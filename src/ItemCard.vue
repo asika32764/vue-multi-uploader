@@ -1,15 +1,13 @@
 <script setup lang="ts">
 
-import { computed, onMounted, ref } from 'vue';
+import { computed } from 'vue';
 import { UploadState } from '@/enum/UploadState';
-import type { UploaderItemInstance } from '@/types/UploaderItemInstance.ts';
+import type { UploaderItem } from '@/types/UploaderItem.ts';
 
 const props = withDefaults(
   defineProps<{
-    item: UploaderItemInstance;
+    item: UploaderItem;
     i: number;
-    initState: UploadState;
-    uploadUrl: string;
     size?: number | string;
     isReadonly?: boolean;
   }>(),
@@ -23,8 +21,8 @@ const emits = defineEmits<{
   (e: 'upload-start', uniqid: string): void;
   (e: 'upload-progress', uniqid: string, progress: number): void;
   (e: 'upload-end', uniqid: string): void;
-  (e: 'delete', item: UploaderItemInstance): void;
-  (e: 'item-click', item: UploaderItemInstance, index: number, $event: Event): void;
+  (e: 'delete', item: UploaderItem): void;
+  (e: 'item-click', item: UploaderItem, index: number, $event: Event): void;
 }>();
 
 const state = computed(() => props.item.uploadState);

@@ -1,52 +1,43 @@
 <script setup lang="ts">
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { computed, onMounted, ref, watch } from 'vue';
-import MultiUploaderItem from '@/MultiUploaderItem.vue';
-import { VueDraggable } from 'vue-draggable-plus'
-import { useMultiUploader } from '@/useMultiUploader';
-import type { UploaderItemInstance } from '@/types/UploaderItemInstance';
+import ItemCardPlaceholder from '@/ItemCardPlaceholder.vue';
+import { onUnmounted, ref, watch } from 'vue';
+import { type MultiUploaderComposableInstance, MultiUploaderOptions, useMultiUploader } from '@/useMultiUploader';
+import type { UploaderItem } from '@/types/UploaderItem.ts';
 import './vue-drag-uploader.scss';
 
 const props = withDefaults(
   defineProps<{
     id?: string;
-    uploadUrl: string;
-    maxFiles?: number | string;
-    maxConcurrent?: number | string;
-    thumbSize?: number | string;
+    uploadUrl?: string;
     placeholder?: string;
-    accept?: string;
-    disabled?: boolean;
-    readonly?: boolean;
+    instance?: MultiUploaderComposableInstance;
+    options?: Exclude<MultiUploaderOptions, 'uploadUrl'>
   }>(),
   {
-    accept: '',
-    disabled: false,
-    readonly: false,
+    options: () => ({})
   }
 );
 
 const emits = defineEmits<{
-  (e: 'update:modelValue', value: UploaderItemInstance[]): void;
-  (e: 'delete-item', item: UploaderItemInstance): void;
-  (e: 'item-click', item: UploaderItemInstance, index: number, $event: Event): void;
+  (e: 'update:modelValue', value: UploaderItem[]): void;
+  (e: 'delete-item', item: UploaderItem): void;
+  (e: 'item-click', item: UploaderItem, index: number, $event: Event): void;
   (e: 'uploading'): void;
   (e: 'uploaded'): void;
   (e: 'reorder', event: any): void;
 }>();
 
-const value = defineModel<UploaderItemInstance[]>({
+const value = defineModel<Partial<UploaderItem>[]>({
   default: () => [],
 });
 
-const v = ref<UploaderItemInstance[]>(value.value);
+const v = ref<Partial<UploaderItem>[]>(value.value);
 
 watch(value, () => {
   v.value = value.value;
 });
 
-const el = ref<HTMLElement>();
-
+const instance = props.instance ?? useMultiUploader(v, props.uploadUrl ?? '', props.options);
 const {
   id,
   maxFiles,
@@ -59,31 +50,25 @@ const {
   deleteItem,
   openFileSelector,
 
-} = useMultiUploader(v, props.uploadUrl, {
-  id: props.id,
-  maxFiles: (() => Number(props.maxFiles) || undefined),
-  maxConcurrent: () => Number(props.maxConcurrent),
-  accept: () => props.accept,
-  disabled: Boolean(props.disabled),
-  readonly: Boolean(props.readonly),
-  dropzone: () => el.value,
-});
+} = instance;
 
-eventBus.on('uploading', () => {
+const offUploading = instance.on('uploading', () => {
   emits('uploading');
 });
 
-eventBus.on('uploaded', () => {
+const offUploaded = instance.on('uploaded', () => {
   emits('uploaded');
 });
 
-eventBus.on('delete-item', (item: UploaderItemInstance) => {
+const offDeleteItem = instance.on('delete-item', (item: UploaderItem) => {
   emits('delete-item', item);
 });
 
-function itemClick(e: MouseEvent, item: UploaderItemInstance, i: number) {
-  emits('item-click', item, i, e);
-}
+onUnmounted(() => {
+  offUploading();
+  offUploaded();
+  offDeleteItem();
+});
 
 </script>
 
@@ -91,55 +76,33 @@ function itemClick(e: MouseEvent, item: UploaderItemInstance, i: number) {
   <div ref="el" class="vue-drag-uploader"
     :class="{ 'vue-drag-uploader--readonly': isReadonly }">
     <div class="vue-drag-uploader__wrapper">
-      <VueDraggable
-        v-model="items"
-        class="vue-drag-uploader__draggable-wrapper"
-        v-bind="{ draggable: '.preview-img', animation: 300 }"
-        :disabled="isReadonly"
-        @sort="$emit('reorder', $event)"
-        item-key="key"
-      >
-        <template v-for="(item, index) of items" :key="item.key">
-          <MultiUploaderItem
-            :item="item"
-            :i="index"
-            :init-state="item.uploadState!"
-            :ref="item.key"
-            :upload-url="uploadUrl"
-            :size="thumbSize"
-            :is-readonly="isReadonly"
-            :queue-name="id"
-            :max-concurrent="maxConcurrent"
-            @delete="deleteItem"
-            @click="itemClick($event, item, index)"
-            style="animation-duration: .3s"
-          >
-            <template #extra>
-              <slot name="extra"
-                :item="item"
-                :i="index"
-                :upload-url="uploadUrl"
-                :max-files="maxFiles"
-                :thumb-size="thumbSize"
-                :files-limited="maxFiles">
-              </slot>
-            </template>
-          </MultiUploaderItem>
-        </template>
+      <slot name="items"
+        :items
+        :options
+        :instance
+      ></slot>
 
-        <div v-if="canUpload" class="vue-drag-uploader__item add-button" :key="'empty'"
-          @click="openFileSelector"
-          :style="{ width: thumbSize, height: thumbSize }">
-          <div class="add-button__body">
-            <div class="add-button__icon">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M288 109.3L288 352c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-242.7-73.4 73.4c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l128-128c12.5-12.5 32.8-12.5 45.3 0l128 128c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L288 109.3zM64 352l128 0c0 35.3 28.7 64 64 64s64-28.7 64-64l128 0c35.3 0 64 28.7 64 64l0 32c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64l0-32c0-35.3 28.7-64 64-64zM432 456a24 24 0 1 0 0-48 24 24 0 1 0 0 48z"/></svg>
-            </div>
-            <div class="add-button__text">
-              {{ placeholder }}
-            </div>
-          </div>
-        </div>
-      </VueDraggable>
+      <!--<VueDraggable-->
+      <!--  v-model="items"-->
+      <!--  class="vue-drag-uploader__draggable-wrapper"-->
+      <!--  v-bind="{ draggable: '.preview-img', animation: 300 }"-->
+      <!--  :disabled="isReadonly"-->
+      <!--  @sort="$emit('reorder', $event)"-->
+      <!--  item-key="key"-->
+      <!--&gt;-->
+      <!--  <template v-for="(item, index) of items" :key="item.key">-->
+      <!--    <template #extra>-->
+      <!--      <slot name="extra"-->
+      <!--        :item-->
+      <!--        :options-->
+      <!--        :i="index"-->
+      <!--      >-->
+      <!--      </slot>-->
+      <!--    </template>-->
+      <!--  </template>-->
+      <!--  -->
+      <!--  -->
+      <!--</VueDraggable>-->
     </div>
   </div>
 </template>

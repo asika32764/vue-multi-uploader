@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import CardExample from '@/docs/CardExample.vue';
 import { faGithub, faNpm } from '@fortawesome/free-brands-svg-icons';
 import { faFile } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -62,9 +63,9 @@ yarn add vue-multi-uploader
 
   <div class="mx-auto d-flex flex-column gap-5" style="max-width: 800px; width: 100%;">
     <section>
-      <h2 class="text-center mb-3">Empty Style</h2>
+      <h2 class="text-center mb-3">Card Example</h2>
 
-<!--      <EmptyStyleExample />-->
+      <CardExample />
     </section>
 
   </div>

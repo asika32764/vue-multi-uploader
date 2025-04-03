@@ -1,17 +1,19 @@
+import { UploadState } from '@/enum/UploadState';
+import type { UploaderItem } from '@/types/UploaderItem.ts';
+import useQueue from '@/useQueue';
 import { simpleAlert, uid } from '@lyrasoft/ts-toolkit/src/generic';
-import dush from 'dush';
+import dush, { Emitter } from 'dush';
 import {
   type ComponentPublicInstance,
-  computed, isRef,
+  computed,
+  isRef,
   type MaybeRef,
-  type MaybeRefOrGetter, reactive,
+  type MaybeRefOrGetter,
+  reactive,
   ref,
   type Ref,
   watch
 } from 'vue';
-import useQueue from '@/useQueue';
-import { UploadState } from '@/enum/UploadState';
-import type { UploaderItemInstance } from '@/types/UploaderItemInstance.ts';
 
 type MaybeElement = HTMLElement | SVGElement | ComponentPublicInstance | undefined | null;
 
@@ -24,22 +26,22 @@ export interface MultiUploaderOptions {
   readonly?: MaybeRefOrGetter<boolean | undefined>;
   dropzone?: MaybeRefOrGetter<MaybeElement>;
 
-  onChange?: (items: UploaderItemInstance[]) => void;
-  onDeleteItem?: (item: UploaderItemInstance) => void;
-  onItemClick?: (item: UploaderItemInstance, index: number, e: Event) => void;
+  onChange?: (items: UploaderItem[]) => void;
+  onDeleteItem?: (item: UploaderItem) => void;
+  onItemClick?: (item: UploaderItem, index: number, e: Event) => void;
   onUploading?: () => void;
   onUploaded?: () => void;
   onReorder?: (e: any) => void;
-  onItemUploadStart?: (item: UploaderItemInstance) => void;
-  onItemUploadEnd?: (item: UploaderItemInstance) => void;
-  onItemUploadProgress?: (item: UploaderItemInstance) => void;
+  onItemUploadStart?: (item: UploaderItem) => void;
+  onItemUploadEnd?: (item: UploaderItem) => void;
+  onItemUploadProgress?: (item: UploaderItem) => void;
 }
 
 export function useMultiUploader<T extends MultiUploaderOptions>(
-  files: MaybeRef<UploaderItemInstance[]>,
+  files: MaybeRef<Partial<UploaderItem>[]>,
   uploadTarget: MaybeRefOrGetter<string>,
   options: T = {} as T
-) {
+): MultiUploaderComposableInstance {
   // Options
   const id = wrapRef(options.id ?? 'vue-multi-uploader-' + uid()) as Ref<string>;
   const accept = wrapRef(options.accept ?? '') as Ref<string>;
@@ -53,7 +55,9 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
   });
 
   // Base
-  const items = wrapRef<UploaderItemInstance[]>(files) as Ref<UploaderItemInstance[]>;
+  let items = wrapRef<Partial<UploaderItem>[]>(files) as Ref<UploaderItem[]>;
+  items.value = items.value.map((item) => wrapUploaderItem(item));
+
   const uploadQueue = useQueue();
 
   // Events
@@ -67,6 +71,14 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
     return eventBus.emit(event, ...args);
   }
 
+  function on(event: string, callback: (...event: any[]) => void) {
+    eventBus.on(event, callback);
+
+    return () => {
+      eventBus.off(event, callback);
+    };
+  }
+
   function openFileSelector() {
     const $input = document.createElement('input');
     $input.id = 'multi-uploader-selector';
@@ -75,18 +87,18 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
     $input.multiple = true;
     $input.style.display = 'none';
 
-    $input.addEventListener('change', (event: Event) => {
+    $input.addEventListener('change', () => {
       const files = $input.files!;
       uploadFiles(files);
 
       $input.remove();
     });
 
-    $input.addEventListener('change', (event) => {
+    $input.addEventListener('change', () => {
       $input.remove();
     });
 
-    $input.addEventListener('blur', (event) => {
+    $input.addEventListener('blur', () => {
       $input.remove();
     });
 
@@ -138,7 +150,6 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
       el.classList.remove('h-ondrag');
 
       const items = event.dataTransfer?.items;
-      const files = [];
       const allEntries: File[] = [];
 
       // Use promise to recursively load files
@@ -166,7 +177,6 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
         await Promise.all(promises);
       };
 
-      const entries = [];
       const promises: Promise<void>[] = [];
       Array.prototype.forEach.call(items ?? [], (item: DataTransferItem) => {
 
@@ -178,7 +188,7 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
       });
 
       if (promises.length) {
-        Promise.all(promises).then((a) => {
+        Promise.all(promises).then(() => {
           uploadFiles(allEntries);
         });
       }
@@ -201,13 +211,13 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
       }
 
       const url = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
-      const item = reactive<UploaderItemInstance>({
+      const item = reactive<UploaderItem>(wrapUploaderItem({
         key: uid(),
         url,
-        file: file,
+        file,
         uploadState: UploadState.PENDING,
         progress: 0,
-      });
+      }));
 
       eventBus.emit('create-item', item);
 
@@ -273,7 +283,7 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
     return accepted === mime;
   }
 
-  function deleteItem(child: UploaderItemInstance) {
+  function deleteItem(child: UploaderItem) {
     emits('delete-item', child);
 
     items.value = items.value.filter(item => item.key !== child.key);
@@ -283,7 +293,7 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
     uploadQueue.push(uploadCallback);
   }
 
-  async function uploadFile(item: UploaderItemInstance) {
+  async function uploadFile(item: UploaderItem) {
     item.uploadState = UploadState.UPLOADING;
 
     const formData = new FormData();
@@ -372,12 +382,12 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
     }
   }
 
-  function itemClick(item: UploaderItemInstance, i: number, $event: Event) {
+  function itemClick(item: UploaderItem, i: number, $event: Event) {
     emits('item-click', item, i, $event);
   }
 
   // Images
-  function isImageItem(item: UploaderItemInstance) {
+  function isImageItem(item: UploaderItem) {
     return isImage(
       item.file
         ? item.file.name
@@ -471,6 +481,7 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
     isReadonly,
 
     emits,
+    on,
     openFileSelector,
     uploadFiles,
     checkFile,
@@ -481,12 +492,47 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
     upload: uploadFile,
     uploadProgress,
     itemClick,
-    isImageFile: isImageItem,
+    isImageItem,
     isImage,
   };
 }
 
-function handleEvents(options: MultiUploaderOptions) {
+export type MultiUploaderComposableInstance = {
+  id: Ref<string>;
+  accept: Ref<string>;
+  maxFiles: Ref<number | undefined>;
+  maxConcurrent: Ref<number>;
+  disabled: Ref<boolean>;
+  readonly: Ref<boolean>;
+  uploadUrl: Ref<string>;
+
+  items: Ref<UploaderItem[]>;
+  uploadQueue: ReturnType<typeof useQueue>;
+  eventBus: Emitter;
+
+  canUpload: Ref<boolean>;
+  uploading: Ref<boolean>;
+  acceptedTypes: Ref<string[]>;
+  isReadonly: Ref<boolean>;
+
+  emits(event: string, ...args: any[]): Emitter;
+  on(event: string, callback: (...event: any[]) => void): () => void;
+
+  openFileSelector(): void;
+  uploadFiles(files: FileList | File[]): void;
+  checkFile(file: File): void;
+  compareMimeType(accepted: string, mime: string): boolean;
+  deleteItem(child: UploaderItem): void;
+  bindDraggingEvents(el: HTMLElement): void;
+  pushUploadQueue(uploadCallback: () => Promise<void>): void;
+  upload(item: UploaderItem): Promise<void>;
+  uploadProgress(uniqid: string, progress: number): void;
+  itemClick(item: UploaderItem, i: number, $event?: Event): void;
+  isImageItem(item?: UploaderItem): boolean;
+  isImage(filePath: string): boolean;
+}
+
+function handleEvents(options: MultiUploaderOptions): Emitter {
   const eventBus = dush();
 
   if (options.onChange) {
@@ -538,6 +584,14 @@ function unrefElement(el: MaybeElement): HTMLElement | SVGElement | null {
   }
 
   return el;
+}
+
+export function wrapUploaderItem(item: Partial<UploaderItem>): UploaderItem {
+  item.key ??= uid();
+  item.uploadState ??= UploadState.PENDING;
+  item.progress ??= 0;
+
+  return item as UploaderItem;
 }
 
 export function wrapRef<T>(value: MaybeRef<T>): Ref<T> {

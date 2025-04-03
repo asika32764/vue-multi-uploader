@@ -21,12 +21,11 @@ function highlight(code: string): string {
 
 <template>
   <div class="card">
+    <div class="card-body border-bottom">
+      <slot></slot>
+    </div>
     <div class="card-body">
-      <div class="d-flex justify-content-center border p-3 bg-light rounded">
-        <slot></slot>
-      </div>
-
-      <div class="mt-3 position-relative">
+      <div class="position-relative">
         <button class="btn btn-sm btn-light position-absolute"
           style="top: .5rem; right: .5rem;"
           @click="copyCode"

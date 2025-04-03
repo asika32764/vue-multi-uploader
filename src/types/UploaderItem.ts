@@ -1,6 +1,6 @@
-import type { UploadState } from '~/enum/UploadState';
+import type { UploadState } from '@/enum/UploadState';
 
-export interface UploaderItemInstance {
+export interface UploaderItem {
   key: string;
   url: string;
   thumbUrl?: string;
@@ -12,4 +12,6 @@ export interface UploaderItemInstance {
   progress: number;
   message?: string;
   messageType?: string;
+
+  [props: string]: any;
 }
