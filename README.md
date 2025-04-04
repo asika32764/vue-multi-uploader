@@ -313,9 +313,25 @@ const { on } = useMultiUploader(items, '/api/upload', {
   
 });
 
-on('item-upload-success', (item, xhr) => {
+const off = on('item-upload-success', (item, xhr) => {
   console.log('Item uploaded successfully:', item);
 });
+
+onUnmounted(() => {
+  // Remember release the event listener
+  off();
+});
+```
+
+The `eventBus` is a `dush()` instance, so there are some features you can use:
+
+```ts
+const { eventBus } = useMultiUploader(items, '/api/upload', {
+  
+});
+
+eventBus.on('...', () => {...});
+eventBus.once('...', () => {...});
 ```
 
 The following events will match to `on*` callback in options:
