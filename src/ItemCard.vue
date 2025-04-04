@@ -12,17 +12,13 @@ const props = withDefaults(
     isReadonly?: boolean;
   }>(),
   {
-
+    size: '150px'
   }
 );
 
 const emits = defineEmits<{
-  (e: 'push-upload-queue', fn: () => Promise<void>): void;
-  (e: 'upload-start', uniqid: string): void;
-  (e: 'upload-progress', uniqid: string, progress: number): void;
-  (e: 'upload-end', uniqid: string): void;
   (e: 'delete', item: UploaderItem): void;
-  (e: 'item-click', item: UploaderItem, index: number, $event: Event): void;
+  (e: 'item-click', item: UploaderItem, index: number, $event: MouseEvent): void;
 }>();
 
 const state = computed(() => props.item.uploadState);
@@ -71,37 +67,6 @@ function isImageType(filePath: string) {
   return allow.indexOf(ext.toLowerCase()) !== -1;
 }
 
-const icon = computed(() => {
-  const ext = props.item.file
-    ? props.item.file.name.split('.').pop()
-    : props.item.url.split('.').pop();
-
-  const icons = {
-    pdf: 'fas fa-file-pdf text-danger',
-    xls: 'fas fa-file-excel text-success',
-    xlsx: 'fas fa-file-excel text-success',
-    doc: 'fas fa-file-word text-primary',
-    docx: 'fas fa-file-word text-primary',
-    ppt: 'fas fa-file-powerpoint text-warning',
-    pptx: 'fas fa-file-powerpoint text-warning',
-    zip: 'fas fa-file-archive text-dark',
-    '7z': 'fas fa-file-archive text-dark',
-    rar: 'fas fa-file-archive text-dark',
-    mp4: 'fas fa-file-video text-dark',
-    avi: 'fas fa-file-video text-dark',
-    flv: 'fas fa-file-video text-dark',
-    mov: 'fas fa-file-video text-dark',
-    ogg: 'fas fa-file-video text-dark',
-    webm: 'fas fa-file-video text-dark',
-    mpg: 'fas fa-file-video text-dark',
-    mp3: 'fas fa-file-audio text-dark',
-    acc: 'fas fa-file-audio text-dark',
-    wav: 'fas fa-file-audio text-dark',
-  };
-
-  return icons[String(ext).toLowerCase() as keyof typeof icons] || 'fas fa-file';
-});
-
 function onClick($event: MouseEvent) {
   emits('item-click', props.item, props.i, $event);
 }
@@ -109,25 +74,29 @@ function onClick($event: MouseEvent) {
 </script>
 
 <template>
-  <div class="vue-drag-uploader__item preview-img"
-    :style="{ width: size ? size + 'px' : undefined, height: size ? size + 'px' : undefined }"
+  <div class="vue-drag-uploader-item preview-img"
+    :style="{ '--vmu-img-size': size }"
     @click="onClick">
     <slot name="it" :item="item">
       <div v-if="isImage" class="preview-img__body"
         :style="{'background-image': 'url(' + (item.thumbUrl || item.url) + ')', opacity: state === UploadState.UPLOADED ? 1 : 0.5}"></div>
 
-      <div v-if="!isImage" class="preview-img__body d-flex justify-content-center align-items-center">
-        <div class="text-center">
-          <div>
-            <span :class="icon" class="fa-3x"></span>
-          </div>
-          <div style="word-break: break-word">{{ fileName }}</div>
+      <div v-if="!isImage" class="preview-img__body d-flex flex-column justify-content-center align-items-center gap-2">
+        <div>
+          <slot name="icon" :item>
+            <svg style="width: calc(var(--vmu-img-size) / 3); height: calc(var(--vmu-img-size) / 3);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M320 464c8.8 0 16-7.2 16-16l0-288-80 0c-17.7 0-32-14.3-32-32l0-80L64 48c-8.8 0-16 7.2-16 16l0 384c0 8.8 7.2 16 16 16l256 0zM0 64C0 28.7 28.7 0 64 0L229.5 0c17 0 33.3 6.7 45.3 18.7l90.5 90.5c12 12 18.7 28.3 18.7 45.3L384 448c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 64z"/></svg>
+          </slot>
         </div>
+        <div style="word-break: break-word">{{ fileName }}</div>
       </div>
 
       <div class="preview-img__overlay">
-          <span v-if="!isReadonly" class="preview-img__remove-icon fa fa-times"
-            @click.stop.prevent="deleteSelf()"></span>
+          <span v-if="!isReadonly" class="preview-img__remove-icon"
+            @click.prevent="deleteSelf()">
+            <slot name="remove-icon">
+              <svg style="width: 1rem; height: 1rem; fill: white;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>
+            </slot>
+          </span>
         <slot name="extra" :item="item"></slot>
       </div>
 

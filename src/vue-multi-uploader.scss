@@ -1,12 +1,13 @@
 // Part of ke file.
 
-$img-width: 155px !default;
-$img-height: 155px !default;
+$img-size: 155px !default;
 
 .vue-drag-uploader {
+  --vmu-img-size: #{$img-size};
+
   display: flex;
   flex-wrap: wrap;
-  padding: 15px 5px 5px 15px;
+  padding: 1rem;
   border: 1px dotted #999;
   border-radius: 4px;
   cursor: pointer;
@@ -23,20 +24,23 @@ $img-height: 155px !default;
     color: #666;
   }
 
+  &__wrapper {
+    width: 100%;
+  }
+
   &__draggable-wrapper,
   &__transition-wrapper {
     display: flex;
     flex-wrap: wrap;
   }
 
-  &__item {
-    width: $img-width;
-    height: $img-height;
+  &-item {
+    width: var(--vmu-img-size);
+    height: var(--vmu-img-size);
     border: 1px solid rgba(0, 0, 0, .25);
     border-radius: 3px;
     cursor: pointer;
-    margin-right: 15px;
-    margin-bottom: 15px;
+    padding: .5rem;
   }
 
   .add-button {

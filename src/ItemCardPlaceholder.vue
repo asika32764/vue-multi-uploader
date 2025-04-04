@@ -6,13 +6,14 @@ withDefaults(
   }>(),
   {
     text: '',
+    size: '150px',
   }
 )
 </script>
 
 <template>
-  <div class="add-button" :key="'empty'"
-    :style="{ width: size, height: size }">
+  <div class="vue-drag-uploader-item add-button" :key="'empty'"
+    :style="{ '--vmu-img-size': size }">
     <div class="add-button__body">
       <slot>
         <div class="add-button__icon">

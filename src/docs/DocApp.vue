@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import CardExample from '@/docs/CardExample.vue';
+import CardExample from '@/docs/examples/CardExample.vue';
+import CardIconsExample from '@/docs/examples/CardIconsExample.vue';
+import CardSortableExample from '@/docs/examples/CardSortableExample.vue';
+import ListExample from '@/docs/examples/ListExample.vue';
+import ListManualStartExample from '@/docs/examples/ListManualStartExample.vue';
 import { faGithub, faNpm } from '@fortawesome/free-brands-svg-icons';
 import { faFile } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -19,17 +23,17 @@ yarn add vue-multi-uploader
 
     <div class="d-flex gap-2 justify-content-center mb-3">
       <div>
-        <a href="https://www.npmjs.com/package/@asika32764/vue-pagination" target="_blank">
-          <img src="https://img.shields.io/npm/v/%40asika32764/vue-pagination.svg?style=flat-square" alt="Version">
+        <a href="https://www.npmjs.com/package/vue-multi-uploader" target="_blank">
+          <img src="https://img.shields.io/npm/v/vue-multi-uploader.svg?style=flat-square" alt="Version">
         </a>
       </div>
       <div>
-        <img src="https://img.shields.io/npm/l/%40asika32764/vue-pagination.svg?style=flat-square" alt="License">
+        <img src="https://img.shields.io/npm/l/vue-multi-uploader.svg?style=flat-square" alt="License">
       </div>
     </div>
 
     <p class="lead">
-      A Vue.js 3 styless / ready-use multi-uploader package.
+      A Vue.js 3 headless / ready-use multi-uploader package.
     </p>
 
     <div class="d-flex gap-2 justify-content-center">
@@ -63,9 +67,45 @@ yarn add vue-multi-uploader
 
   <div class="mx-auto d-flex flex-column gap-5" style="max-width: 800px; width: 100%;">
     <section>
+      <h2 class="text-center mb-3">List Example</h2>
+
+      <ListExample />
+    </section>
+
+  </div>
+
+  <div class="mx-auto d-flex flex-column gap-5" style="max-width: 800px; width: 100%;">
+    <section>
+      <h2 class="text-center mb-3">Manually Start Upload</h2>
+
+      <ListManualStartExample />
+    </section>
+
+  </div>
+
+  <div class="mx-auto d-flex flex-column gap-5" style="max-width: 800px; width: 100%;">
+    <section>
       <h2 class="text-center mb-3">Card Example</h2>
 
       <CardExample />
+    </section>
+
+  </div>
+
+  <div class="mx-auto d-flex flex-column gap-5" style="max-width: 800px; width: 100%;">
+    <section>
+      <h2 class="text-center mb-3">Card Sortable Example</h2>
+
+      <CardSortableExample />
+    </section>
+
+  </div>
+
+  <div class="mx-auto d-flex flex-column gap-5" style="max-width: 800px; width: 100%;">
+    <section>
+      <h2 class="text-center mb-3">Card With Custom Icons</h2>
+
+      <CardIconsExample />
     </section>
 
   </div>

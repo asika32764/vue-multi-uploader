@@ -1,7 +1,7 @@
 import { UploadState } from '@/enum/UploadState';
 import type { UploaderItem } from '@/types/UploaderItem.ts';
 import useQueue from '@/useQueue';
-import { simpleAlert, uid } from '@lyrasoft/ts-toolkit/src/generic';
+import { uid } from '@lyrasoft/ts-toolkit/src/generic';
 import dush, { Emitter } from 'dush';
 import {
   type ComponentPublicInstance,
@@ -17,7 +17,7 @@ import {
 
 type MaybeElement = HTMLElement | SVGElement | ComponentPublicInstance | undefined | null;
 
-export interface MultiUploaderOptions {
+export type MultiUploaderOptions = {
   id?: MaybeRefOrGetter<string | undefined>;
   accept?: MaybeRefOrGetter<string | undefined>;
   maxFiles?: MaybeRefOrGetter<number | undefined>;
@@ -25,20 +25,71 @@ export interface MultiUploaderOptions {
   disabled?: MaybeRefOrGetter<boolean | undefined>;
   readonly?: MaybeRefOrGetter<boolean | undefined>;
   dropzone?: MaybeRefOrGetter<MaybeElement>;
+  onDragClass?: MaybeRefOrGetter<string>;
+  autoStart?: MaybeRefOrGetter<boolean>;
+} & Partial<OptionsEventsMap>;
 
-  onChange?: (items: UploaderItem[]) => void;
-  onDeleteItem?: (item: UploaderItem) => void;
-  onItemClick?: (item: UploaderItem, index: number, e: Event) => void;
-  onUploading?: () => void;
-  onUploaded?: () => void;
-  onReorder?: (e: any) => void;
-  onItemUploadStart?: (item: UploaderItem) => void;
-  onItemUploadEnd?: (item: UploaderItem) => void;
-  onItemUploadProgress?: (item: UploaderItem) => void;
+type UploaderEvents = {
+  'change': (items: UploaderItem[]) => void;
+  'delete-item': (item: UploaderItem) => void;
+  'item-click': (item: UploaderItem, index: number, e: Event) => void;
+  'uploading': () => void;
+  'uploaded': () => void;
+  'create-item': (item: UploaderItem) => void;
+  'item-upload-start': (item: UploaderItem, xhr: XMLHttpRequest) => void;
+  'item-upload-success': (item: UploaderItem, xhr: XMLHttpRequest) => void;
+  'item-upload-fail': (item: UploaderItem, xhr: XMLHttpRequest) => void;
+  'item-upload-end': (item: UploaderItem, xhr: XMLHttpRequest) => void;
+  'item-upload-progress': (item: UploaderItem, event: ProgressEvent) => void;
+  'invalid-file-type': (file: File, accepted: string[]) => void;
+}
+
+type OptionsEventsMap = {
+  onChange?: UploaderEvents['change'];
+  onDeleteItem?: UploaderEvents['delete-item'];
+  onItemClick?: UploaderEvents['item-click'];
+  onUploading?: UploaderEvents['uploading'];
+  onUploaded?: UploaderEvents['uploaded'];
+  onItemUploadStart?: UploaderEvents['item-upload-start'];
+  onItemUploadSuccess?: UploaderEvents['item-upload-success'];
+  onItemUploadFail?: UploaderEvents['item-upload-fail'];
+  onItemUploadEnd?: UploaderEvents['item-upload-end'];
+  onItemUploadProgress?: UploaderEvents['item-upload-progress'];
+  onInvalidFileType?: UploaderEvents['invalid-file-type'];
+}
+
+const uploaderEvents: Record<keyof UploaderEvents, string> = {
+  'change': 'onChange',
+  'delete-item': 'onDeleteItem',
+  'item-click': 'onItemClick',
+  'uploading': 'onUploading',
+  'uploaded': 'onUploaded',
+  'create-item': 'onCreateItem',
+  'item-upload-start': 'onItemUploadStart',
+  'item-upload-success': 'onItemUploadSuccess',
+  'item-upload-fail': 'onItemUploadFail',
+  'item-upload-end': 'onItemUploadEnd',
+  'item-upload-progress': 'onItemUploadProgress',
+  'invalid-file-type': 'onInvalidFileType',
+};
+
+function handleEvents(options: MultiUploaderOptions): Emitter {
+  const eventBus = dush();
+
+  for (const eventName in uploaderEvents) {
+    const optionName = uploaderEvents[eventName as keyof UploaderEvents];
+
+    if (optionName && options[optionName as keyof MultiUploaderOptions]) {
+      // @ts-ignore
+      eventBus.on(eventName, options[optionName as keyof MultiUploaderOptions]);
+    }
+  }
+
+  return eventBus;
 }
 
 export function useMultiUploader<T extends MultiUploaderOptions>(
-  files: MaybeRef<Partial<UploaderItem>[]>,
+  currentValue: MaybeRef<Partial<UploaderItem>[]>,
   uploadTarget: MaybeRefOrGetter<string>,
   options: T = {} as T
 ): MultiUploaderComposableInstance {
@@ -53,10 +104,14 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
   const dropzone = computed<MaybeElement>(() => {
     return (wrapRef(options.dropzone).value) as MaybeElement;
   });
+  const onDragClass = wrapRef(options.onDragClass ?? 'h-ondrag') as Ref<string>;
+  const autoStart = wrapRef(options.autoStart ?? false) as Ref<boolean>;
 
   // Base
-  let items = wrapRef<Partial<UploaderItem>[]>(files) as Ref<UploaderItem[]>;
-  items.value = items.value.map((item) => wrapUploaderItem(item));
+  let items = wrapRef<Partial<UploaderItem>[]>(currentValue) as Ref<UploaderItem[]>;
+  items.value = items.value.map(
+    (item) => wrapUploaderItem(item, { uploadState: UploadState.UPLOADED })
+  );
 
   const uploadQueue = useQueue();
 
@@ -132,14 +187,14 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
       event.stopPropagation();
       event.preventDefault();
 
-      el.classList.add('h-ondrag');
+      el.classList.add(onDragClass.value);
     });
 
     el.addEventListener('dragleave', (event) => {
       event.stopPropagation();
       event.preventDefault();
 
-      el.classList.remove('h-ondrag');
+      el.classList.remove(onDragClass.value);
     });
 
     // File drop
@@ -147,7 +202,7 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
       event.stopPropagation();
       event.preventDefault();
 
-      el.classList.remove('h-ondrag');
+      el.classList.remove(onDragClass.value);
 
       const items = event.dataTransfer?.items;
       const allEntries: File[] = [];
@@ -219,12 +274,16 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
         progress: 0,
       }));
 
+      item.title = item.title || item.file!.name;
+
       eventBus.emit('create-item', item);
 
       const i = items.value.push(item);
       const v = items.value[i - 1];
 
-      uploadFile(v);
+      if (autoStart.value) {
+        uploadFile(v);
+      }
 
       // Read preview image
       if (isImageItem(item)) {
@@ -262,11 +321,7 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
       });
 
       if (!allow) {
-        simpleAlert(
-          '不支援的檔案格式',
-          `目前僅支援： ${accepted.join(', ')}`,
-          'warning'
-        );
+        emits('invalid-file-type', file, accepted);
         throw new Error('Not accepted file ext');
       }
     }
@@ -289,8 +344,16 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
     items.value = items.value.filter(item => item.key !== child.key);
   }
 
-  function pushUploadQueue(uploadCallback: () => Promise<void>) {
-    uploadQueue.push(uploadCallback);
+  async function uploadStart() {
+    const promises: Promise<UploaderItem>[] = [];
+
+    items.value.forEach((item) => {
+      if (item.uploadState === UploadState.PENDING) {
+        promises.push(uploadFile(item));
+      }
+    });
+
+    return Promise.allSettled(promises);
   }
 
   async function uploadFile(item: UploaderItem) {
@@ -299,47 +362,34 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
     const formData = new FormData();
     formData.append('file', item.file!);
 
-    item.title = item.title || item.file!.name;
-
-    emits('item-upload-start', item);
-
-    return new Promise<void>((resolve, reject) => {
+    const promise = new Promise<UploaderItem>((resolve, reject) => {
       const xhr = new XMLHttpRequest();
+
+      emits('item-upload-start', item, xhr);
 
       xhr.open('POST', uploadUrl.value);
 
       xhr.upload.onprogress = (event: ProgressEvent) => {
         if (event.lengthComputable) {
           item.progress = event.loaded / event.total;
-          emits('item-upload-progress', item);
+          emits('item-upload-progress', item, event);
         }
       };
 
       xhr.onload = () => {
         if (xhr.status >= 200 && xhr.status < 300) {
           try {
-            const res = JSON.parse(xhr.responseText);
-
             item.uploadState = UploadState.UPLOADED;
 
-            Object.assign(
-              item,
-              {
-                url: '',
-              },
-              res.data
-            );
+            emits('item-upload-success', item, xhr);
 
-            if (isImageItem(item)) {
-              item.thumbUrl = res.data.thumb_url || res.data.url;
-            }
-
-            resolve();
+            resolve(item);
           } catch (parseError) {
             console.error(parseError);
             item.uploadState = UploadState.ERROR;
             item.message = (parseError as Error).message;
             item.messageType = 'error';
+
             reject(parseError);
           }
         } else {
@@ -366,24 +416,18 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
       };
 
       xhr.onloadend = () => {
-        item.file = undefined;
-        emits('item-upload-end', item);
+        // item.file = undefined;
+        emits('item-upload-end', item, xhr);
       };
 
       xhr.send(formData);
     });
-  }
 
-  function uploadProgress(uniqid: string, progress: number) {
-    const item = items.value.find(item => item.key === uniqid);
+    return promise.catch((error) => {
+      emits('item-upload-fail', item, error);
 
-    if (item) {
-      item.progress = progress;
-    }
-  }
-
-  function itemClick(item: UploaderItem, i: number, $event: Event) {
-    emits('item-click', item, i, $event);
+      return Promise.reject(error);
+    });
   }
 
   // Images
@@ -415,7 +459,7 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
     return (maxFiles.value == null || items.value.length < Number(maxFiles.value)) && !isReadonly.value;
   });
 
-  const uploading = computed(() => {
+  const isUploading = computed(() => {
     const uploadingItems = items.value.filter(item => item.uploadState === UploadState.UPLOADING);
 
     return uploadingItems.length > 0;
@@ -456,7 +500,7 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
   //   emits('change', items);
   // }, { deep: true });
 
-  watch(uploading, (val) => {
+  watch(isUploading, (val) => {
     if (val) {
       emits('uploading');
     } else {
@@ -476,22 +520,15 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
     uploadQueue,
     eventBus,
     canUpload,
-    uploading,
+    isUploading,
     acceptedTypes,
     isReadonly,
 
     emits,
     on,
     openFileSelector,
-    uploadFiles,
-    checkFile,
-    compareMimeType,
     deleteItem,
-    bindDraggingEvents,
-    pushUploadQueue,
-    upload: uploadFile,
-    uploadProgress,
-    itemClick,
+    uploadStart,
     isImageItem,
     isImage,
   };
@@ -505,73 +542,21 @@ export type MultiUploaderComposableInstance = {
   disabled: Ref<boolean>;
   readonly: Ref<boolean>;
   uploadUrl: Ref<string>;
-
   items: Ref<UploaderItem[]>;
   uploadQueue: ReturnType<typeof useQueue>;
   eventBus: Emitter;
-
   canUpload: Ref<boolean>;
-  uploading: Ref<boolean>;
+  isUploading: Ref<boolean>;
   acceptedTypes: Ref<string[]>;
   isReadonly: Ref<boolean>;
 
-  emits(event: string, ...args: any[]): Emitter;
-  on(event: string, callback: (...event: any[]) => void): () => void;
-
-  openFileSelector(): void;
-  uploadFiles(files: FileList | File[]): void;
-  checkFile(file: File): void;
-  compareMimeType(accepted: string, mime: string): boolean;
-  deleteItem(child: UploaderItem): void;
-  bindDraggingEvents(el: HTMLElement): void;
-  pushUploadQueue(uploadCallback: () => Promise<void>): void;
-  upload(item: UploaderItem): Promise<void>;
-  uploadProgress(uniqid: string, progress: number): void;
-  itemClick(item: UploaderItem, i: number, $event?: Event): void;
-  isImageItem(item?: UploaderItem): boolean;
-  isImage(filePath: string): boolean;
-}
-
-function handleEvents(options: MultiUploaderOptions): Emitter {
-  const eventBus = dush();
-
-  if (options.onChange) {
-    eventBus.on('change', options.onChange);
-  }
-
-  if (options.onDeleteItem) {
-    eventBus.on('delete-item', options.onDeleteItem);
-  }
-
-  if (options.onItemClick) {
-    eventBus.on('item-click', options.onItemClick);
-  }
-
-  if (options.onUploading) {
-    eventBus.on('uploading', options.onUploading);
-  }
-
-  if (options.onUploaded) {
-    eventBus.on('uploaded', options.onUploaded);
-  }
-
-  if (options.onReorder) {
-    eventBus.on('reorder', options.onReorder);
-  }
-
-  if (options.onItemUploadStart) {
-    eventBus.on('item-upload-start', options.onItemUploadStart);
-  }
-
-  if (options.onItemUploadEnd) {
-    eventBus.on('item-upload-end', options.onItemUploadEnd);
-  }
-
-  if (options.onItemUploadProgress) {
-    eventBus.on('item-upload-progress', options.onItemUploadProgress);
-  }
-
-  return eventBus;
+  emits: (event: string, ...args: any[]) => void;
+  on: (event: string, callback: (...event: any[]) => void) => () => void;
+  openFileSelector: () => void;
+  deleteItem: (child: UploaderItem) => void;
+  uploadStart: () => Promise<PromiseSettledResult<UploaderItem>[]>;
+  isImage: (filePath: string) => boolean;
+  isImageItem: (item: UploaderItem) => boolean;
 }
 
 function unrefElement(el: MaybeElement): HTMLElement | SVGElement | null {
@@ -586,10 +571,14 @@ function unrefElement(el: MaybeElement): HTMLElement | SVGElement | null {
   return el;
 }
 
-export function wrapUploaderItem(item: Partial<UploaderItem>): UploaderItem {
+export function wrapUploaderItem(item: Partial<UploaderItem>, extra?: Record<keyof UploaderItem, any>): UploaderItem {
   item.key ??= uid();
   item.uploadState ??= UploadState.PENDING;
   item.progress ??= 0;
+
+  if (extra) {
+    Object.assign(item, extra);
+  }
 
   return item as UploaderItem;
 }
