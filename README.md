@@ -6,6 +6,20 @@
 A headless upload component that supports developers to custom for every
 project. [DEMO](https://about.asika.tw/vue-multi-uploader/)
 
+<!-- TOC -->
+* [Vue Multi Uploader](#vue-multi-uploader)
+  * [Installation](#installation)
+  * [Getting Started](#getting-started)
+  * [Usage](#usage)
+  * [Options](#options)
+    * [Options Refs](#options-refs)
+  * [Return Values](#return-values)
+  * [Prepare Default Items](#prepare-default-items)
+  * [Fetch Uploaded Data And Set to Item](#fetch-uploaded-data-and-set-to-item)
+  * [Events](#events)
+  * [Pre-Built Components](#pre-built-components)
+<!-- TOC -->
+
 ## Installation
 
 ```shell
@@ -50,7 +64,7 @@ ES Module
 
 ```
 
-## Getting Started
+## Usage
 
 This is a simple example of how to use the `vue-multi-uploader` component in a Vue 3 application.
 The example demonstrates how to set up a file upload interface with drag-and-drop functionality,
