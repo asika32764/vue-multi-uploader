@@ -8,27 +8,16 @@ import { MaybeRef } from 'vue';
 import { MaybeRefOrGetter } from 'vue';
 import { PublicProps } from 'vue';
 import { Ref } from 'vue';
-import { TaskQueue } from '@lyrasoft/ts-toolkit/src/generic';
 import { WildcardHandler } from 'dush';
 
 declare const __VLS_component: DefineComponent<__VLS_PublicProps, {
 instance: MultiUploaderComposableInstance;
 }, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
-"update:modelValue": (modelValue: Partial<UploaderItem>[]) => any;
+[x: string]: any;
 } & {
-uploading: () => any;
-uploaded: () => any;
-"delete-item": (item: UploaderItem) => any;
-"item-click": (item: UploaderItem, index: number, $event: Event) => any;
-"update:modelValue": (value: UploaderItem[]) => any;
-reorder: (event: any) => any;
+[x: string]: any;
 }, string, PublicProps, Readonly<__VLS_PublicProps> & Readonly<{
-onUploading?: (() => any) | undefined;
-onUploaded?: (() => any) | undefined;
-"onDelete-item"?: ((item: UploaderItem) => any) | undefined;
-"onItem-click"?: ((item: UploaderItem, index: number, $event: Event) => any) | undefined;
-"onUpdate:modelValue"?: ((value: UploaderItem[]) => any) | undefined;
-onReorder?: ((event: any) => any) | undefined;
+[x: `on${Capitalize<any>}`]: ((...args: any) => any) | undefined;
 }>, {
 options: Exclude<MultiUploaderOptions, "uploadUrl">;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {
@@ -41,16 +30,16 @@ i: number;
 size?: number | string;
 isReadonly?: boolean;
 }, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {} & {
-"item-click": (item: UploaderItem, index: number, $event: MouseEvent) => any;
-delete: (item: UploaderItem) => any;
+delete: any;
+"item-click": any;
 }, string, PublicProps, Readonly<{
 item: UploaderItem;
 i: number;
 size?: number | string;
 isReadonly?: boolean;
 }> & Readonly<{
-"onItem-click"?: ((item: UploaderItem, index: number, $event: MouseEvent) => any) | undefined;
-onDelete?: ((item: UploaderItem) => any) | undefined;
+onDelete?: ((...args: any) => any) | undefined;
+"onItem-click"?: ((...args: any) => any) | undefined;
 }>, {
 size: number | string;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, any>;
@@ -84,35 +73,6 @@ declare function __VLS_template(): {
                 readonly: boolean;
                 uploadUrl: string;
                 items: UploaderItem[];
-                uploadQueue: {
-                    items: (() => Promise<any>)[];
-                    currentRunning: number;
-                    running: boolean;
-                    observers: {
-                        handler: Function;
-                        once: boolean;
-                    }[];
-                    maxRunning: number;
-                    push: <T extends ((...args: any[]) => any)>(callback: T) => Promise<Awaited<ReturnType<T>>>;
-                    run: () => void;
-                    pop: () => Promise<any>;
-                    endPop: () => void;
-                    clear: () => TaskQueue;
-                    isEmpty: () => boolean;
-                    readonly length: number;
-                    peek: () => (() => Promise<any>)[];
-                    observe: (handler: (queue: TaskQueue, length: number, running: number) => void, options?: {
-                        once?: boolean;
-                    }) => () => void;
-                    once: (handler: (queue: TaskQueue, length: number, running: number) => void, options?: {
-                        once?: boolean;
-                    }) => () => void;
-                    onEnd: (callback: (queue: TaskQueue, length: number, running: number) => void, options?: {
-                        once?: boolean;
-                    }) => () => void;
-                    notice: () => TaskQueue;
-                    off: (callback?: Function) => TaskQueue;
-                };
                 eventBus: {
                     _allEvents: Array<{
                         [eventName: string]: Handler[];
@@ -230,7 +190,6 @@ export declare type MultiUploaderComposableInstance = {
     readonly: Ref<boolean>;
     uploadUrl: Ref<string>;
     items: Ref<UploaderItem[]>;
-    uploadQueue: ReturnType<typeof useQueue>;
     eventBus: Emitter;
     canUpload: Ref<boolean>;
     isUploading: Ref<boolean>;
@@ -257,10 +216,9 @@ export declare type MultiUploaderOptions = {
     autoStart?: MaybeRefOrGetter<boolean>;
 } & Partial<OptionsEventsMap>;
 
-declare type OptionsEventsMap = {
+export declare type OptionsEventsMap = {
     onChange?: UploaderEvents['change'];
     onDeleteItem?: UploaderEvents['delete-item'];
-    onItemClick?: UploaderEvents['item-click'];
     onUploading?: UploaderEvents['uploading'];
     onUploaded?: UploaderEvents['uploaded'];
     onItemUploadStart?: UploaderEvents['item-upload-start'];
@@ -271,10 +229,9 @@ declare type OptionsEventsMap = {
     onInvalidFileType?: UploaderEvents['invalid-file-type'];
 };
 
-declare type UploaderEvents = {
+export declare type UploaderEvents = {
     'change': (items: UploaderItem[]) => void;
     'delete-item': (item: UploaderItem) => void;
-    'item-click': (item: UploaderItem, index: number, e: Event) => void;
     'uploading': () => void;
     'uploaded': () => void;
     'create-item': (item: UploaderItem) => void;
@@ -285,6 +242,8 @@ declare type UploaderEvents = {
     'item-upload-progress': (item: UploaderItem, event: ProgressEvent) => void;
     'invalid-file-type': (file: File, accepted: string[]) => void;
 };
+
+export declare const uploaderEvents: Record<keyof UploaderEvents, string>;
 
 export declare interface UploaderItem {
     key: string;
@@ -308,8 +267,6 @@ export declare enum UploadState {
 }
 
 export declare function useMultiUploader<T extends MultiUploaderOptions>(currentValue: MaybeRef<Partial<UploaderItem>[]>, uploadTarget: MaybeRefOrGetter<string>, options?: T): MultiUploaderComposableInstance;
-
-declare function useQueue(): TaskQueue;
 
 export declare function wrapRef<T>(value: MaybeRef<T>): Ref<T>;
 

@@ -29,10 +29,9 @@ export type MultiUploaderOptions = {
   autoStart?: MaybeRefOrGetter<boolean>;
 } & Partial<OptionsEventsMap>;
 
-type UploaderEvents = {
+export type UploaderEvents = {
   'change': (items: UploaderItem[]) => void;
   'delete-item': (item: UploaderItem) => void;
-  'item-click': (item: UploaderItem, index: number, e: Event) => void;
   'uploading': () => void;
   'uploaded': () => void;
   'create-item': (item: UploaderItem) => void;
@@ -44,10 +43,9 @@ type UploaderEvents = {
   'invalid-file-type': (file: File, accepted: string[]) => void;
 }
 
-type OptionsEventsMap = {
+export type OptionsEventsMap = {
   onChange?: UploaderEvents['change'];
   onDeleteItem?: UploaderEvents['delete-item'];
-  onItemClick?: UploaderEvents['item-click'];
   onUploading?: UploaderEvents['uploading'];
   onUploaded?: UploaderEvents['uploaded'];
   onItemUploadStart?: UploaderEvents['item-upload-start'];
@@ -58,10 +56,9 @@ type OptionsEventsMap = {
   onInvalidFileType?: UploaderEvents['invalid-file-type'];
 }
 
-const uploaderEvents: Record<keyof UploaderEvents, string> = {
+export const uploaderEvents: Record<keyof UploaderEvents, string> = {
   'change': 'onChange',
   'delete-item': 'onDeleteItem',
-  'item-click': 'onItemClick',
   'uploading': 'onUploading',
   'uploaded': 'onUploaded',
   'create-item': 'onCreateItem',
@@ -517,7 +514,6 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
     readonly,
     uploadUrl,
     items,
-    uploadQueue,
     eventBus,
     canUpload,
     isUploading,
@@ -543,7 +539,6 @@ export type MultiUploaderComposableInstance = {
   readonly: Ref<boolean>;
   uploadUrl: Ref<string>;
   items: Ref<UploaderItem[]>;
-  uploadQueue: ReturnType<typeof useQueue>;
   eventBus: Emitter;
   canUpload: Ref<boolean>;
   isUploading: Ref<boolean>;

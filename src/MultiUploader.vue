@@ -1,7 +1,12 @@
 <script setup lang="ts">
-import { onUnmounted, reactive, ref, useTemplateRef, watch } from 'vue';
-import { type MultiUploaderComposableInstance, MultiUploaderOptions, useMultiUploader } from '@/useMultiUploader';
 import type { UploaderItem } from '@/types/UploaderItem.ts';
+import {
+  type MultiUploaderComposableInstance,
+  type MultiUploaderOptions,
+  uploaderEvents,
+  useMultiUploader,
+} from '@/useMultiUploader';
+import { onUnmounted, reactive, ref, useTemplateRef, watch } from 'vue';
 
 const props = withDefaults(
   defineProps<{
@@ -12,17 +17,23 @@ const props = withDefaults(
     options?: Exclude<MultiUploaderOptions, 'uploadUrl'>
   }>(),
   {
-    options: () => ({})
-  }
+    options: () => ({}),
+  },
 );
 
 const emits = defineEmits<{
-  (e: 'update:modelValue', value: UploaderItem[]): void;
+  (e: 'update:modelValue', items: UploaderItem[]): void;
+  (e: 'change', items: UploaderItem[]): void;
   (e: 'delete-item', item: UploaderItem): void;
-  (e: 'item-click', item: UploaderItem, index: number, $event: Event): void;
   (e: 'uploading'): void;
   (e: 'uploaded'): void;
-  (e: 'reorder', event: any): void;
+  (e: 'create-item', item: UploaderItem): void;
+  (e: 'item-upload-start', item: UploaderItem, xhr: XMLHttpRequest): void;
+  (e: 'item-upload-success', item: UploaderItem, xhr: XMLHttpRequest): void;
+  (e: 'item-upload-fail', item: UploaderItem, xhr: XMLHttpRequest): void;
+  (e: 'item-upload-end', item: UploaderItem, xhr: XMLHttpRequest): void;
+  (e: 'item-upload-progress', item: UploaderItem, event: ProgressEvent): void;
+  (e: 'invalid-file-type', file: File, accepted: string[]): void;
 }>();
 
 const value = defineModel<Partial<UploaderItem>[]>({
@@ -48,28 +59,25 @@ watch(items, () => {
   value.value = items.value;
 }, { deep: true });
 
-const offUploading = instance.on('uploading', () => {
-  emits('uploading');
-});
+const offEvents: (() => void)[] = [];
 
-const offUploaded = instance.on('uploaded', () => {
-  emits('uploaded');
-});
+for (const eventName in uploaderEvents) {
+  const off = instance.on(eventName, (...args: any[]) => {
+    // @ts-ignore
+    emits(eventName, ...args);
+  });
 
-const offDeleteItem = instance.on('delete-item', (item: UploaderItem) => {
-  emits('delete-item', item);
-});
+  offEvents.push(off);
+}
 
 onUnmounted(() => {
-  offUploading();
-  offUploaded();
-  offDeleteItem();
+  offEvents.forEach(off => off());
 });
 
 defineExpose<{
   instance: MultiUploaderComposableInstance;
 }>({
-  instance
+  instance,
 });
 
 </script>
