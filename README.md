@@ -7,6 +7,7 @@ A headless upload component that supports developers to custom for every
 project. [DEMO](https://about.asika.tw/vue-multi-uploader/)
 
 <!-- TOC -->
+
 * [Vue Multi Uploader](#vue-multi-uploader)
   * [Installation](#installation)
   * [Getting Started](#getting-started)
@@ -28,6 +29,7 @@ project. [DEMO](https://about.asika.tw/vue-multi-uploader/)
   * [Events](#events)
   * [Pre-Built Components](#pre-built-components)
     * [Get Uploader Instance From Component](#get-uploader-instance-from-component)
+
 <!-- TOC -->
 
 ## Installation
@@ -162,28 +164,28 @@ useMultiUploader(items, '/api/upload', {
 
 ### Options Refs
 
-| Name                   | Type                                               | Default     | Description                                                                                                                       |
-|------------------------|----------------------------------------------------|-------------|-----------------------------------------------------------------------------------------------------------------------------------|
-| `id`                   | `string`                                           | `undefined` | ID for the uploader instance, leave empty will auto generate.                                                                     |
-| `accept`               | `string`                                           | `undefined` | Accepted file types for upload, separate by comma if multiple, can be mime type (`image/*, text/plain`) or ext name `.jpg, .png`. |
-| `maxFiles`             | `number`                                           | `undefined` | Maximum number of files allowed for upload.                                                                                       |
-| `maxConcurrent`        | `number`                                           | `2`         | Maximum number of concurrent uploads.                                                                                             |
-| `maxItemSize`          | `number`                                           | `undefined` | Maximum size of a single file in bytes.                                                                                           |
-| `disabled`             | `boolean`                                          | `false`     | Disables the uploader if set to `true`.                                                                                           |
-| `readonly`             | `boolean`                                          | `false`     | Sets the uploader to read-only mode if set to `true`.                                                                             |
-| `dropzone`             | `MaybeElement`                                     | `undefined` | Element or ElementRef to be used as the dropzone.                                                                                 |
-| `onDragClass`          | `string`                                           | `h-ondrag`  | CSS class to apply when dragging files over the dropzone.                                                                         |
-| `autoStart`            | `boolean`                                          | `true`      | Automatically start uploading files when added, if set to `false`, you must call `uploadStart()` to start.                        |
-| `onChange`             | (items: UploaderItem[]) => void                    |             | Triggered when the uploader items change.                                                                                         |
-| `onDeleteItem`         | (item: UploaderItem) => void                       |             | Triggered when an item is deleted from uploader.                                                                                  |
-| `onUploading`          | () => void                                         |             | Triggered when uploading process starts.                                                                                          |
-| `onUploaded`           | () => void                                         |             | Triggered when uploading process completes.                                                                                       |
-| `onItemUploadStart`    | (item: UploaderItem, xhr: XMLHttpRequest) => void  |             | Triggered when an individual file upload starts.                                                                                  |
-| `onItemUploadSuccess`  | (item: UploaderItem, xhr: XMLHttpRequest) => void  |             | Triggered when a file uploads successfully, you can get the API return url here and set to `item`.                                |
-| `onItemUploadFail`     | (item: UploaderItem, xhr: XMLHttpRequest) => void  |             | Triggered when a file fails to upload.                                                                                            |
-| `onItemUploadEnd`      | (item: UploaderItem, xhr: XMLHttpRequest) => void  |             | Triggered when an individual file upload finishes.                                                                                |
-| `onItemUploadProgress` | (item: UploaderItem, event: ProgressEvent) => void |             | Triggered during upload progress of a file.                                                                                       |
-| `onInvalidFile`        | (e: Error) => void                                 |             | Triggered when a file with an invalid type or size is selected.                                                                   |
+| Name                   | Type                                                 | Default     | Description                                                                                                                       |
+|------------------------|------------------------------------------------------|-------------|-----------------------------------------------------------------------------------------------------------------------------------|
+| `id`                   | `string`                                             | `undefined` | ID for the uploader instance, leave empty will auto generate.                                                                     |
+| `accept`               | `string`                                             | `undefined` | Accepted file types for upload, separate by comma if multiple, can be mime type (`image/*, text/plain`) or ext name `.jpg, .png`. |
+| `maxFiles`             | `number`                                             | `undefined` | Maximum number of files allowed for upload.                                                                                       |
+| `maxConcurrent`        | `number`                                             | `2`         | Maximum number of concurrent uploads.                                                                                             |
+| `maxItemSize`          | `number`                                             | `undefined` | Maximum size of a single file in bytes.                                                                                           |
+| `disabled`             | `boolean`                                            | `false`     | Disables the uploader if set to `true`.                                                                                           |
+| `readonly`             | `boolean`                                            | `false`     | Sets the uploader to read-only mode if set to `true`.                                                                             |
+| `dropzone`             | `MaybeElement`                                       | `undefined` | Element or ElementRef to be used as the dropzone.                                                                                 |
+| `onDragClass`          | `string`                                             | `h-ondrag`  | CSS class to apply when dragging files over the dropzone.                                                                         |
+| `autoStart`            | `boolean`                                            | `true`      | Automatically start uploading files when added, if set to `false`, you must call `uploadStart()` to start.                        |
+| `onChange`             | `(items: UploaderItem[]) => void`                    |             | Triggered when the uploader items change.                                                                                         |
+| `onDeleteItem`         | `(item: UploaderItem) => void`                       |             | Triggered when an item is deleted from uploader.                                                                                  |
+| `onUploading`          | `() => void`                                         |             | Triggered when uploading process starts.                                                                                          |
+| `onUploaded`           | `() => void`                                         |             | Triggered when uploading process completes.                                                                                       |
+| `onItemUploadStart`    | `(item: UploaderItem, xhr: XMLHttpRequest) => void`  |             | Triggered when an individual file upload starts.                                                                                  |
+| `onItemUploadSuccess`  | `(item: UploaderItem, xhr: XMLHttpRequest) => void`  |             | Triggered when a file uploads successfully, you can get the API return url here and set to `item`.                                |
+| `onItemUploadFail`     | `(item: UploaderItem, xhr: XMLHttpRequest) => void`  |             | Triggered when a file fails to upload.                                                                                            |
+| `onItemUploadEnd`      | `(item: UploaderItem, xhr: XMLHttpRequest) => void`  |             | Triggered when an individual file upload finishes.                                                                                |
+| `onItemUploadProgress` | `(item: UploaderItem, event: ProgressEvent) => void` |             | Triggered during upload progress of a file.                                                                                       |
+| `onInvalidFile`        | `(e: Error) => void`                                 |             | Triggered when a file with an invalid type or size is selected.                                                                   |
 
 ## Return Values
 
@@ -248,7 +250,7 @@ const {
 | `on`               | `(event: string, callback: (...event: any[]) => void) => () => void` | Register event listeners and return a function to remove the listener |
 | `openFileSelector` | `() => void`                                                         | Open the file selection window                                        |
 | `uploadStart`      | `() => Promise<PromiseSettledResult<UploaderItem>[]>`                | Start the upload process and return the result for each item          |
-| `stopItemUpload`   | `(item: UploaderItem                                                 | XMLHttpRequest) => void`                                              | Stop the upload process for a specific item                           |
+| `stopItemUpload`   | `(item: UploaderItem or XMLHttpRequest) => void`                     | Stop the upload process for a specific item                           |
 
 Note you can modify some of the values in the return values, such as `disabled`, `readonly`, `maxFiles` etc.
 The change will be reflected in the uploader instance.
