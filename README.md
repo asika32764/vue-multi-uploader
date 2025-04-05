@@ -205,42 +205,42 @@ const {
 
 | Name          | Type                       | Description                                    |
 |---------------|----------------------------|------------------------------------------------|
-| accept        | `Ref<string>`              | Accepted file types string (e.g., `.jpg,.png`) |
-| disabled      | `Ref<boolean>`             | Whether the uploader is disabled               |
-| id            | `Ref<string>`              | Unique identifier for the uploader instance    |
-| items         | `Ref<UploaderItem[]>`      | List of file items currently in the uploader   |
-| maxConcurrent | `Ref<number>`              | Maximum number of concurrent uploads           |
-| maxFiles      | `Ref<number or undefined>` | Maximum number of files allowed                |
-| maxItemSize   | `Ref<number or undefined>` | Maximum size of a single file in bytes         |
-| readonly      | `Ref<boolean>`             | Whether the uploader is in read-only mode      |
-| uploadUrl     | `Ref<string>`              | Target URL for uploads                         |
+| `accept`        | `Ref<string>`              | Accepted file types string (e.g., `.jpg,.png`) |
+| `disabled`      | `Ref<boolean>`             | Whether the uploader is disabled               |
+| `id`            | `Ref<string>`              | Unique identifier for the uploader instance    |
+| `items`         | `Ref<UploaderItem[]>`      | List of file items currently in the uploader   |
+| `maxConcurrent` | `Ref<number>`              | Maximum number of concurrent uploads           |
+| `maxFiles`      | `Ref<number or undefined>` | Maximum number of files allowed                |
+| `maxItemSize`   | `Ref<number or undefined>` | Maximum size of a single file in bytes         |
+| `readonly`      | `Ref<boolean>`             | Whether the uploader is in read-only mode      |
+| `uploadUrl`     | `Ref<string>`              | Target URL for uploads                         |
 
 ### Readonly Values
 
 | Name          | Type            | Description                                                                                             |
 |---------------|-----------------|---------------------------------------------------------------------------------------------------------|
-| acceptedTypes | `Ref<string[]>` | Array of accepted file types                                                                            |
-| canUpload     | `Ref<boolean>`  | Whether uploading is allowed, if is `readonly` or `disabled` or reaches max files, this will be `false` |
-| eventBus      | `Emitter`       | Custom event bus for listening and triggering events                                                    |
-| isReadonly    | `Ref<boolean>`  | Whether the uploader is in read-only state, this will merge `disabled` and `readonly`                   |
-| isUploading   | `Ref<boolean>`  | Whether an upload is currently in progress                                                              |
-| totalSize     | `Ref<number>`   | Total size of all files in the uploader                                                                 |
+| `acceptedTypes` | `Ref<string[]>` | Array of accepted file types                                                                            |
+| `canUpload`     | `Ref<boolean>`  | Whether uploading is allowed, if is `readonly` or `disabled` or reaches max files, this will be `false` |
+| `eventBus`      | `Emitter`       | Custom event bus for listening and triggering events                                                    |
+| `isReadonly`    | `Ref<boolean>`  | Whether the uploader is in read-only state, this will merge `disabled` and `readonly`                   |
+| `isUploading`   | `Ref<boolean>`  | Whether an upload is currently in progress                                                              |
+| `totalSize`     | `Ref<number>`   | Total size of all files in the uploader                                                                 |
 
 ### Methods
 
 | Name             | Type                                                                 | Description                                                           |
 |------------------|----------------------------------------------------------------------|-----------------------------------------------------------------------|
-| addFile          | `(file: File) => UploaderItem`                                       | Add a file to the uploader                                            |
-| addItem          | `(item: UploaderItem) => UploaderItem`                               | Add an item to the uploader                                           |
-| createItem       | `(file: File) => UploaderItem`                                       | Create a new item based on the file                                   |
-| deleteItem       | `(child: UploaderItem) => void`                                      | Delete a specific file item from the uploader                         |
-| emits            | `(event: string, ...args: any[]) => void`                            | Manually trigger specific events                                      |
-| isImage          | `(filePath: string) => boolean`                                      | Determine if a file is an image based on its path                     |
-| isImageItem      | `(item: UploaderItem) => boolean`                                    | Determine if an item is an image based on `UploaderItem`              |
-| on               | `(event: string, callback: (...event: any[]) => void) => () => void` | Register event listeners and return a function to remove the listener |
-| openFileSelector | `() => void`                                                         | Open the file selection window                                        |
-| uploadStart      | `() => Promise<PromiseSettledResult<UploaderItem>[]>`                | Start the upload process and return the result for each item          |
-| stopItemUpload | `(item: UploaderItem | XMLHttpRequest) => void`                                                         | Stop the upload process for a specific item                           |
+| `addFile`          | `(file: File) => UploaderItem`                                       | Add a file to the uploader                                            |
+| `addItem`          | `(item: UploaderItem) => UploaderItem`                               | Add an item to the uploader                                           |
+| `createItem`       | `(file: File) => UploaderItem`                                       | Create a new item based on the file                                   |
+| `deleteItem`       | `(child: UploaderItem) => void`                                      | Delete a specific file item from the uploader                         |
+| `emits`            | `(event: string, ...args: any[]) => void`                            | Manually trigger specific events                                      |
+| `isImage`          | `(filePath: string) => boolean`                                      | Determine if a file is an image based on its path                     |
+| `isImageItem`      | `(item: UploaderItem) => boolean`                                    | Determine if an item is an image based on `UploaderItem`              |
+| `on`               | `(event: string, callback: (...event: any[]) => void) => () => void` | Register event listeners and return a function to remove the listener |
+| `openFileSelector` | `() => void`                                                         | Open the file selection window                                        |
+| `uploadStart`      | `() => Promise<PromiseSettledResult<UploaderItem>[]>`                | Start the upload process and return the result for each item          |
+| `stopItemUpload` | `(item: UploaderItem | XMLHttpRequest) => void`                                                         | Stop the upload process for a specific item                           |
 
 
 Note you can modify some of the values in the return values, such as `disabled`, `readonly`, `maxFiles` etc.
