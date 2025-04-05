@@ -107,7 +107,7 @@ function onClick($event: MouseEvent) {
       </div>
       <div class="preview-img__error-message error-message" v-if="state === UploadState.ERROR" @click.stop.prevent="">
         <span class="error-message__notice">Upload fail</span>
-        <span class="error-message__message">{{ item.error.message }}</span>
+        <span class="error-message__message">{{ item.error?.message }}</span>
       </div>
     </slot>
   </div>

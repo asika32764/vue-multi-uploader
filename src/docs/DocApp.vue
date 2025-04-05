@@ -37,19 +37,19 @@ yarn add vue-multi-uploader
     </p>
 
     <div class="d-flex gap-2 justify-content-center">
-      <a class="btn btn-primary" href="https://github.com/asika32764/vue-pagination#readme"
+      <a class="btn btn-primary" href="https://github.com/asika32764/vue-multi-uploader#readme"
         target="_blank">
         <FontAwesomeIcon :icon="faFile" />
         Documentation
       </a>
 
-      <a class="btn btn-dark" href="https://github.com/asika32764/vue-pagination"
+      <a class="btn btn-dark" href="https://github.com/asika32764/vue-multi-uploader"
         target="_blank">
         <FontAwesomeIcon :icon="faGithub" />
         GitHub
       </a>
 
-      <a class="btn btn-danger" href="https://www.npmjs.com/package/@asika32764/vue-pagination"
+      <a class="btn btn-danger" href="https://www.npmjs.com/package/vue-multi-uploader"
         target="_blank">
         <FontAwesomeIcon :icon="faNpm" />
         NPM

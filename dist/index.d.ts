@@ -1,6 +1,7 @@
 import { ComponentOptionsMixin } from 'vue';
 import { ComponentProvideOptions } from 'vue';
 import { ComponentPublicInstance } from 'vue';
+import { ComputedRef } from 'vue';
 import { DefineComponent } from 'vue';
 import { Emitter } from 'dush';
 import { Handler } from 'dush';
@@ -69,6 +70,7 @@ declare function __VLS_template(): {
                 accept: string;
                 maxFiles: number | undefined;
                 maxConcurrent: number;
+                maxItemSize: number | undefined;
                 disabled: boolean;
                 readonly: boolean;
                 uploadUrl: string;
@@ -96,11 +98,16 @@ declare function __VLS_template(): {
                 isUploading: boolean;
                 acceptedTypes: string[];
                 isReadonly: boolean;
+                totalSize: number;
                 emits: (event: string, ...args: any[]) => void;
                 on: (event: string, callback: (...event: any[]) => void) => () => void;
                 openFileSelector: () => void;
+                addFile: (file: File) => UploaderItem;
+                addItem: (item: UploaderItem) => UploaderItem;
+                createItem: (file: File) => UploaderItem;
                 deleteItem: (child: UploaderItem) => void;
                 uploadStart: () => Promise<PromiseSettledResult<UploaderItem>[]>;
+                stopItemUpload: (item: UploaderItem | XMLHttpRequest) => void;
                 isImage: (filePath: string) => boolean;
                 isImageItem: (item: UploaderItem) => boolean;
             };
@@ -186,20 +193,26 @@ export declare type MultiUploaderComposableInstance = {
     accept: Ref<string>;
     maxFiles: Ref<number | undefined>;
     maxConcurrent: Ref<number>;
+    maxItemSize: Ref<number | undefined>;
     disabled: Ref<boolean>;
     readonly: Ref<boolean>;
     uploadUrl: Ref<string>;
     items: Ref<UploaderItem[]>;
     eventBus: Emitter;
-    canUpload: Ref<boolean>;
-    isUploading: Ref<boolean>;
-    acceptedTypes: Ref<string[]>;
-    isReadonly: Ref<boolean>;
+    canUpload: ComputedRef<boolean>;
+    isUploading: ComputedRef<boolean>;
+    acceptedTypes: ComputedRef<string[]>;
+    isReadonly: ComputedRef<boolean>;
+    totalSize: ComputedRef<number>;
     emits: (event: string, ...args: any[]) => void;
     on: (event: string, callback: (...event: any[]) => void) => () => void;
     openFileSelector: () => void;
+    addFile: (file: File) => UploaderItem;
+    addItem: (item: UploaderItem) => UploaderItem;
+    createItem: (file: File) => UploaderItem;
     deleteItem: (child: UploaderItem) => void;
     uploadStart: () => Promise<PromiseSettledResult<UploaderItem>[]>;
+    stopItemUpload: (item: UploaderItem | XMLHttpRequest) => void;
     isImage: (filePath: string) => boolean;
     isImageItem: (item: UploaderItem) => boolean;
 };
@@ -209,6 +222,7 @@ export declare type MultiUploaderOptions = {
     accept?: MaybeRefOrGetter<string | undefined>;
     maxFiles?: MaybeRefOrGetter<number | undefined>;
     maxConcurrent?: MaybeRefOrGetter<number | undefined>;
+    maxItemSize?: MaybeRefOrGetter<number | undefined>;
     disabled?: MaybeRefOrGetter<boolean | undefined>;
     readonly?: MaybeRefOrGetter<boolean | undefined>;
     dropzone?: MaybeRefOrGetter<MaybeElement>;
@@ -216,7 +230,7 @@ export declare type MultiUploaderOptions = {
     autoStart?: MaybeRefOrGetter<boolean>;
 } & Partial<OptionsEventsMap>;
 
-export declare type OptionsEventsMap = {
+declare type OptionsEventsMap = {
     onChange?: UploaderEvents['change'];
     onDeleteItem?: UploaderEvents['delete-item'];
     onUploading?: UploaderEvents['uploading'];
@@ -226,10 +240,10 @@ export declare type OptionsEventsMap = {
     onItemUploadFail?: UploaderEvents['item-upload-fail'];
     onItemUploadEnd?: UploaderEvents['item-upload-end'];
     onItemUploadProgress?: UploaderEvents['item-upload-progress'];
-    onInvalidFileType?: UploaderEvents['invalid-file-type'];
+    onInvalidFile?: UploaderEvents['invalid-file'];
 };
 
-export declare type UploaderEvents = {
+declare type UploaderEvents = {
     'change': (items: UploaderItem[]) => void;
     'delete-item': (item: UploaderItem) => void;
     'uploading': () => void;
@@ -240,10 +254,8 @@ export declare type UploaderEvents = {
     'item-upload-fail': (item: UploaderItem, xhr: XMLHttpRequest) => void;
     'item-upload-end': (item: UploaderItem, xhr: XMLHttpRequest) => void;
     'item-upload-progress': (item: UploaderItem, event: ProgressEvent) => void;
-    'invalid-file-type': (file: File, accepted: string[]) => void;
+    'invalid-file': (e: Error) => void;
 };
-
-export declare const uploaderEvents: Record<keyof UploaderEvents, string>;
 
 export declare interface UploaderItem {
     key: string;
@@ -254,6 +266,8 @@ export declare interface UploaderItem {
     data?: Record<string, any>;
     uploadState: UploadState;
     progress: number;
+    xhr?: XMLHttpRequest;
+    error?: Error;
     message?: string;
     messageType?: string;
     [props: string]: any;
@@ -267,9 +281,5 @@ export declare enum UploadState {
 }
 
 export declare function useMultiUploader<T extends MultiUploaderOptions>(currentValue: MaybeRef<Partial<UploaderItem>[]>, uploadTarget: MaybeRefOrGetter<string>, options?: T): MultiUploaderComposableInstance;
-
-export declare function wrapRef<T>(value: MaybeRef<T>): Ref<T>;
-
-export declare function wrapUploaderItem(item: Partial<UploaderItem>, extra?: Record<keyof UploaderItem, any>): UploaderItem;
 
 export { }

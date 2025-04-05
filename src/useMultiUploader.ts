@@ -7,7 +7,7 @@ import useQueue from '@/useQueue';
 import { MaybeElement, unrefElement, wrapRef, wrapUploaderItem } from '@/utils.ts';
 import { uid } from '@lyrasoft/ts-toolkit/src/generic';
 import { Emitter } from 'dush';
-import { computed, type MaybeRef, type MaybeRefOrGetter, reactive, type Ref, watch } from 'vue';
+import { computed, type MaybeRef, type MaybeRefOrGetter, reactive, type Ref, type ComputedRef, watch } from 'vue';
 
 export type MultiUploaderOptions = {
   id?: MaybeRefOrGetter<string | undefined>;
@@ -143,7 +143,7 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
         addedItem.thumbUrl = String(event.target?.result);
       };
 
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(item.file);
     }
 
     return addedItem;
@@ -275,7 +275,7 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
           } catch (parseError) {
             console.error(parseError);
             item.uploadState = UploadState.ERROR;
-            item.error = parseError;
+            item.error = parseError as Error;
 
             reject(parseError);
           }

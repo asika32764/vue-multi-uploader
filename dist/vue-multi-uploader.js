@@ -1,386 +1,12 @@
-import { computed as j, watch as W, reactive as ye, ref as le, isRef as we, defineComponent as fe, mergeModels as pe, useModel as $e, useTemplateRef as Me, onUnmounted as be, openBlock as I, createElementBlock as P, normalizeClass as De, unref as J, createElementVNode as C, renderSlot as Q, normalizeStyle as ie, createCommentVNode as te, toDisplayString as ce, withModifiers as me, normalizeProps as _e, guardReactiveProps as Se } from "vue";
-var A = /* @__PURE__ */ ((a) => (a.PENDING = "pending", a.UPLOADING = "uploading", a.UPLOADED = "uploaded", a.ERROR = "error", a))(A || {});
-const x = class x {
-};
-x.alert = async (r) => window.alert(r), x.confirm = async (r) => new Promise((o) => {
-  const l = confirm(r);
-  o(l);
-}), x.deleteConfirm = async (r) => x.confirm(r), x.confirmText = () => "確認", x.cancelText = () => "取消", x.deleteText = () => "刪除";
-let he = x;
-function oe(a = "", r = !1) {
-  if (r) {
-    const l = (performance != null && performance.timeOrigin ? Math.round(performance.timeOrigin) : performance.timing.navigationStart) * 1e5 + performance.now() * 100;
-    return a + l.toString(12) + ve(4);
-  }
-  return a + ve(12);
-}
-function ve(a = 12) {
-  const o = window.crypto;
-  if (!o)
-    return String(Math.floor(Math.random() * a ** 10));
-  const l = new Uint8Array(a);
-  for (let p = 0; p < a; p += 65536)
-    o.getRandomValues(l.subarray(p, p + Math.min(a - p, 65536)));
-  return Array.from(l).map((p) => p.toString(16).padStart(2, "0")).join("");
-}
-var Ee = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof global < "u" ? global : typeof self < "u" ? self : {}, Oe = { exports: {} };
-(function(a, r) {
-  (function(o, l) {
-    a.exports = l();
-  })(Ee, function() {
-    var o = 1e3, l = 6e4, p = 36e5, v = "millisecond", _ = "second", D = "minute", b = "hour", S = "day", L = "week", m = "month", y = "quarter", g = "year", k = "date", Y = "Invalid Date", R = /^(\d{4})[-/]?(\d{1,2})?[-/]?(\d{0,2})[Tt\s]*(\d{1,2})?:?(\d{1,2})?:?(\d{1,2})?[.:]?(\d+)?$/, ae = /\[([^\]]+)]|Y{1,4}|M{1,4}|D{1,2}|d{1,4}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|Z{1,2}|SSS/g, ue = { name: "en", weekdays: "Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"), months: "January_February_March_April_May_June_July_August_September_October_November_December".split("_"), ordinal: function(c) {
-      var s = ["th", "st", "nd", "rd"], e = c % 100;
-      return "[" + c + (s[(e - 20) % 10] || s[e] || s[0]) + "]";
-    } }, Z = function(c, s, e) {
-      var t = String(c);
-      return !t || t.length >= s ? c : "" + Array(s + 1 - t.length).join(e) + c;
-    }, ne = { s: Z, z: function(c) {
-      var s = -c.utcOffset(), e = Math.abs(s), t = Math.floor(e / 60), n = e % 60;
-      return (s <= 0 ? "+" : "-") + Z(t, 2, "0") + ":" + Z(n, 2, "0");
-    }, m: function c(s, e) {
-      if (s.date() < e.date()) return -c(e, s);
-      var t = 12 * (e.year() - s.year()) + (e.month() - s.month()), n = s.clone().add(t, m), i = e - n < 0, u = s.clone().add(t + (i ? -1 : 1), m);
-      return +(-(t + (e - n) / (i ? n - u : u - n)) || 0);
-    }, a: function(c) {
-      return c < 0 ? Math.ceil(c) || 0 : Math.floor(c);
-    }, p: function(c) {
-      return { M: m, y: g, w: L, d: S, D: k, h: b, m: D, s: _, ms: v, Q: y }[c] || String(c || "").toLowerCase().replace(/s$/, "");
-    }, u: function(c) {
-      return c === void 0;
-    } }, H = "en", z = {};
-    z[H] = ue;
-    var re = "$isDayjsObject", q = function(c) {
-      return c instanceof V || !(!c || !c[re]);
-    }, B = function c(s, e, t) {
-      var n;
-      if (!s) return H;
-      if (typeof s == "string") {
-        var i = s.toLowerCase();
-        z[i] && (n = i), e && (z[i] = e, n = i);
-        var u = s.split("-");
-        if (!n && u.length > 1) return c(u[0]);
-      } else {
-        var d = s.name;
-        z[d] = s, n = d;
-      }
-      return !t && n && (H = n), n || !t && H;
-    }, M = function(c, s) {
-      if (q(c)) return c.clone();
-      var e = typeof s == "object" ? s : {};
-      return e.date = c, e.args = arguments, new V(e);
-    }, h = ne;
-    h.l = B, h.i = q, h.w = function(c, s) {
-      return M(c, { locale: s.$L, utc: s.$u, x: s.$x, $offset: s.$offset });
-    };
-    var V = function() {
-      function c(e) {
-        this.$L = B(e.locale, null, !0), this.parse(e), this.$x = this.$x || e.x || {}, this[re] = !0;
-      }
-      var s = c.prototype;
-      return s.parse = function(e) {
-        this.$d = function(t) {
-          var n = t.date, i = t.utc;
-          if (n === null) return /* @__PURE__ */ new Date(NaN);
-          if (h.u(n)) return /* @__PURE__ */ new Date();
-          if (n instanceof Date) return new Date(n);
-          if (typeof n == "string" && !/Z$/i.test(n)) {
-            var u = n.match(R);
-            if (u) {
-              var d = u[2] - 1 || 0, f = (u[7] || "0").substring(0, 3);
-              return i ? new Date(Date.UTC(u[1], d, u[3] || 1, u[4] || 0, u[5] || 0, u[6] || 0, f)) : new Date(u[1], d, u[3] || 1, u[4] || 0, u[5] || 0, u[6] || 0, f);
-            }
-          }
-          return new Date(n);
-        }(e), this.init();
-      }, s.init = function() {
-        var e = this.$d;
-        this.$y = e.getFullYear(), this.$M = e.getMonth(), this.$D = e.getDate(), this.$W = e.getDay(), this.$H = e.getHours(), this.$m = e.getMinutes(), this.$s = e.getSeconds(), this.$ms = e.getMilliseconds();
-      }, s.$utils = function() {
-        return h;
-      }, s.isValid = function() {
-        return this.$d.toString() !== Y;
-      }, s.isSame = function(e, t) {
-        var n = M(e);
-        return this.startOf(t) <= n && n <= this.endOf(t);
-      }, s.isAfter = function(e, t) {
-        return M(e) < this.startOf(t);
-      }, s.isBefore = function(e, t) {
-        return this.endOf(t) < M(e);
-      }, s.$g = function(e, t, n) {
-        return h.u(e) ? this[t] : this.set(n, e);
-      }, s.unix = function() {
-        return Math.floor(this.valueOf() / 1e3);
-      }, s.valueOf = function() {
-        return this.$d.getTime();
-      }, s.startOf = function(e, t) {
-        var n = this, i = !!h.u(t) || t, u = h.p(e), d = function(G, O) {
-          var F = h.w(n.$u ? Date.UTC(n.$y, O, G) : new Date(n.$y, O, G), n);
-          return i ? F : F.endOf(S);
-        }, f = function(G, O) {
-          return h.w(n.toDate()[G].apply(n.toDate("s"), (i ? [0, 0, 0, 0] : [23, 59, 59, 999]).slice(O)), n);
-        }, w = this.$W, $ = this.$M, E = this.$D, T = "set" + (this.$u ? "UTC" : "");
-        switch (u) {
-          case g:
-            return i ? d(1, 0) : d(31, 11);
-          case m:
-            return i ? d(1, $) : d(0, $ + 1);
-          case L:
-            var N = this.$locale().weekStart || 0, X = (w < N ? w + 7 : w) - N;
-            return d(i ? E - X : E + (6 - X), $);
-          case S:
-          case k:
-            return f(T + "Hours", 0);
-          case b:
-            return f(T + "Minutes", 1);
-          case D:
-            return f(T + "Seconds", 2);
-          case _:
-            return f(T + "Milliseconds", 3);
-          default:
-            return this.clone();
-        }
-      }, s.endOf = function(e) {
-        return this.startOf(e, !1);
-      }, s.$set = function(e, t) {
-        var n, i = h.p(e), u = "set" + (this.$u ? "UTC" : ""), d = (n = {}, n[S] = u + "Date", n[k] = u + "Date", n[m] = u + "Month", n[g] = u + "FullYear", n[b] = u + "Hours", n[D] = u + "Minutes", n[_] = u + "Seconds", n[v] = u + "Milliseconds", n)[i], f = i === S ? this.$D + (t - this.$W) : t;
-        if (i === m || i === g) {
-          var w = this.clone().set(k, 1);
-          w.$d[d](f), w.init(), this.$d = w.set(k, Math.min(this.$D, w.daysInMonth())).$d;
-        } else d && this.$d[d](f);
-        return this.init(), this;
-      }, s.set = function(e, t) {
-        return this.clone().$set(e, t);
-      }, s.get = function(e) {
-        return this[h.p(e)]();
-      }, s.add = function(e, t) {
-        var n, i = this;
-        e = Number(e);
-        var u = h.p(t), d = function($) {
-          var E = M(i);
-          return h.w(E.date(E.date() + Math.round($ * e)), i);
-        };
-        if (u === m) return this.set(m, this.$M + e);
-        if (u === g) return this.set(g, this.$y + e);
-        if (u === S) return d(1);
-        if (u === L) return d(7);
-        var f = (n = {}, n[D] = l, n[b] = p, n[_] = o, n)[u] || 1, w = this.$d.getTime() + e * f;
-        return h.w(w, this);
-      }, s.subtract = function(e, t) {
-        return this.add(-1 * e, t);
-      }, s.format = function(e) {
-        var t = this, n = this.$locale();
-        if (!this.isValid()) return n.invalidDate || Y;
-        var i = e || "YYYY-MM-DDTHH:mm:ssZ", u = h.z(this), d = this.$H, f = this.$m, w = this.$M, $ = n.weekdays, E = n.months, T = n.meridiem, N = function(O, F, ee, se) {
-          return O && (O[F] || O(t, i)) || ee[F].slice(0, se);
-        }, X = function(O) {
-          return h.s(d % 12 || 12, O, "0");
-        }, G = T || function(O, F, ee) {
-          var se = O < 12 ? "AM" : "PM";
-          return ee ? se.toLowerCase() : se;
-        };
-        return i.replace(ae, function(O, F) {
-          return F || function(ee) {
-            switch (ee) {
-              case "YY":
-                return String(t.$y).slice(-2);
-              case "YYYY":
-                return h.s(t.$y, 4, "0");
-              case "M":
-                return w + 1;
-              case "MM":
-                return h.s(w + 1, 2, "0");
-              case "MMM":
-                return N(n.monthsShort, w, E, 3);
-              case "MMMM":
-                return N(E, w);
-              case "D":
-                return t.$D;
-              case "DD":
-                return h.s(t.$D, 2, "0");
-              case "d":
-                return String(t.$W);
-              case "dd":
-                return N(n.weekdaysMin, t.$W, $, 2);
-              case "ddd":
-                return N(n.weekdaysShort, t.$W, $, 3);
-              case "dddd":
-                return $[t.$W];
-              case "H":
-                return String(d);
-              case "HH":
-                return h.s(d, 2, "0");
-              case "h":
-                return X(1);
-              case "hh":
-                return X(2);
-              case "a":
-                return G(d, f, !0);
-              case "A":
-                return G(d, f, !1);
-              case "m":
-                return String(f);
-              case "mm":
-                return h.s(f, 2, "0");
-              case "s":
-                return String(t.$s);
-              case "ss":
-                return h.s(t.$s, 2, "0");
-              case "SSS":
-                return h.s(t.$ms, 3, "0");
-              case "Z":
-                return u;
-            }
-            return null;
-          }(O) || u.replace(":", "");
-        });
-      }, s.utcOffset = function() {
-        return 15 * -Math.round(this.$d.getTimezoneOffset() / 15);
-      }, s.diff = function(e, t, n) {
-        var i, u = this, d = h.p(t), f = M(e), w = (f.utcOffset() - this.utcOffset()) * l, $ = this - f, E = function() {
-          return h.m(u, f);
-        };
-        switch (d) {
-          case g:
-            i = E() / 12;
-            break;
-          case m:
-            i = E();
-            break;
-          case y:
-            i = E() / 3;
-            break;
-          case L:
-            i = ($ - w) / 6048e5;
-            break;
-          case S:
-            i = ($ - w) / 864e5;
-            break;
-          case b:
-            i = $ / p;
-            break;
-          case D:
-            i = $ / l;
-            break;
-          case _:
-            i = $ / o;
-            break;
-          default:
-            i = $;
-        }
-        return n ? i : h.a(i);
-      }, s.daysInMonth = function() {
-        return this.endOf(m).$D;
-      }, s.$locale = function() {
-        return z[this.$L];
-      }, s.locale = function(e, t) {
-        if (!e) return this.$L;
-        var n = this.clone(), i = B(e, t, !0);
-        return i && (n.$L = i), n;
-      }, s.clone = function() {
-        return h.w(this.$d, this);
-      }, s.toDate = function() {
-        return new Date(this.valueOf());
-      }, s.toJSON = function() {
-        return this.isValid() ? this.toISOString() : null;
-      }, s.toISOString = function() {
-        return this.$d.toISOString();
-      }, s.toString = function() {
-        return this.$d.toUTCString();
-      }, c;
-    }(), K = V.prototype;
-    return M.prototype = K, [["$ms", v], ["$s", _], ["$m", D], ["$H", b], ["$W", S], ["$M", m], ["$y", g], ["$D", k]].forEach(function(c) {
-      K[c[1]] = function(s) {
-        return this.$g(s, c[0], c[1]);
-      };
-    }), M.extend = function(c, s) {
-      return c.$i || (c(s, V, M), c.$i = !0), M;
-    }, M.locale = B, M.isDayjs = q, M.unix = function(c) {
-      return M(1e3 * c);
-    }, M.en = z[H], M.Ls = z, M.p = {}, M;
-  });
-})(Oe);
-class Ae {
-  constructor(r = 1) {
-    this.maxRunning = r, this.items = [], this.currentRunning = 0, this.running = !1, this.observers = [];
-  }
-  push(r) {
-    const o = new Promise((l, p) => {
-      this.items.push(() => Promise.resolve(r()).then(l));
-    });
-    return this.run(), o;
-  }
-  run() {
-    this.running || (this.running = !0), this.pop();
-  }
-  async pop() {
-    const r = this.items.shift();
-    if (!r)
-      return this.running = !1, Promise.resolve();
-    if (this.currentRunning >= this.maxRunning)
-      return this.items.unshift(r), Promise.resolve();
-    this.currentRunning++, this.notice();
-    try {
-      return await r();
-    } catch (o) {
-      throw o;
-    } finally {
-      this.endPop();
-    }
-  }
-  endPop() {
-    this.currentRunning--, this.notice(), this.pop();
-  }
-  clear() {
-    return this.items = [], this.notice(), this;
-  }
-  isEmpty() {
-    return this.items.length === 0;
-  }
-  get length() {
-    return this.items.length;
-  }
-  peek() {
-    return this.items;
-  }
-  observe(r, o = {}) {
-    return this.observers.push({
-      handler: r,
-      once: o.once || !1
-    }), () => {
-      this.off(r);
-    };
-  }
-  once(r, o = {}) {
-    return o.once = !0, this.observe(r, o);
-  }
-  onEnd(r, o = {}) {
-    return this.observe((l, p, v) => {
-      p === 0 && v === 0 && r(l, p, v);
-    }, o);
-  }
-  notice() {
-    return this.observers.forEach((r) => {
-      r.handler(this, this.length, this.currentRunning);
-    }), this.observers = this.observers.filter((r) => !r.once), this;
-  }
-  off(r) {
-    return r == null ? (this.observers = [], this) : (this.observers = this.observers.filter((o) => o.handler !== r), this);
-  }
-}
-function Le(a = 1) {
-  return new Ae(a);
-}
-function ke() {
-  return Le();
-}
+import { ref as ce, isRef as we, computed as F, watch as J, reactive as de, defineComponent as he, mergeModels as me, useModel as $e, useTemplateRef as Me, onUnmounted as be, openBlock as x, createElementBlock as T, normalizeClass as Se, unref as Z, createElementVNode as z, renderSlot as G, normalizeStyle as oe, createCommentVNode as te, toDisplayString as fe, withModifiers as ve, normalizeProps as De, guardReactiveProps as Ee } from "vue";
 /*!
  * dush <https://github.com/tunnckoCore/dush>
  *
  * Copyright (c) Charlike Mike Reagent <@tunnckoCore> (https://i.am.charlike.online)
  * Released under the MIT license.
  */
-function Re() {
-  var a = /* @__PURE__ */ Object.create(null), r = {
+function _e() {
+  var i = /* @__PURE__ */ Object.create(null), n = {
     /**
      * > An listeners map of all registered events
      * and their listeners. A key/value store, where 1) value
@@ -409,7 +35,7 @@ function Re() {
      * @type {Object} `_allEvents` a key/value store of all events and their listeners
      * @api public
      */
-    _allEvents: a,
+    _allEvents: i,
     /**
      * > Invokes `plugin` function immediately, which is passed
      * with `app` instance. You can use it for adding more methods
@@ -440,9 +66,9 @@ function Re() {
      * @return {Object} self "app" for chaining
      * @api public
      */
-    use: function(l, p) {
-      var v = l(r, p);
-      return v || r;
+    use: function(a, d) {
+      var v = a(n, d);
+      return v || n;
     },
     /**
      * > Add `handler` for `name` event.
@@ -473,14 +99,14 @@ function Re() {
      * @return {Object} self "app" for chaining
      * @api public
      */
-    on: function(l, p, v) {
-      var _ = r._allEvents[l] || (r._allEvents[l] = []);
-      function D() {
-        r.off(l, D), p.apply(p, arguments);
+    on: function(a, d, v) {
+      var k = n._allEvents[a] || (n._allEvents[a] = []);
+      function b() {
+        n.off(a, b), d.apply(d, arguments);
       }
-      D.fn = p;
-      var b = v ? D : p;
-      return _.push(b), r;
+      b.fn = d;
+      var E = v ? b : d;
+      return k.push(E), n;
     },
     /**
      * > Add `handler` for `name` event that
@@ -513,8 +139,8 @@ function Re() {
      * @return {Object} self "app" for chaining
      * @api public
      */
-    once: function(l, p) {
-      return r.on(l, p, !0), r;
+    once: function(a, d) {
+      return n.on(a, d, !0), n;
     },
     /**
      * > Remove `handler` for `name` event. If `handler` not
@@ -550,12 +176,12 @@ function Re() {
      * @return {Object} self "app" for chaining
      * @api public
      */
-    off: function(l, p) {
-      return p && r._allEvents[l] ? r._allEvents[l] = r._allEvents[l].filter(
+    off: function(a, d) {
+      return d && n._allEvents[a] ? n._allEvents[a] = n._allEvents[a].filter(
         function(v) {
-          return v !== p && v !== p.fn;
+          return v !== d && v !== d.fn;
         }
-      ) : l ? r._allEvents[l] = [] : r._allEvents = /* @__PURE__ */ Object.create(null), r;
+      ) : a ? n._allEvents[a] = [] : n._allEvents = /* @__PURE__ */ Object.create(null), n;
     },
     /**
      * > Invoke all handlers for given `name` event.
@@ -589,21 +215,21 @@ function Re() {
      * @return {Object} self "app" for chaining
      * @api public
      */
-    emit: function(l) {
-      if (l !== "*") {
-        var p = [].slice.call(arguments);
-        (r._allEvents[l] || []).map(function(v) {
-          v.apply(v, p.slice(1));
-        }), (r._allEvents["*"] || []).map(function(v) {
-          v.apply(v, p);
+    emit: function(a) {
+      if (a !== "*") {
+        var d = [].slice.call(arguments);
+        (n._allEvents[a] || []).map(function(v) {
+          v.apply(v, d.slice(1));
+        }), (n._allEvents["*"] || []).map(function(v) {
+          v.apply(v, d);
         });
       }
-      return r;
+      return n;
     }
   };
-  return r;
+  return n;
 }
-const de = {
+const pe = {
   change: "onChange",
   "delete-item": "onDeleteItem",
   uploading: "onUploading",
@@ -614,162 +240,600 @@ const de = {
   "item-upload-fail": "onItemUploadFail",
   "item-upload-end": "onItemUploadEnd",
   "item-upload-progress": "onItemUploadProgress",
-  "invalid-file-type": "onInvalidFileType"
+  "invalid-file": "onInvalidFile"
 };
-function Ce(a) {
-  const r = Re();
-  for (const o in de) {
-    const l = de[o];
-    l && a[l] && r.on(o, a[l]);
+function Oe(i) {
+  const n = _e();
+  for (const t in pe) {
+    const a = pe[t];
+    a && i[a] && n.on(t, i[a]);
   }
-  return r;
+  return n;
 }
-function Ue(a, r, o = {}) {
-  const l = U(o.id ?? "vue-multi-uploader-" + oe()), p = U(o.accept ?? ""), v = U(o.maxFiles), _ = U(o.maxConcurrent ?? 2), D = U(o.disabled ?? !1), b = U(o.readonly ?? !1), S = U(r), L = j(() => U(o.dropzone).value), m = U(o.onDragClass ?? "h-ondrag"), y = U(o.autoStart ?? !1);
-  let g = U(a);
-  g.value = g.value.map(
-    (e) => ge(e, { uploadState: A.UPLOADED })
+var R = /* @__PURE__ */ ((i) => (i.PENDING = "pending", i.UPLOADING = "uploading", i.UPLOADED = "uploaded", i.ERROR = "error", i))(R || {});
+class Ie extends Error {
+  constructor(n, t, a) {
+    super(n), this.file = t, this.accepted = a, this.name = "InvalidFileTypeError";
+  }
+}
+class Ae extends Error {
+  constructor(n, t, a) {
+    super(n), this.file = t, this.maxSize = a, this.name = "InvalidFileSizeError";
+  }
+}
+function Le(i, n) {
+  const t = document.createElement("input");
+  t.id = "multi-uploader-selector", t.type = "file", t.accept = i.value, t.multiple = !0, t.style.display = "none", t.addEventListener("change", () => {
+    const a = t.files;
+    n(a), t.remove();
+  }), t.addEventListener("change", () => {
+    t.remove();
+  }), t.addEventListener("blur", () => {
+    t.remove();
+  }), document.body.appendChild(t), t.dispatchEvent(
+    new MouseEvent("click", {
+      view: window,
+      bubbles: !0,
+      cancelable: !0
+    })
   );
-  const k = ke(), Y = Ce(o);
-  W(_, (e) => {
-    k.maxRunning = e;
-  }, { immediate: !0 });
-  function R(e, ...t) {
-    return Y.emit(e, ...t);
-  }
-  function ae(e, t) {
-    return Y.on(e, t), () => {
-      Y.off(e, t);
-    };
-  }
-  function ue() {
-    const e = document.createElement("input");
-    e.id = "multi-uploader-selector", e.type = "file", e.accept = p.value, e.multiple = !0, e.style.display = "none", e.addEventListener("change", () => {
-      const t = e.files;
-      ne(t), e.remove();
-    }), e.addEventListener("change", () => {
-      e.remove();
-    }), e.addEventListener("blur", () => {
-      e.remove();
-    }), document.body.appendChild(e), e.dispatchEvent(
-      new MouseEvent("click", {
-        view: window,
-        bubbles: !0,
-        cancelable: !0
-      })
-    );
-  }
-  W(L, () => {
-    const e = Ie(L.value);
-    e && e instanceof HTMLElement && Z(e);
-  }, { immediate: !0 });
-  function Z(e) {
-    e.__dragging_events || (e.addEventListener("dragover", (t) => {
-      t.stopPropagation(), t.preventDefault(), e.classList.add(m.value);
-    }), e.addEventListener("dragleave", (t) => {
-      t.stopPropagation(), t.preventDefault(), e.classList.remove(m.value);
-    }), e.addEventListener("drop", async (t) => {
-      var f;
-      t.stopPropagation(), t.preventDefault(), e.classList.remove(m.value);
-      const n = (f = t.dataTransfer) == null ? void 0 : f.items, i = [], u = async (w) => {
-        const $ = [];
-        w.isDirectory ? w.createReader().readEntries((T) => {
-          T.forEach((N) => {
-            $.push(u(N));
-          });
-        }) : $.push(new Promise((E) => {
-          w.file((T) => {
-            i.push(T), E();
-          });
-        })), await Promise.all($);
-      }, d = [];
-      Array.prototype.forEach.call(n ?? [], (w) => {
-        const $ = w.webkitGetAsEntry();
-        $ && d.push(u($));
-      }), d.length && Promise.all(d).then(() => {
-        ne(i);
-      });
-    }), e.__dragging_events = !0);
-  }
-  function ne(e) {
-    Array.prototype.forEach.call(e, H), Array.prototype.forEach.call(e, (t) => {
-      if (!V.value)
-        return;
-      const i = ye(ge({
-        key: oe(),
-        url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
-        file: t,
-        uploadState: A.PENDING,
-        progress: 0
-      }));
-      i.title = i.title || i.file.name, Y.emit("create-item", i);
-      const u = g.value.push(i), d = g.value[u - 1];
-      if (y.value && B(d), M(i)) {
-        const f = new FileReader();
-        f.onload = (w) => {
-          var $;
-          i.thumbUrl = String(($ = w.target) == null ? void 0 : $.result);
-        }, f.readAsDataURL(t);
-      }
+}
+function ke(i, n, t) {
+  i.__dragging_events || (i.addEventListener("dragover", (a) => {
+    a.stopPropagation(), a.preventDefault(), i.classList.add(n.value);
+  }), i.addEventListener("dragleave", (a) => {
+    a.stopPropagation(), a.preventDefault(), i.classList.remove(n.value);
+  }), i.addEventListener("drop", async (a) => {
+    var E;
+    a.stopPropagation(), a.preventDefault(), i.classList.remove(n.value);
+    const d = (E = a.dataTransfer) == null ? void 0 : E.items, v = [], k = async (O) => {
+      const L = [];
+      O.isDirectory ? O.createReader().readEntries((y) => {
+        y.forEach((I) => {
+          L.push(k(I));
+        });
+      }) : L.push(new Promise((h) => {
+        O.file((y) => {
+          v.push(y), h();
+        });
+      })), await Promise.all(L);
+    }, b = [];
+    Array.prototype.forEach.call(d ?? [], (O) => {
+      const L = O.webkitGetAsEntry();
+      L && b.push(k(L));
+    }), b.length && Promise.all(b).then(() => {
+      t(v);
     });
+  }), i.__dragging_events = !0);
+}
+const j = class j {
+};
+j.alert = async (n) => window.alert(n), j.confirm = async (n) => new Promise((t) => {
+  const a = confirm(n);
+  t(a);
+}), j.deleteConfirm = async (n) => j.confirm(n), j.confirmText = () => "確認", j.cancelText = () => "取消", j.deleteText = () => "刪除";
+let ge = j;
+function ne(i = "", n = !1) {
+  if (n) {
+    const a = (performance != null && performance.timeOrigin ? Math.round(performance.timeOrigin) : performance.timing.navigationStart) * 1e5 + performance.now() * 100;
+    return i + a.toString(12) + ye(4);
   }
-  function H(e) {
-    const t = c.value, n = e.name.split(".").pop();
-    if (t.length) {
-      let i = !1;
-      if (t.forEach((u) => {
-        i || (u.indexOf("/") !== -1 ? z(u, e.type) && (i = !0) : u.toLowerCase() === (n == null ? void 0 : n.toLowerCase()) && (i = !0));
-      }), !i)
-        throw R("invalid-file-type", e, t), new Error("Not accepted file ext");
+  return i + ye(12);
+}
+function ye(i = 12) {
+  const t = window.crypto;
+  if (!t)
+    return String(Math.floor(Math.random() * i ** 10));
+  const a = new Uint8Array(i);
+  for (let d = 0; d < i; d += 65536)
+    t.getRandomValues(a.subarray(d, d + Math.min(i - d, 65536)));
+  return Array.from(a).map((d) => d.toString(16).padStart(2, "0")).join("");
+}
+var Re = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof global < "u" ? global : typeof self < "u" ? self : {}, Ue = { exports: {} };
+(function(i, n) {
+  (function(t, a) {
+    i.exports = a();
+  })(Re, function() {
+    var t = 1e3, a = 6e4, d = 36e5, v = "millisecond", k = "second", b = "minute", E = "hour", O = "day", L = "week", h = "month", y = "quarter", I = "year", M = "date", re = "Invalid Date", B = /^(\d{4})[-/]?(\d{1,2})?[-/]?(\d{0,2})[Tt\s]*(\d{1,2})?:?(\d{1,2})?:?(\d{1,2})?[.:]?(\d+)?$/, U = /\[([^\]]+)]|Y{1,4}|M{1,4}|D{1,2}|d{1,4}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|Z{1,2}|SSS/g, ae = { name: "en", weekdays: "Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"), months: "January_February_March_April_May_June_July_August_September_October_November_December".split("_"), ordinal: function(c) {
+      var o = ["th", "st", "nd", "rd"], r = c % 100;
+      return "[" + c + (o[(r - 20) % 10] || o[r] || o[0]) + "]";
+    } }, K = function(c, o, r) {
+      var u = String(c);
+      return !u || u.length >= o ? c : "" + Array(o + 1 - u.length).join(r) + c;
+    }, ue = { s: K, z: function(c) {
+      var o = -c.utcOffset(), r = Math.abs(o), u = Math.floor(r / 60), s = r % 60;
+      return (o <= 0 ? "+" : "-") + K(u, 2, "0") + ":" + K(s, 2, "0");
+    }, m: function c(o, r) {
+      if (o.date() < r.date()) return -c(r, o);
+      var u = 12 * (r.year() - o.year()) + (r.month() - o.month()), s = o.clone().add(u, h), f = r - s < 0, p = o.clone().add(u + (f ? -1 : 1), h);
+      return +(-(u + (r - s) / (f ? s - p : p - s)) || 0);
+    }, a: function(c) {
+      return c < 0 ? Math.ceil(c) || 0 : Math.floor(c);
+    }, p: function(c) {
+      return { M: h, y: I, w: L, d: O, D: M, h: E, m: b, s: k, ms: v, Q: y }[c] || String(c || "").toLowerCase().replace(/s$/, "");
+    }, u: function(c) {
+      return c === void 0;
+    } }, H = "en", N = {};
+    N[H] = ae;
+    var X = "$isDayjsObject", Q = function(c) {
+      return c instanceof q || !(!c || !c[X]);
+    }, W = function c(o, r, u) {
+      var s;
+      if (!o) return H;
+      if (typeof o == "string") {
+        var f = o.toLowerCase();
+        N[f] && (s = f), r && (N[f] = r, s = f);
+        var p = o.split("-");
+        if (!s && p.length > 1) return c(p[0]);
+      } else {
+        var $ = o.name;
+        N[$] = o, s = $;
+      }
+      return !u && s && (H = s), s || !u && H;
+    }, A = function(c, o) {
+      if (Q(c)) return c.clone();
+      var r = typeof o == "object" ? o : {};
+      return r.date = c, r.args = arguments, new q(r);
+    }, w = ue;
+    w.l = W, w.i = Q, w.w = function(c, o) {
+      return A(c, { locale: o.$L, utc: o.$u, x: o.$x, $offset: o.$offset });
+    };
+    var q = function() {
+      function c(r) {
+        this.$L = W(r.locale, null, !0), this.parse(r), this.$x = this.$x || r.x || {}, this[X] = !0;
+      }
+      var o = c.prototype;
+      return o.parse = function(r) {
+        this.$d = function(u) {
+          var s = u.date, f = u.utc;
+          if (s === null) return /* @__PURE__ */ new Date(NaN);
+          if (w.u(s)) return /* @__PURE__ */ new Date();
+          if (s instanceof Date) return new Date(s);
+          if (typeof s == "string" && !/Z$/i.test(s)) {
+            var p = s.match(B);
+            if (p) {
+              var $ = p[2] - 1 || 0, e = (p[7] || "0").substring(0, 3);
+              return f ? new Date(Date.UTC(p[1], $, p[3] || 1, p[4] || 0, p[5] || 0, p[6] || 0, e)) : new Date(p[1], $, p[3] || 1, p[4] || 0, p[5] || 0, p[6] || 0, e);
+            }
+          }
+          return new Date(s);
+        }(r), this.init();
+      }, o.init = function() {
+        var r = this.$d;
+        this.$y = r.getFullYear(), this.$M = r.getMonth(), this.$D = r.getDate(), this.$W = r.getDay(), this.$H = r.getHours(), this.$m = r.getMinutes(), this.$s = r.getSeconds(), this.$ms = r.getMilliseconds();
+      }, o.$utils = function() {
+        return w;
+      }, o.isValid = function() {
+        return this.$d.toString() !== re;
+      }, o.isSame = function(r, u) {
+        var s = A(r);
+        return this.startOf(u) <= s && s <= this.endOf(u);
+      }, o.isAfter = function(r, u) {
+        return A(r) < this.startOf(u);
+      }, o.isBefore = function(r, u) {
+        return this.endOf(u) < A(r);
+      }, o.$g = function(r, u, s) {
+        return w.u(r) ? this[u] : this.set(s, r);
+      }, o.unix = function() {
+        return Math.floor(this.valueOf() / 1e3);
+      }, o.valueOf = function() {
+        return this.$d.getTime();
+      }, o.startOf = function(r, u) {
+        var s = this, f = !!w.u(u) || u, p = w.p(r), $ = function(V, C) {
+          var Y = w.w(s.$u ? Date.UTC(s.$y, C, V) : new Date(s.$y, C, V), s);
+          return f ? Y : Y.endOf(O);
+        }, e = function(V, C) {
+          return w.w(s.toDate()[V].apply(s.toDate("s"), (f ? [0, 0, 0, 0] : [23, 59, 59, 999]).slice(C)), s);
+        }, l = this.$W, m = this.$M, g = this.$D, D = "set" + (this.$u ? "UTC" : "");
+        switch (p) {
+          case I:
+            return f ? $(1, 0) : $(31, 11);
+          case h:
+            return f ? $(1, m) : $(0, m + 1);
+          case L:
+            var _ = this.$locale().weekStart || 0, S = (l < _ ? l + 7 : l) - _;
+            return $(f ? g - S : g + (6 - S), m);
+          case O:
+          case M:
+            return e(D + "Hours", 0);
+          case E:
+            return e(D + "Minutes", 1);
+          case b:
+            return e(D + "Seconds", 2);
+          case k:
+            return e(D + "Milliseconds", 3);
+          default:
+            return this.clone();
+        }
+      }, o.endOf = function(r) {
+        return this.startOf(r, !1);
+      }, o.$set = function(r, u) {
+        var s, f = w.p(r), p = "set" + (this.$u ? "UTC" : ""), $ = (s = {}, s[O] = p + "Date", s[M] = p + "Date", s[h] = p + "Month", s[I] = p + "FullYear", s[E] = p + "Hours", s[b] = p + "Minutes", s[k] = p + "Seconds", s[v] = p + "Milliseconds", s)[f], e = f === O ? this.$D + (u - this.$W) : u;
+        if (f === h || f === I) {
+          var l = this.clone().set(M, 1);
+          l.$d[$](e), l.init(), this.$d = l.set(M, Math.min(this.$D, l.daysInMonth())).$d;
+        } else $ && this.$d[$](e);
+        return this.init(), this;
+      }, o.set = function(r, u) {
+        return this.clone().$set(r, u);
+      }, o.get = function(r) {
+        return this[w.p(r)]();
+      }, o.add = function(r, u) {
+        var s, f = this;
+        r = Number(r);
+        var p = w.p(u), $ = function(m) {
+          var g = A(f);
+          return w.w(g.date(g.date() + Math.round(m * r)), f);
+        };
+        if (p === h) return this.set(h, this.$M + r);
+        if (p === I) return this.set(I, this.$y + r);
+        if (p === O) return $(1);
+        if (p === L) return $(7);
+        var e = (s = {}, s[b] = a, s[E] = d, s[k] = t, s)[p] || 1, l = this.$d.getTime() + r * e;
+        return w.w(l, this);
+      }, o.subtract = function(r, u) {
+        return this.add(-1 * r, u);
+      }, o.format = function(r) {
+        var u = this, s = this.$locale();
+        if (!this.isValid()) return s.invalidDate || re;
+        var f = r || "YYYY-MM-DDTHH:mm:ssZ", p = w.z(this), $ = this.$H, e = this.$m, l = this.$M, m = s.weekdays, g = s.months, D = s.meridiem, _ = function(C, Y, ee, ie) {
+          return C && (C[Y] || C(u, f)) || ee[Y].slice(0, ie);
+        }, S = function(C) {
+          return w.s($ % 12 || 12, C, "0");
+        }, V = D || function(C, Y, ee) {
+          var ie = C < 12 ? "AM" : "PM";
+          return ee ? ie.toLowerCase() : ie;
+        };
+        return f.replace(U, function(C, Y) {
+          return Y || function(ee) {
+            switch (ee) {
+              case "YY":
+                return String(u.$y).slice(-2);
+              case "YYYY":
+                return w.s(u.$y, 4, "0");
+              case "M":
+                return l + 1;
+              case "MM":
+                return w.s(l + 1, 2, "0");
+              case "MMM":
+                return _(s.monthsShort, l, g, 3);
+              case "MMMM":
+                return _(g, l);
+              case "D":
+                return u.$D;
+              case "DD":
+                return w.s(u.$D, 2, "0");
+              case "d":
+                return String(u.$W);
+              case "dd":
+                return _(s.weekdaysMin, u.$W, m, 2);
+              case "ddd":
+                return _(s.weekdaysShort, u.$W, m, 3);
+              case "dddd":
+                return m[u.$W];
+              case "H":
+                return String($);
+              case "HH":
+                return w.s($, 2, "0");
+              case "h":
+                return S(1);
+              case "hh":
+                return S(2);
+              case "a":
+                return V($, e, !0);
+              case "A":
+                return V($, e, !1);
+              case "m":
+                return String(e);
+              case "mm":
+                return w.s(e, 2, "0");
+              case "s":
+                return String(u.$s);
+              case "ss":
+                return w.s(u.$s, 2, "0");
+              case "SSS":
+                return w.s(u.$ms, 3, "0");
+              case "Z":
+                return p;
+            }
+            return null;
+          }(C) || p.replace(":", "");
+        });
+      }, o.utcOffset = function() {
+        return 15 * -Math.round(this.$d.getTimezoneOffset() / 15);
+      }, o.diff = function(r, u, s) {
+        var f, p = this, $ = w.p(u), e = A(r), l = (e.utcOffset() - this.utcOffset()) * a, m = this - e, g = function() {
+          return w.m(p, e);
+        };
+        switch ($) {
+          case I:
+            f = g() / 12;
+            break;
+          case h:
+            f = g();
+            break;
+          case y:
+            f = g() / 3;
+            break;
+          case L:
+            f = (m - l) / 6048e5;
+            break;
+          case O:
+            f = (m - l) / 864e5;
+            break;
+          case E:
+            f = m / d;
+            break;
+          case b:
+            f = m / a;
+            break;
+          case k:
+            f = m / t;
+            break;
+          default:
+            f = m;
+        }
+        return s ? f : w.a(f);
+      }, o.daysInMonth = function() {
+        return this.endOf(h).$D;
+      }, o.$locale = function() {
+        return N[this.$L];
+      }, o.locale = function(r, u) {
+        if (!r) return this.$L;
+        var s = this.clone(), f = W(r, u, !0);
+        return f && (s.$L = f), s;
+      }, o.clone = function() {
+        return w.w(this.$d, this);
+      }, o.toDate = function() {
+        return new Date(this.valueOf());
+      }, o.toJSON = function() {
+        return this.isValid() ? this.toISOString() : null;
+      }, o.toISOString = function() {
+        return this.$d.toISOString();
+      }, o.toString = function() {
+        return this.$d.toUTCString();
+      }, c;
+    }(), se = q.prototype;
+    return A.prototype = se, [["$ms", v], ["$s", k], ["$m", b], ["$H", E], ["$W", O], ["$M", h], ["$y", I], ["$D", M]].forEach(function(c) {
+      se[c[1]] = function(o) {
+        return this.$g(o, c[0], c[1]);
+      };
+    }), A.extend = function(c, o) {
+      return c.$i || (c(o, q, A), c.$i = !0), A;
+    }, A.locale = W, A.isDayjs = Q, A.unix = function(c) {
+      return A(1e3 * c);
+    }, A.en = N[H], A.Ls = N, A.p = {}, A;
+  });
+})(Ue);
+class Ce {
+  constructor(n = 1) {
+    this.maxRunning = n, this.items = [], this.currentRunning = 0, this.running = !1, this.observers = [];
+  }
+  push(n) {
+    const t = new Promise((a, d) => {
+      this.items.push(() => Promise.resolve(n()).then(a));
+    });
+    return this.run(), t;
+  }
+  run() {
+    this.running || (this.running = !0), this.pop();
+  }
+  async pop() {
+    const n = this.items.shift();
+    if (!n)
+      return this.running = !1, Promise.resolve();
+    if (this.currentRunning >= this.maxRunning)
+      return this.items.unshift(n), Promise.resolve();
+    this.currentRunning++, this.notice();
+    try {
+      return await n();
+    } catch (t) {
+      throw t;
+    } finally {
+      this.endPop();
     }
   }
-  function z(e, t) {
-    const n = e.split("/"), i = t.split("/");
-    return n[1] === "*" ? n[0] === i[0] : e === t;
+  endPop() {
+    this.currentRunning--, this.notice(), this.pop();
   }
-  function re(e) {
-    R("delete-item", e), g.value = g.value.filter((t) => t.key !== e.key);
+  clear() {
+    return this.items = [], this.notice(), this;
   }
-  async function q() {
+  isEmpty() {
+    return this.items.length === 0;
+  }
+  get length() {
+    return this.items.length;
+  }
+  peek() {
+    return this.items;
+  }
+  observe(n, t = {}) {
+    return this.observers.push({
+      handler: n,
+      once: t.once || !1
+    }), () => {
+      this.off(n);
+    };
+  }
+  once(n, t = {}) {
+    return t.once = !0, this.observe(n, t);
+  }
+  onEnd(n, t = {}) {
+    return this.observe((a, d, v) => {
+      d === 0 && v === 0 && n(a, d, v);
+    }, t);
+  }
+  notice() {
+    return this.observers.forEach((n) => {
+      n.handler(this, this.length, this.currentRunning);
+    }), this.observers = this.observers.filter((n) => !n.once), this;
+  }
+  off(n) {
+    return n == null ? (this.observers = [], this) : (this.observers = this.observers.filter((t) => t.handler !== n), this);
+  }
+}
+function ze(i = 1) {
+  return new Ce(i);
+}
+function Pe() {
+  return ze();
+}
+function xe(i) {
+  return i ? "$el" in i ? i.$el : i : null;
+}
+function le(i, n) {
+  return i.key ?? (i.key = ne()), i.uploadState ?? (i.uploadState = R.PENDING), i.progress ?? (i.progress = 0), n && Object.assign(i, n), i;
+}
+function P(i) {
+  return typeof i == "function" && (i = ce(i())), we(i) ? i : ce(i);
+}
+function Te(i, n, t = {}) {
+  const a = P(t.id ?? "vue-multi-uploader-" + ne()), d = P(t.accept ?? ""), v = P(t.maxFiles), k = P(t.maxConcurrent ?? 2), b = P(t.maxItemSize), E = P(t.disabled ?? !1), O = P(t.readonly ?? !1), L = P(n), h = F(() => P(t.dropzone).value), y = P(t.onDragClass ?? "h-ondrag"), I = P(t.autoStart ?? !0);
+  let M = P(i);
+  M.value = M.value.map(
+    (e) => le(e, { uploadState: R.UPLOADED })
+  );
+  const re = Pe(), B = Oe(t);
+  J(k, (e) => {
+    re.maxRunning = e;
+  }, { immediate: !0 });
+  function U(e, ...l) {
+    return B.emit(e, ...l);
+  }
+  function ae(e, l) {
+    return B.on(e, l), () => {
+      B.off(e, l);
+    };
+  }
+  function K() {
+    Le(d, Q);
+  }
+  J(h, () => {
+    const e = xe(h.value);
+    e && e instanceof HTMLElement && ue(e);
+  }, { immediate: !0 });
+  function ue(e) {
+    ke(e, y, Q);
+  }
+  function H(e) {
+    return X(N(e));
+  }
+  function N(e) {
+    const m = de(le({
+      key: ne(),
+      url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+      file: e,
+      uploadState: R.PENDING,
+      progress: 0
+    }));
+    return m.title = m.title || m.file.name, B.emit("create-item", m), m;
+  }
+  function X(e) {
+    const l = de(le({
+      key: ne(),
+      uploadState: R.PENDING,
+      progress: 0
+    }, e));
+    if (!e.file)
+      return e;
+    if (A(e.file), b.value != null && e.file.size > b.value) {
+      const D = new Ae(
+        "File size is too large",
+        e.file,
+        b.value
+      );
+      throw U("invalid-file", D), D;
+    }
+    const m = M.value.push(l), g = M.value[m - 1];
+    if (o(g)) {
+      const D = new FileReader();
+      D.onload = (_) => {
+        var S;
+        g.thumbUrl = String((S = _.target) == null ? void 0 : S.result);
+      }, D.readAsDataURL(e.file);
+    }
+    return g;
+  }
+  function Q(e) {
+    Array.prototype.forEach.call(e, A), Array.prototype.forEach.call(e, (l) => {
+      if (!u.value)
+        return;
+      const m = H(l);
+      I.value && c(m);
+    });
+  }
+  function W(e) {
+    var l;
+    if (e instanceof XMLHttpRequest) {
+      e.abort();
+      return;
+    }
+    (l = e.xhr) == null || l.abort();
+  }
+  function A(e) {
+    const l = f.value, m = e.name.split(".").pop();
+    if (l.length) {
+      let g = !1;
+      if (l.forEach((D) => {
+        g || (D.indexOf("/") !== -1 ? w(D, e.type) && (g = !0) : D.toLowerCase() === (m == null ? void 0 : m.toLowerCase()) && (g = !0));
+      }), !g) {
+        const D = new Ie(
+          "Invalid file type",
+          e,
+          l
+        );
+        throw U("invalid-file", D), D;
+      }
+    }
+  }
+  function w(e, l) {
+    const m = e.split("/"), g = l.split("/");
+    return m[1] === "*" ? m[0] === g[0] : e === l;
+  }
+  function q(e) {
+    U("delete-item", e), M.value = M.value.filter((l) => l.key !== e.key);
+  }
+  async function se() {
     const e = [];
-    return g.value.forEach((t) => {
-      t.uploadState === A.PENDING && e.push(B(t));
+    return M.value.forEach((l) => {
+      l.uploadState === R.PENDING && e.push(c(l));
     }), Promise.allSettled(e);
   }
-  async function B(e) {
-    e.uploadState = A.UPLOADING;
-    const t = new FormData();
-    return t.append("file", e.file), new Promise((i, u) => {
-      const d = new XMLHttpRequest();
-      R("item-upload-start", e, d), d.open("POST", S.value), d.upload.onprogress = (f) => {
-        f.lengthComputable && (e.progress = f.loaded / f.total, R("item-upload-progress", e, f));
-      }, d.onload = () => {
-        if (d.status >= 200 && d.status < 300)
+  async function c(e) {
+    e.uploadState = R.UPLOADING, e.error = void 0;
+    const l = new FormData();
+    return l.append("file", e.file), new Promise((g, D) => {
+      const _ = new XMLHttpRequest();
+      U("item-upload-start", e, _), _.open("POST", L.value), _.upload.onprogress = (S) => {
+        S.lengthComputable && (e.progress = S.loaded / S.total, U("item-upload-progress", e, S));
+      }, _.onload = () => {
+        if (_.status >= 200 && _.status < 300)
           try {
-            e.uploadState = A.UPLOADED, R("item-upload-success", e, d), i(e);
-          } catch (f) {
-            console.error(f), e.uploadState = A.ERROR, e.message = f.message, e.messageType = "error", u(f);
+            e.uploadState = R.UPLOADED, U("item-upload-success", e, _), g(e);
+          } catch (S) {
+            console.error(S), e.uploadState = R.ERROR, e.error = S, D(S);
           }
         else {
-          const f = `Upload failed with status: ${d.status}`;
-          console.error(f), e.uploadState = A.ERROR, e.message = f, e.messageType = "error", u(new Error(f));
+          const S = `Upload failed with status: ${_.status}`;
+          console.error(S), e.uploadState = R.ERROR, e.message = S, e.messageType = "error", D(new Error(S));
         }
-      }, d.onerror = () => {
-        const f = "An error occurred during the upload.";
-        console.error(f), e.uploadState = A.ERROR, e.message = f, e.messageType = "error", u(new Error(f));
-      }, d.onloadend = () => {
-        R("item-upload-end", e, d);
-      }, d.send(t);
-    }).catch((i) => (R("item-upload-fail", e, i), Promise.reject(i)));
+      }, _.onerror = () => {
+        const S = "An error occurred during the upload.";
+        console.error(S), e.uploadState = R.ERROR, e.error = new Error(S), D(e.error);
+      }, _.onloadend = () => {
+        U("item-upload-end", e, _);
+      }, _.send(l);
+    }).catch((g) => (U("item-upload-fail", e, g), Promise.reject(g)));
   }
-  function M(e) {
-    return h(
+  function o(e) {
+    return r(
       e.file ? e.file.name : e.url
     );
   }
-  function h(e) {
-    var i;
-    const t = ((i = e.split(".").pop()) == null ? void 0 : i.split("?").shift()) || "";
+  function r(e) {
+    var g;
+    const l = ((g = e.split(".").pop()) == null ? void 0 : g.split("?").shift()) || "";
     return [
       "png",
       "jpeg",
@@ -777,50 +841,49 @@ function Ue(a, r, o = {}) {
       "gif",
       "bmp",
       "webp"
-    ].indexOf(t.toLowerCase()) !== -1;
+    ].indexOf(l.toLowerCase()) !== -1;
   }
-  const V = j(() => (v.value == null || g.value.length < Number(v.value)) && !s.value), K = j(() => g.value.filter((t) => t.uploadState === A.UPLOADING).length > 0), c = j(() => (Array.isArray(p.value) ? p.value : p.value.split(",")).map((e) => e.trim()).filter((e) => e.length > 0).map((e) => e.indexOf("/") === -1 && e[0] === "." ? e.substr(1) : e)), s = j(() => D.value || b.value);
-  return W(g, (e) => {
-    e.map((t) => {
-      t.key = t.key || oe();
-    }), R("change", g);
-  }, { deep: !0 }), W(K, (e) => {
-    R(e ? "uploading" : "uploaded");
-  }), {
-    id: l,
-    accept: p,
+  const u = F(() => (v.value == null || M.value.length < Number(v.value)) && !p.value), s = F(() => M.value.filter((l) => l.uploadState === R.UPLOADING).length > 0), f = F(() => (Array.isArray(d.value) ? d.value : d.value.split(",")).map((e) => e.trim()).filter((e) => e.length > 0).map((e) => e.indexOf("/") === -1 && e[0] === "." ? e.substr(1) : e)), p = F(() => E.value || O.value);
+  J(M, (e) => {
+    e.map((l) => {
+      l.key = l.key || ne();
+    }), U("change", M);
+  }, { deep: !0 }), J(s, (e) => {
+    U(e ? "uploading" : "uploaded");
+  });
+  const $ = F(() => M.value.reduce((e, l) => (l.file && (e += l.file.size), e), 0));
+  return {
+    id: a,
+    accept: d,
     maxFiles: v,
-    maxConcurrent: _,
-    disabled: D,
-    readonly: b,
-    uploadUrl: S,
-    items: g,
-    eventBus: Y,
-    canUpload: V,
-    isUploading: K,
-    acceptedTypes: c,
-    isReadonly: s,
-    emits: R,
+    maxConcurrent: k,
+    maxItemSize: b,
+    disabled: E,
+    readonly: O,
+    uploadUrl: L,
+    items: M,
+    eventBus: B,
+    canUpload: u,
+    isUploading: s,
+    acceptedTypes: f,
+    isReadonly: p,
+    totalSize: $,
+    emits: U,
     on: ae,
-    openFileSelector: ue,
-    deleteItem: re,
-    uploadStart: q,
-    isImageItem: M,
-    isImage: h
+    openFileSelector: K,
+    addFile: H,
+    addItem: X,
+    createItem: N,
+    deleteItem: q,
+    uploadStart: se,
+    stopItemUpload: W,
+    isImageItem: o,
+    isImage: r
   };
 }
-function Ie(a) {
-  return a ? "$el" in a ? a.$el : a : null;
-}
-function ge(a, r) {
-  return a.key ?? (a.key = oe()), a.uploadState ?? (a.uploadState = A.PENDING), a.progress ?? (a.progress = 0), r && Object.assign(a, r), a;
-}
-function U(a) {
-  return typeof a == "function" && (a = le(a())), we(a) ? a : le(a);
-}
-const Pe = { class: "vue-drag-uploader__wrapper" }, We = /* @__PURE__ */ fe({
+const Ne = { class: "vue-drag-uploader__wrapper" }, Ke = /* @__PURE__ */ he({
   __name: "MultiUploader",
-  props: /* @__PURE__ */ pe({
+  props: /* @__PURE__ */ me({
     id: {},
     uploadUrl: {},
     placeholder: {},
@@ -832,62 +895,62 @@ const Pe = { class: "vue-drag-uploader__wrapper" }, We = /* @__PURE__ */ fe({
     },
     modelModifiers: {}
   }),
-  emits: /* @__PURE__ */ pe(["update:modelValue", "change", "delete-item", "uploading", "uploaded", "create-item", "item-upload-start", "item-upload-success", "item-upload-fail", "item-upload-end", "item-upload-progress", "invalid-file-type"], ["update:modelValue"]),
-  setup(a, { expose: r, emit: o }) {
-    const l = a, p = o, v = $e(a, "modelValue"), _ = le(v.value);
-    W(v, () => {
-      _.value = v.value;
+  emits: /* @__PURE__ */ me(["update:modelValue", "change", "delete-item", "uploading", "uploaded", "create-item", "item-upload-start", "item-upload-success", "item-upload-fail", "item-upload-end", "item-upload-progress", "invalid-file-type"], ["update:modelValue"]),
+  setup(i, { expose: n, emit: t }) {
+    const a = i, d = t, v = $e(i, "modelValue"), k = ce(v.value);
+    J(v, () => {
+      k.value = v.value;
     }, { deep: !0 });
-    const D = Me("el");
-    l.options.dropzone = l.options.dropzone ?? D;
-    const b = l.instance ?? Ue(_, l.uploadUrl ?? "", l.options), {
-      isReadonly: S,
+    const b = Me("el");
+    a.options.dropzone = a.options.dropzone ?? b;
+    const E = a.instance ?? Te(k, a.uploadUrl ?? "", a.options), {
+      isReadonly: O,
       items: L
-    } = b;
-    W(L, () => {
+    } = E;
+    J(L, () => {
       v.value = L.value;
     }, { deep: !0 });
-    const m = [];
-    for (const y in de) {
-      const g = b.on(y, (...k) => {
-        p(y, ...k);
+    const h = [];
+    for (const y in pe) {
+      const I = E.on(y, (...M) => {
+        d(y, ...M);
       });
-      m.push(g);
+      h.push(I);
     }
     return be(() => {
-      m.forEach((y) => y());
-    }), r({
-      instance: b
-    }), (y, g) => (I(), P("div", {
+      h.forEach((y) => y());
+    }), n({
+      instance: E
+    }), (y, I) => (x(), T("div", {
       ref_key: "el",
-      ref: D,
-      class: De(["vue-drag-uploader", { "vue-drag-uploader--readonly": J(S) }])
+      ref: b,
+      class: Se(["vue-drag-uploader", { "vue-drag-uploader--readonly": Z(O) }])
     }, [
-      C("div", Pe, [
-        Q(y.$slots, "items", {
-          items: J(L),
+      z("div", Ne, [
+        G(y.$slots, "items", {
+          items: Z(L),
           options: y.options,
-          instance: ye(J(b)),
-          onDelete: g[0] || (g[0] = () => console.log(y.$event))
+          instance: de(Z(E)),
+          onDelete: I[0] || (I[0] = () => console.log(y.$event))
         })
       ])
     ], 2));
   }
-}), Te = {
+}), Fe = {
   key: 1,
   class: "preview-img__body d-flex flex-column justify-content-center align-items-center gap-2"
-}, ze = {
+}, je = {
   style: { width: "calc(var(--vmu-img-size) / 3)", height: "calc(var(--vmu-img-size) / 3)" },
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 384 512"
-}, Ne = { style: { "word-break": "break-word" } }, xe = { class: "preview-img__overlay" }, je = {
+}, He = { style: { "word-break": "break-word" } }, Ye = { class: "preview-img__overlay" }, Be = {
   style: { width: "1rem", height: "1rem", fill: "white" },
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 448 512"
-}, Ye = {
+}, Ve = {
   key: 2,
   class: "preview-img__progress"
-}, Fe = { class: "error-message__message" }, Je = /* @__PURE__ */ fe({
+}, Ge = { class: "error-message__message" }, Xe = /* @__PURE__ */ he({
   __name: "ItemCard",
   props: {
     item: {},
@@ -896,17 +959,17 @@ const Pe = { class: "vue-drag-uploader__wrapper" }, We = /* @__PURE__ */ fe({
     isReadonly: { type: Boolean }
   },
   emits: ["delete", "item-click"],
-  setup(a, { emit: r }) {
-    const o = a, l = r, p = j(() => o.item.uploadState), v = j(() => o.item.progress);
-    function _() {
-      o.isReadonly || l("delete", o.item);
+  setup(i, { emit: n }) {
+    const t = i, a = n, d = F(() => t.item.uploadState), v = F(() => t.item.progress);
+    function k() {
+      t.isReadonly || a("delete", t.item);
     }
-    const D = j(() => o.item.file ? o.item.file.name : o.item.title ? o.item.title : o.item.url.split("/").pop()), b = j(() => S(
-      o.item.file ? o.item.file.name : o.item.url
+    const b = F(() => t.item.file ? t.item.file.name : t.item.title ? t.item.title : t.item.url.split("/").pop()), E = F(() => O(
+      t.item.file ? t.item.file.name : t.item.url
     ));
-    function S(m) {
-      var k;
-      const y = ((k = m.split(".").pop()) == null ? void 0 : k.split("?").shift()) || "";
+    function O(h) {
+      var M;
+      const y = ((M = h.split(".").pop()) == null ? void 0 : M.split("?").shift()) || "";
       return [
         "png",
         "jpeg",
@@ -916,100 +979,100 @@ const Pe = { class: "vue-drag-uploader__wrapper" }, We = /* @__PURE__ */ fe({
         "webp"
       ].indexOf(y.toLowerCase()) !== -1;
     }
-    function L(m) {
-      l("item-click", o.item, o.i, m);
+    function L(h) {
+      a("item-click", t.item, t.i, h);
     }
-    return (m, y) => (I(), P("div", {
+    return (h, y) => (x(), T("div", {
       class: "vue-drag-uploader-item preview-img",
-      style: ie({ "--vmu-img-size": m.size }),
+      style: oe({ "--vmu-img-size": h.size }),
       onClick: L
     }, [
-      Q(m.$slots, "it", { item: m.item }, () => [
-        b.value ? (I(), P("div", {
-          key: 0,
-          class: "preview-img__body",
-          style: ie({ "background-image": "url(" + (m.item.thumbUrl || m.item.url) + ")", opacity: p.value === J(A).UPLOADED ? 1 : 0.5 })
-        }, null, 4)) : te("", !0),
-        b.value ? te("", !0) : (I(), P("div", Te, [
-          C("div", null, [
-            Q(m.$slots, "icon", { item: m.item }, () => [
-              (I(), P("svg", ze, y[2] || (y[2] = [
-                C("path", { d: "M320 464c8.8 0 16-7.2 16-16l0-288-80 0c-17.7 0-32-14.3-32-32l0-80L64 48c-8.8 0-16 7.2-16 16l0 384c0 8.8 7.2 16 16 16l256 0zM0 64C0 28.7 28.7 0 64 0L229.5 0c17 0 33.3 6.7 45.3 18.7l90.5 90.5c12 12 18.7 28.3 18.7 45.3L384 448c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 64z" }, null, -1)
-              ])))
-            ])
-          ]),
-          C("div", Ne, ce(D.value), 1)
-        ])),
-        C("div", xe, [
-          m.isReadonly ? te("", !0) : (I(), P("span", {
+      G(h.$slots, "it", { item: h.item }, () => {
+        var I;
+        return [
+          E.value ? (x(), T("div", {
             key: 0,
-            class: "preview-img__remove-icon",
-            onClick: y[0] || (y[0] = me((g) => _(), ["prevent"]))
-          }, [
-            Q(m.$slots, "remove-icon", {}, () => [
-              (I(), P("svg", je, y[3] || (y[3] = [
-                C("path", { d: "M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z" }, null, -1)
-              ])))
-            ])
+            class: "preview-img__body",
+            style: oe({ "background-image": "url(" + (h.item.thumbUrl || h.item.url) + ")", opacity: d.value === Z(R).UPLOADED ? 1 : 0.5 })
+          }, null, 4)) : te("", !0),
+          E.value ? te("", !0) : (x(), T("div", Fe, [
+            z("div", null, [
+              G(h.$slots, "icon", { item: h.item }, () => [
+                (x(), T("svg", je, y[2] || (y[2] = [
+                  z("path", { d: "M320 464c8.8 0 16-7.2 16-16l0-288-80 0c-17.7 0-32-14.3-32-32l0-80L64 48c-8.8 0-16 7.2-16 16l0 384c0 8.8 7.2 16 16 16l256 0zM0 64C0 28.7 28.7 0 64 0L229.5 0c17 0 33.3 6.7 45.3 18.7l90.5 90.5c12 12 18.7 28.3 18.7 45.3L384 448c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 64z" }, null, -1)
+                ])))
+              ])
+            ]),
+            z("div", He, fe(b.value), 1)
           ])),
-          Q(m.$slots, "extra", { item: m.item })
-        ]),
-        p.value === J(A).UPLOADING ? (I(), P("div", Ye, [
-          C("div", {
-            class: "preview-img__progress-bar",
-            style: ie({ width: v.value * 100 + "%" })
-          }, null, 4)
-        ])) : te("", !0),
-        p.value === J(A).ERROR ? (I(), P("div", {
-          key: 3,
-          class: "preview-img__error-message error-message",
-          onClick: y[1] || (y[1] = me(() => {
-          }, ["stop", "prevent"]))
-        }, [
-          y[4] || (y[4] = C("span", { class: "error-message__notice" }, "Upload fail", -1)),
-          C("span", Fe, ce(m.item.message), 1)
-        ])) : te("", !0)
-      ])
+          z("div", Ye, [
+            h.isReadonly ? te("", !0) : (x(), T("span", {
+              key: 0,
+              class: "preview-img__remove-icon",
+              onClick: y[0] || (y[0] = ve((M) => k(), ["prevent"]))
+            }, [
+              G(h.$slots, "remove-icon", {}, () => [
+                (x(), T("svg", Be, y[3] || (y[3] = [
+                  z("path", { d: "M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z" }, null, -1)
+                ])))
+              ])
+            ])),
+            G(h.$slots, "extra", { item: h.item })
+          ]),
+          d.value === Z(R).UPLOADING ? (x(), T("div", Ve, [
+            z("div", {
+              class: "preview-img__progress-bar",
+              style: oe({ width: v.value * 100 + "%" })
+            }, null, 4)
+          ])) : te("", !0),
+          d.value === Z(R).ERROR ? (x(), T("div", {
+            key: 3,
+            class: "preview-img__error-message error-message",
+            onClick: y[1] || (y[1] = ve(() => {
+            }, ["stop", "prevent"]))
+          }, [
+            y[4] || (y[4] = z("span", { class: "error-message__notice" }, "Upload fail", -1)),
+            z("span", Ge, fe((I = h.item.error) == null ? void 0 : I.message), 1)
+          ])) : te("", !0)
+        ];
+      })
     ], 4));
   }
-}), He = { class: "add-button__body" }, Be = { class: "add-button__icon" }, Ve = {
+}), Qe = { class: "add-button__body" }, We = { class: "add-button__icon" }, qe = {
   style: { width: "32px" },
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 512 512"
-}, Ge = { class: "add-button__text" }, Ze = /* @__PURE__ */ fe({
+}, Je = { class: "add-button__text" }, et = /* @__PURE__ */ he({
   __name: "ItemCardPlaceholder",
   props: {
     size: { default: "150px" },
     text: { default: "" }
   },
-  setup(a) {
-    return (r, o) => (I(), P("div", {
+  setup(i) {
+    return (n, t) => (x(), T("div", {
       class: "vue-drag-uploader-item add-button",
       key: "empty",
-      style: ie({ "--vmu-img-size": r.size })
+      style: oe({ "--vmu-img-size": n.size })
     }, [
-      C("div", He, [
-        Q(r.$slots, "default", {}, () => [
-          C("div", Be, [
-            Q(r.$slots, "icon", _e(Se({ size: r.size })), () => [
-              (I(), P("svg", Ve, o[0] || (o[0] = [
-                C("path", { d: "M288 109.3L288 352c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-242.7-73.4 73.4c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l128-128c12.5-12.5 32.8-12.5 45.3 0l128 128c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L288 109.3zM64 352l128 0c0 35.3 28.7 64 64 64s64-28.7 64-64l128 0c35.3 0 64 28.7 64 64l0 32c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64l0-32c0-35.3 28.7-64 64-64zM432 456a24 24 0 1 0 0-48 24 24 0 1 0 0 48z" }, null, -1)
+      z("div", Qe, [
+        G(n.$slots, "default", {}, () => [
+          z("div", We, [
+            G(n.$slots, "icon", De(Ee({ size: n.size })), () => [
+              (x(), T("svg", qe, t[0] || (t[0] = [
+                z("path", { d: "M288 109.3L288 352c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-242.7-73.4 73.4c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l128-128c12.5-12.5 32.8-12.5 45.3 0l128 128c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L288 109.3zM64 352l128 0c0 35.3 28.7 64 64 64s64-28.7 64-64l128 0c35.3 0 64 28.7 64 64l0 32c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64l0-32c0-35.3 28.7-64 64-64zM432 456a24 24 0 1 0 0-48 24 24 0 1 0 0 48z" }, null, -1)
               ])))
             ])
           ]),
-          C("div", Ge, ce(r.text), 1)
+          z("div", Je, fe(n.text), 1)
         ])
       ])
     ], 4));
   }
 });
 export {
-  Je as ItemCard,
-  Ze as ItemCardPlaceholder,
-  We as MultiUploader,
-  A as UploadState,
-  de as uploaderEvents,
-  Ue as useMultiUploader,
-  U as wrapRef,
-  ge as wrapUploaderItem
+  Xe as ItemCard,
+  et as ItemCardPlaceholder,
+  Ke as MultiUploader,
+  R as UploadState,
+  Te as useMultiUploader
 };
