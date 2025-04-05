@@ -175,7 +175,7 @@ useMultiUploader(items, '/api/upload', {
 | `onItemUploadFail`     | (item: UploaderItem, xhr: XMLHttpRequest) => void  |             | Triggered when a file fails to upload.                                                                                            |
 | `onItemUploadEnd`      | (item: UploaderItem, xhr: XMLHttpRequest) => void  |             | Triggered when an individual file upload finishes.                                                                                |
 | `onItemUploadProgress` | (item: UploaderItem, event: ProgressEvent) => void |             | Triggered during upload progress of a file.                                                                                       |
-| `onInvalidFile`    | (e: Error) => void                                 |             | Triggered when a file with an invalid type or size is selected.                                                                   |
+| `onInvalidFile`        | (e: Error) => void                                 |             | Triggered when a file with an invalid type or size is selected.                                                                   |
 
 ## Return Values
 
@@ -203,8 +203,8 @@ const {
 
 ### Modifiable Values
 
-| Name          | Type                       | Description                                    |
-|---------------|----------------------------|------------------------------------------------|
+| Name            | Type                       | Description                                    |
+|-----------------|----------------------------|------------------------------------------------|
 | `accept`        | `Ref<string>`              | Accepted file types string (e.g., `.jpg,.png`) |
 | `disabled`      | `Ref<boolean>`             | Whether the uploader is disabled               |
 | `id`            | `Ref<string>`              | Unique identifier for the uploader instance    |
@@ -217,8 +217,8 @@ const {
 
 ### Readonly Values
 
-| Name          | Type            | Description                                                                                             |
-|---------------|-----------------|---------------------------------------------------------------------------------------------------------|
+| Name            | Type            | Description                                                                                             |
+|-----------------|-----------------|---------------------------------------------------------------------------------------------------------|
 | `acceptedTypes` | `Ref<string[]>` | Array of accepted file types                                                                            |
 | `canUpload`     | `Ref<boolean>`  | Whether uploading is allowed, if is `readonly` or `disabled` or reaches max files, this will be `false` |
 | `eventBus`      | `Emitter`       | Custom event bus for listening and triggering events                                                    |
@@ -228,8 +228,8 @@ const {
 
 ### Methods
 
-| Name             | Type                                                                 | Description                                                           |
-|------------------|----------------------------------------------------------------------|-----------------------------------------------------------------------|
+| Name               | Type                                                                 | Description                                                           |
+|--------------------|----------------------------------------------------------------------|-----------------------------------------------------------------------|
 | `addFile`          | `(file: File) => UploaderItem`                                       | Add a file to the uploader                                            |
 | `addItem`          | `(item: UploaderItem) => UploaderItem`                               | Add an item to the uploader                                           |
 | `createItem`       | `(file: File) => UploaderItem`                                       | Create a new item based on the file                                   |
@@ -240,8 +240,7 @@ const {
 | `on`               | `(event: string, callback: (...event: any[]) => void) => () => void` | Register event listeners and return a function to remove the listener |
 | `openFileSelector` | `() => void`                                                         | Open the file selection window                                        |
 | `uploadStart`      | `() => Promise<PromiseSettledResult<UploaderItem>[]>`                | Start the upload process and return the result for each item          |
-| `stopItemUpload` | `(item: UploaderItem | XMLHttpRequest) => void`                                                         | Stop the upload process for a specific item                           |
-
+| `stopItemUpload`   | `(item: UploaderItem                                                 | XMLHttpRequest) => void`                                              | Stop the upload process for a specific item                           |
 
 Note you can modify some of the values in the return values, such as `disabled`, `readonly`, `maxFiles` etc.
 The change will be reflected in the uploader instance.
@@ -251,7 +250,7 @@ The change will be reflected in the uploader instance.
 If you have some exists files that you want to show in the uploader, you can prepare them in advance.
 
 ```ts
-import { useMultiUploader, type UploaderItem } from 'vue-multi-uploader';
+import { type UploaderItem, useMultiUploader } from 'vue-multi-uploader';
 
 const defaultItems = ref<UploaderItem[]>([
   {
@@ -281,7 +280,7 @@ const defaultItems = ref<UploaderItem[]>([
 ]);
 
 const { items, ... } = useMultiUploader(defaultItems, '/api/upload', {
-  ...
+  ...,
 });
 ```
 
@@ -331,7 +330,7 @@ const {
 
 ### Adding Items
 
-You can add items programmatically by using the `addFile` or `addItem` method. If `autoStart` is set to `true`, 
+You can add items programmatically by using the `addFile` or `addItem` method. If `autoStart` is set to `true`,
 the upload will start automatically after adding the item.
 
 ```ts
@@ -380,7 +379,7 @@ const {
 
 function clickToStop(item: UploaderItem) {
   stopItemUpload(item);
-  
+
   // Or stop by xhr
   stopItemUpload(item.xhr);
 }
@@ -451,19 +450,19 @@ eventBus.once('...', () => {...
 
 The following events will match to `on*` callback in options:
 
-| Event             | Callback           |
-|-------------------|--------------------|
-| `change`          | `onChange`         |
-| `delete-item`     | `onDeleteItem`     |
-| `uploading`       | `onUploading`      |
-| `uploaded`        | `onUploaded`       |
-| `create-item`     | `onCreateItem`     |
-| `item-upload-start` | `onItemUploadStart` |
-| `item-upload-success` | `onItemUploadSuccess` |
-| `item-upload-fail` | `onItemUploadFail` |
-| `item-upload-end` | `onItemUploadEnd`  |
+| Event                  | Callback               |
+|------------------------|------------------------|
+| `change`               | `onChange`             |
+| `delete-item`          | `onDeleteItem`         |
+| `uploading`            | `onUploading`          |
+| `uploaded`             | `onUploaded`           |
+| `create-item`          | `onCreateItem`         |
+| `item-upload-start`    | `onItemUploadStart`    |
+| `item-upload-success`  | `onItemUploadSuccess`  |
+| `item-upload-fail`     | `onItemUploadFail`     |
+| `item-upload-end`      | `onItemUploadEnd`      |
 | `item-upload-progress` | `onItemUploadProgress` |
-| `invalid-file`    | `onInvalidFile`    |
+| `invalid-file`         | `onInvalidFile`        |
 
 ## Pre-Built Components
 
