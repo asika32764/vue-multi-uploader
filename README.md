@@ -7,7 +7,6 @@ A headless upload component that supports developers to custom for every
 project. [DEMO](https://about.asika.tw/vue-multi-uploader/)
 
 <!-- TOC -->
-
 * [Vue Multi Uploader](#vue-multi-uploader)
   * [Installation](#installation)
   * [Getting Started](#getting-started)
@@ -15,11 +14,20 @@ project. [DEMO](https://about.asika.tw/vue-multi-uploader/)
   * [Options](#options)
     * [Options Refs](#options-refs)
   * [Return Values](#return-values)
+    * [Modifiable Values](#modifiable-values)
+    * [Readonly Values](#readonly-values)
+    * [Methods](#methods)
   * [Prepare Default Items](#prepare-default-items)
   * [Fetch Uploaded Data And Set to Item](#fetch-uploaded-data-and-set-to-item)
+  * [Programmatically Control](#programmatically-control)
+    * [Adding Items](#adding-items)
+    * [Stop Upload](#stop-upload)
+  * [Handle Errors](#handle-errors)
+    * [Invalid File](#invalid-file)
+    * [Upload Fail](#upload-fail)
   * [Events](#events)
   * [Pre-Built Components](#pre-built-components)
-
+    * [Get Uploader Instance From Component](#get-uploader-instance-from-component)
 <!-- TOC -->
 
 ## Installation
