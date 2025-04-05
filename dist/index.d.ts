@@ -268,8 +268,6 @@ export declare interface UploaderItem {
     progress: number;
     xhr?: XMLHttpRequest;
     error?: Error;
-    message?: string;
-    messageType?: string;
     [props: string]: any;
 }
 

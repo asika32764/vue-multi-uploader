@@ -1,4 +1,4 @@
-import { ref as ce, isRef as we, computed as F, watch as J, reactive as de, defineComponent as he, mergeModels as me, useModel as $e, useTemplateRef as Me, onUnmounted as be, openBlock as x, createElementBlock as T, normalizeClass as Se, unref as Z, createElementVNode as z, renderSlot as G, normalizeStyle as oe, createCommentVNode as te, toDisplayString as fe, withModifiers as ve, normalizeProps as De, guardReactiveProps as Ee } from "vue";
+import { ref as ce, isRef as we, computed as j, watch as J, reactive as de, defineComponent as he, mergeModels as me, useModel as $e, useTemplateRef as Me, onUnmounted as be, openBlock as T, createElementBlock as N, normalizeClass as Se, unref as Z, createElementVNode as z, renderSlot as G, normalizeStyle as oe, createCommentVNode as te, toDisplayString as fe, withModifiers as ve, normalizeProps as De, guardReactiveProps as Ee } from "vue";
 /*!
  * dush <https://github.com/tunnckoCore/dush>
  *
@@ -105,8 +105,8 @@ function _e() {
         n.off(a, b), d.apply(d, arguments);
       }
       b.fn = d;
-      var E = v ? b : d;
-      return k.push(E), n;
+      var D = v ? b : d;
+      return k.push(D), n;
     },
     /**
      * > Add `handler` for `name` event that
@@ -284,9 +284,9 @@ function ke(i, n, t) {
   }), i.addEventListener("dragleave", (a) => {
     a.stopPropagation(), a.preventDefault(), i.classList.remove(n.value);
   }), i.addEventListener("drop", async (a) => {
-    var E;
+    var D;
     a.stopPropagation(), a.preventDefault(), i.classList.remove(n.value);
-    const d = (E = a.dataTransfer) == null ? void 0 : E.items, v = [], k = async (O) => {
+    const d = (D = a.dataTransfer) == null ? void 0 : D.items, v = [], k = async (O) => {
       const L = [];
       O.isDirectory ? O.createReader().readEntries((y) => {
         y.forEach((I) => {
@@ -306,13 +306,13 @@ function ke(i, n, t) {
     });
   }), i.__dragging_events = !0);
 }
-const j = class j {
+const H = class H {
 };
-j.alert = async (n) => window.alert(n), j.confirm = async (n) => new Promise((t) => {
+H.alert = async (n) => window.alert(n), H.confirm = async (n) => new Promise((t) => {
   const a = confirm(n);
   t(a);
-}), j.deleteConfirm = async (n) => j.confirm(n), j.confirmText = () => "確認", j.cancelText = () => "取消", j.deleteText = () => "刪除";
-let ge = j;
+}), H.deleteConfirm = async (n) => H.confirm(n), H.confirmText = () => "確認", H.cancelText = () => "取消", H.deleteText = () => "刪除";
+let ge = H;
 function ne(i = "", n = !1) {
   if (n) {
     const a = (performance != null && performance.timeOrigin ? Math.round(performance.timeOrigin) : performance.timing.navigationStart) * 1e5 + performance.now() * 100;
@@ -334,7 +334,7 @@ var Re = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : t
   (function(t, a) {
     i.exports = a();
   })(Re, function() {
-    var t = 1e3, a = 6e4, d = 36e5, v = "millisecond", k = "second", b = "minute", E = "hour", O = "day", L = "week", h = "month", y = "quarter", I = "year", M = "date", re = "Invalid Date", B = /^(\d{4})[-/]?(\d{1,2})?[-/]?(\d{0,2})[Tt\s]*(\d{1,2})?:?(\d{1,2})?:?(\d{1,2})?[.:]?(\d+)?$/, U = /\[([^\]]+)]|Y{1,4}|M{1,4}|D{1,2}|d{1,4}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|Z{1,2}|SSS/g, ae = { name: "en", weekdays: "Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"), months: "January_February_March_April_May_June_July_August_September_October_November_December".split("_"), ordinal: function(c) {
+    var t = 1e3, a = 6e4, d = 36e5, v = "millisecond", k = "second", b = "minute", D = "hour", O = "day", L = "week", h = "month", y = "quarter", I = "year", M = "date", re = "Invalid Date", V = /^(\d{4})[-/]?(\d{1,2})?[-/]?(\d{0,2})[Tt\s]*(\d{1,2})?:?(\d{1,2})?:?(\d{1,2})?[.:]?(\d+)?$/, U = /\[([^\]]+)]|Y{1,4}|M{1,4}|D{1,2}|d{1,4}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|Z{1,2}|SSS/g, ae = { name: "en", weekdays: "Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"), months: "January_February_March_April_May_June_July_August_September_October_November_December".split("_"), ordinal: function(c) {
       var o = ["th", "st", "nd", "rd"], r = c % 100;
       return "[" + c + (o[(r - 20) % 10] || o[r] || o[0]) + "]";
     } }, K = function(c, o, r) {
@@ -350,26 +350,26 @@ var Re = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : t
     }, a: function(c) {
       return c < 0 ? Math.ceil(c) || 0 : Math.floor(c);
     }, p: function(c) {
-      return { M: h, y: I, w: L, d: O, D: M, h: E, m: b, s: k, ms: v, Q: y }[c] || String(c || "").toLowerCase().replace(/s$/, "");
+      return { M: h, y: I, w: L, d: O, D: M, h: D, m: b, s: k, ms: v, Q: y }[c] || String(c || "").toLowerCase().replace(/s$/, "");
     }, u: function(c) {
       return c === void 0;
-    } }, H = "en", N = {};
-    N[H] = ae;
+    } }, Y = "en", F = {};
+    F[Y] = ae;
     var X = "$isDayjsObject", Q = function(c) {
       return c instanceof q || !(!c || !c[X]);
     }, W = function c(o, r, u) {
       var s;
-      if (!o) return H;
+      if (!o) return Y;
       if (typeof o == "string") {
         var f = o.toLowerCase();
-        N[f] && (s = f), r && (N[f] = r, s = f);
+        F[f] && (s = f), r && (F[f] = r, s = f);
         var p = o.split("-");
         if (!s && p.length > 1) return c(p[0]);
       } else {
         var $ = o.name;
-        N[$] = o, s = $;
+        F[$] = o, s = $;
       }
-      return !u && s && (H = s), s || !u && H;
+      return !u && s && (Y = s), s || !u && Y;
     }, A = function(c, o) {
       if (Q(c)) return c.clone();
       var r = typeof o == "object" ? o : {};
@@ -390,7 +390,7 @@ var Re = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : t
           if (w.u(s)) return /* @__PURE__ */ new Date();
           if (s instanceof Date) return new Date(s);
           if (typeof s == "string" && !/Z$/i.test(s)) {
-            var p = s.match(B);
+            var p = s.match(V);
             if (p) {
               var $ = p[2] - 1 || 0, e = (p[7] || "0").substring(0, 3);
               return f ? new Date(Date.UTC(p[1], $, p[3] || 1, p[4] || 0, p[5] || 0, p[6] || 0, e)) : new Date(p[1], $, p[3] || 1, p[4] || 0, p[5] || 0, p[6] || 0, e);
@@ -419,36 +419,36 @@ var Re = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : t
       }, o.valueOf = function() {
         return this.$d.getTime();
       }, o.startOf = function(r, u) {
-        var s = this, f = !!w.u(u) || u, p = w.p(r), $ = function(V, C) {
-          var Y = w.w(s.$u ? Date.UTC(s.$y, C, V) : new Date(s.$y, C, V), s);
-          return f ? Y : Y.endOf(O);
-        }, e = function(V, C) {
-          return w.w(s.toDate()[V].apply(s.toDate("s"), (f ? [0, 0, 0, 0] : [23, 59, 59, 999]).slice(C)), s);
-        }, l = this.$W, m = this.$M, g = this.$D, D = "set" + (this.$u ? "UTC" : "");
+        var s = this, f = !!w.u(u) || u, p = w.p(r), $ = function(x, C) {
+          var B = w.w(s.$u ? Date.UTC(s.$y, C, x) : new Date(s.$y, C, x), s);
+          return f ? B : B.endOf(O);
+        }, e = function(x, C) {
+          return w.w(s.toDate()[x].apply(s.toDate("s"), (f ? [0, 0, 0, 0] : [23, 59, 59, 999]).slice(C)), s);
+        }, l = this.$W, m = this.$M, g = this.$D, S = "set" + (this.$u ? "UTC" : "");
         switch (p) {
           case I:
             return f ? $(1, 0) : $(31, 11);
           case h:
             return f ? $(1, m) : $(0, m + 1);
           case L:
-            var _ = this.$locale().weekStart || 0, S = (l < _ ? l + 7 : l) - _;
-            return $(f ? g - S : g + (6 - S), m);
+            var E = this.$locale().weekStart || 0, _ = (l < E ? l + 7 : l) - E;
+            return $(f ? g - _ : g + (6 - _), m);
           case O:
           case M:
-            return e(D + "Hours", 0);
-          case E:
-            return e(D + "Minutes", 1);
+            return e(S + "Hours", 0);
+          case D:
+            return e(S + "Minutes", 1);
           case b:
-            return e(D + "Seconds", 2);
+            return e(S + "Seconds", 2);
           case k:
-            return e(D + "Milliseconds", 3);
+            return e(S + "Milliseconds", 3);
           default:
             return this.clone();
         }
       }, o.endOf = function(r) {
         return this.startOf(r, !1);
       }, o.$set = function(r, u) {
-        var s, f = w.p(r), p = "set" + (this.$u ? "UTC" : ""), $ = (s = {}, s[O] = p + "Date", s[M] = p + "Date", s[h] = p + "Month", s[I] = p + "FullYear", s[E] = p + "Hours", s[b] = p + "Minutes", s[k] = p + "Seconds", s[v] = p + "Milliseconds", s)[f], e = f === O ? this.$D + (u - this.$W) : u;
+        var s, f = w.p(r), p = "set" + (this.$u ? "UTC" : ""), $ = (s = {}, s[O] = p + "Date", s[M] = p + "Date", s[h] = p + "Month", s[I] = p + "FullYear", s[D] = p + "Hours", s[b] = p + "Minutes", s[k] = p + "Seconds", s[v] = p + "Milliseconds", s)[f], e = f === O ? this.$D + (u - this.$W) : u;
         if (f === h || f === I) {
           var l = this.clone().set(M, 1);
           l.$d[$](e), l.init(), this.$d = l.set(M, Math.min(this.$D, l.daysInMonth())).$d;
@@ -469,23 +469,23 @@ var Re = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : t
         if (p === I) return this.set(I, this.$y + r);
         if (p === O) return $(1);
         if (p === L) return $(7);
-        var e = (s = {}, s[b] = a, s[E] = d, s[k] = t, s)[p] || 1, l = this.$d.getTime() + r * e;
+        var e = (s = {}, s[b] = a, s[D] = d, s[k] = t, s)[p] || 1, l = this.$d.getTime() + r * e;
         return w.w(l, this);
       }, o.subtract = function(r, u) {
         return this.add(-1 * r, u);
       }, o.format = function(r) {
         var u = this, s = this.$locale();
         if (!this.isValid()) return s.invalidDate || re;
-        var f = r || "YYYY-MM-DDTHH:mm:ssZ", p = w.z(this), $ = this.$H, e = this.$m, l = this.$M, m = s.weekdays, g = s.months, D = s.meridiem, _ = function(C, Y, ee, ie) {
-          return C && (C[Y] || C(u, f)) || ee[Y].slice(0, ie);
-        }, S = function(C) {
+        var f = r || "YYYY-MM-DDTHH:mm:ssZ", p = w.z(this), $ = this.$H, e = this.$m, l = this.$M, m = s.weekdays, g = s.months, S = s.meridiem, E = function(C, B, ee, ie) {
+          return C && (C[B] || C(u, f)) || ee[B].slice(0, ie);
+        }, _ = function(C) {
           return w.s($ % 12 || 12, C, "0");
-        }, V = D || function(C, Y, ee) {
+        }, x = S || function(C, B, ee) {
           var ie = C < 12 ? "AM" : "PM";
           return ee ? ie.toLowerCase() : ie;
         };
-        return f.replace(U, function(C, Y) {
-          return Y || function(ee) {
+        return f.replace(U, function(C, B) {
+          return B || function(ee) {
             switch (ee) {
               case "YY":
                 return String(u.$y).slice(-2);
@@ -496,9 +496,9 @@ var Re = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : t
               case "MM":
                 return w.s(l + 1, 2, "0");
               case "MMM":
-                return _(s.monthsShort, l, g, 3);
+                return E(s.monthsShort, l, g, 3);
               case "MMMM":
-                return _(g, l);
+                return E(g, l);
               case "D":
                 return u.$D;
               case "DD":
@@ -506,9 +506,9 @@ var Re = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : t
               case "d":
                 return String(u.$W);
               case "dd":
-                return _(s.weekdaysMin, u.$W, m, 2);
+                return E(s.weekdaysMin, u.$W, m, 2);
               case "ddd":
-                return _(s.weekdaysShort, u.$W, m, 3);
+                return E(s.weekdaysShort, u.$W, m, 3);
               case "dddd":
                 return m[u.$W];
               case "H":
@@ -516,13 +516,13 @@ var Re = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : t
               case "HH":
                 return w.s($, 2, "0");
               case "h":
-                return S(1);
+                return _(1);
               case "hh":
-                return S(2);
+                return _(2);
               case "a":
-                return V($, e, !0);
+                return x($, e, !0);
               case "A":
-                return V($, e, !1);
+                return x($, e, !1);
               case "m":
                 return String(e);
               case "mm":
@@ -561,7 +561,7 @@ var Re = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : t
           case O:
             f = (m - l) / 864e5;
             break;
-          case E:
+          case D:
             f = m / d;
             break;
           case b:
@@ -577,7 +577,7 @@ var Re = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : t
       }, o.daysInMonth = function() {
         return this.endOf(h).$D;
       }, o.$locale = function() {
-        return N[this.$L];
+        return F[this.$L];
       }, o.locale = function(r, u) {
         if (!r) return this.$L;
         var s = this.clone(), f = W(r, u, !0);
@@ -594,7 +594,7 @@ var Re = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : t
         return this.$d.toUTCString();
       }, c;
     }(), se = q.prototype;
-    return A.prototype = se, [["$ms", v], ["$s", k], ["$m", b], ["$H", E], ["$W", O], ["$M", h], ["$y", I], ["$D", M]].forEach(function(c) {
+    return A.prototype = se, [["$ms", v], ["$s", k], ["$m", b], ["$H", D], ["$W", O], ["$M", h], ["$y", I], ["$D", M]].forEach(function(c) {
       se[c[1]] = function(o) {
         return this.$g(o, c[0], c[1]);
       };
@@ -602,7 +602,7 @@ var Re = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : t
       return c.$i || (c(o, q, A), c.$i = !0), A;
     }, A.locale = W, A.isDayjs = Q, A.unix = function(c) {
       return A(1e3 * c);
-    }, A.en = N[H], A.Ls = N, A.p = {}, A;
+    }, A.en = F[Y], A.Ls = F, A.p = {}, A;
   });
 })(Ue);
 class Ce {
@@ -689,21 +689,21 @@ function P(i) {
   return typeof i == "function" && (i = ce(i())), we(i) ? i : ce(i);
 }
 function Te(i, n, t = {}) {
-  const a = P(t.id ?? "vue-multi-uploader-" + ne()), d = P(t.accept ?? ""), v = P(t.maxFiles), k = P(t.maxConcurrent ?? 2), b = P(t.maxItemSize), E = P(t.disabled ?? !1), O = P(t.readonly ?? !1), L = P(n), h = F(() => P(t.dropzone).value), y = P(t.onDragClass ?? "h-ondrag"), I = P(t.autoStart ?? !0);
+  const a = P(t.id ?? "vue-multi-uploader-" + ne()), d = P(t.accept ?? ""), v = P(t.maxFiles), k = P(t.maxConcurrent ?? 2), b = P(t.maxItemSize), D = P(t.disabled ?? !1), O = P(t.readonly ?? !1), L = P(n), h = j(() => P(t.dropzone).value), y = P(t.onDragClass ?? "h-ondrag"), I = P(t.autoStart ?? !0);
   let M = P(i);
   M.value = M.value.map(
     (e) => le(e, { uploadState: R.UPLOADED })
   );
-  const re = Pe(), B = Oe(t);
+  const re = Pe(), V = Oe(t);
   J(k, (e) => {
     re.maxRunning = e;
   }, { immediate: !0 });
   function U(e, ...l) {
-    return B.emit(e, ...l);
+    return V.emit(e, ...l);
   }
   function ae(e, l) {
-    return B.on(e, l), () => {
-      B.off(e, l);
+    return V.on(e, l), () => {
+      V.off(e, l);
     };
   }
   function K() {
@@ -716,10 +716,10 @@ function Te(i, n, t = {}) {
   function ue(e) {
     ke(e, y, Q);
   }
-  function H(e) {
-    return X(N(e));
+  function Y(e) {
+    return X(F(e));
   }
-  function N(e) {
+  function F(e) {
     const m = de(le({
       key: ne(),
       url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
@@ -727,7 +727,7 @@ function Te(i, n, t = {}) {
       uploadState: R.PENDING,
       progress: 0
     }));
-    return m.title = m.title || m.file.name, B.emit("create-item", m), m;
+    return m.title = m.title || m.file.name, V.emit("create-item", m), m;
   }
   function X(e) {
     const l = de(le({
@@ -738,20 +738,20 @@ function Te(i, n, t = {}) {
     if (!e.file)
       return e;
     if (A(e.file), b.value != null && e.file.size > b.value) {
-      const D = new Ae(
+      const S = new Ae(
         "File size is too large",
         e.file,
         b.value
       );
-      throw U("invalid-file", D), D;
+      throw U("invalid-file", S), S;
     }
     const m = M.value.push(l), g = M.value[m - 1];
     if (o(g)) {
-      const D = new FileReader();
-      D.onload = (_) => {
-        var S;
-        g.thumbUrl = String((S = _.target) == null ? void 0 : S.result);
-      }, D.readAsDataURL(e.file);
+      const S = new FileReader();
+      S.onload = (E) => {
+        var _;
+        g.thumbUrl = String((_ = E.target) == null ? void 0 : _.result);
+      }, S.readAsDataURL(e.file);
     }
     return g;
   }
@@ -759,7 +759,7 @@ function Te(i, n, t = {}) {
     Array.prototype.forEach.call(e, A), Array.prototype.forEach.call(e, (l) => {
       if (!u.value)
         return;
-      const m = H(l);
+      const m = Y(l);
       I.value && c(m);
     });
   }
@@ -775,15 +775,15 @@ function Te(i, n, t = {}) {
     const l = f.value, m = e.name.split(".").pop();
     if (l.length) {
       let g = !1;
-      if (l.forEach((D) => {
-        g || (D.indexOf("/") !== -1 ? w(D, e.type) && (g = !0) : D.toLowerCase() === (m == null ? void 0 : m.toLowerCase()) && (g = !0));
+      if (l.forEach((S) => {
+        g || (S.indexOf("/") !== -1 ? w(S, e.type) && (g = !0) : S.toLowerCase() === (m == null ? void 0 : m.toLowerCase()) && (g = !0));
       }), !g) {
-        const D = new Ie(
+        const S = new Ie(
           "Invalid file type",
           e,
           l
         );
-        throw U("invalid-file", D), D;
+        throw U("invalid-file", S), S;
       }
     }
   }
@@ -803,27 +803,27 @@ function Te(i, n, t = {}) {
   async function c(e) {
     e.uploadState = R.UPLOADING, e.error = void 0;
     const l = new FormData();
-    return l.append("file", e.file), new Promise((g, D) => {
-      const _ = new XMLHttpRequest();
-      U("item-upload-start", e, _), _.open("POST", L.value), _.upload.onprogress = (S) => {
-        S.lengthComputable && (e.progress = S.loaded / S.total, U("item-upload-progress", e, S));
-      }, _.onload = () => {
-        if (_.status >= 200 && _.status < 300)
+    return l.append("file", e.file), new Promise((g, S) => {
+      const E = new XMLHttpRequest();
+      U("item-upload-start", e, E), E.open("POST", L.value), E.upload.onprogress = (_) => {
+        _.lengthComputable && (e.progress = _.loaded / _.total, U("item-upload-progress", e, _));
+      }, E.onload = () => {
+        if (E.status >= 200 && E.status < 300)
           try {
-            e.uploadState = R.UPLOADED, U("item-upload-success", e, _), g(e);
-          } catch (S) {
-            console.error(S), e.uploadState = R.ERROR, e.error = S, D(S);
+            e.uploadState = R.UPLOADED, U("item-upload-success", e, E), g(e);
+          } catch (_) {
+            console.error(_), e.uploadState = R.ERROR, e.error = _, S(_);
           }
         else {
-          const S = `Upload failed with status: ${_.status}`;
-          console.error(S), e.uploadState = R.ERROR, e.message = S, e.messageType = "error", D(new Error(S));
+          const _ = `Upload failed with status: ${E.status}`, x = new Error(_);
+          console.error(x), e.uploadState = R.ERROR, e.error = x, S(x);
         }
-      }, _.onerror = () => {
-        const S = "An error occurred during the upload.";
-        console.error(S), e.uploadState = R.ERROR, e.error = new Error(S), D(e.error);
-      }, _.onloadend = () => {
-        U("item-upload-end", e, _);
-      }, _.send(l);
+      }, E.onerror = () => {
+        const _ = "An error occurred during the upload.";
+        console.error(_), e.uploadState = R.ERROR, e.error = new Error(_), S(e.error);
+      }, E.onloadend = () => {
+        U("item-upload-end", e, E);
+      }, E.send(l);
     }).catch((g) => (U("item-upload-fail", e, g), Promise.reject(g)));
   }
   function o(e) {
@@ -843,7 +843,7 @@ function Te(i, n, t = {}) {
       "webp"
     ].indexOf(l.toLowerCase()) !== -1;
   }
-  const u = F(() => (v.value == null || M.value.length < Number(v.value)) && !p.value), s = F(() => M.value.filter((l) => l.uploadState === R.UPLOADING).length > 0), f = F(() => (Array.isArray(d.value) ? d.value : d.value.split(",")).map((e) => e.trim()).filter((e) => e.length > 0).map((e) => e.indexOf("/") === -1 && e[0] === "." ? e.substr(1) : e)), p = F(() => E.value || O.value);
+  const u = j(() => (v.value == null || M.value.length < Number(v.value)) && !p.value), s = j(() => M.value.filter((l) => l.uploadState === R.UPLOADING).length > 0), f = j(() => (Array.isArray(d.value) ? d.value : d.value.split(",")).map((e) => e.trim()).filter((e) => e.length > 0).map((e) => e.indexOf("/") === -1 && e[0] === "." ? e.substr(1) : e)), p = j(() => D.value || O.value);
   J(M, (e) => {
     e.map((l) => {
       l.key = l.key || ne();
@@ -851,18 +851,18 @@ function Te(i, n, t = {}) {
   }, { deep: !0 }), J(s, (e) => {
     U(e ? "uploading" : "uploaded");
   });
-  const $ = F(() => M.value.reduce((e, l) => (l.file && (e += l.file.size), e), 0));
+  const $ = j(() => M.value.reduce((e, l) => (l.file && (e += l.file.size), e), 0));
   return {
     id: a,
     accept: d,
     maxFiles: v,
     maxConcurrent: k,
     maxItemSize: b,
-    disabled: E,
+    disabled: D,
     readonly: O,
     uploadUrl: L,
     items: M,
-    eventBus: B,
+    eventBus: V,
     canUpload: u,
     isUploading: s,
     acceptedTypes: f,
@@ -871,9 +871,9 @@ function Te(i, n, t = {}) {
     emits: U,
     on: ae,
     openFileSelector: K,
-    addFile: H,
+    addFile: Y,
     addItem: X,
-    createItem: N,
+    createItem: F,
     deleteItem: q,
     uploadStart: se,
     stopItemUpload: W,
@@ -903,16 +903,16 @@ const Ne = { class: "vue-drag-uploader__wrapper" }, Ke = /* @__PURE__ */ he({
     }, { deep: !0 });
     const b = Me("el");
     a.options.dropzone = a.options.dropzone ?? b;
-    const E = a.instance ?? Te(k, a.uploadUrl ?? "", a.options), {
+    const D = a.instance ?? Te(k, a.uploadUrl ?? "", a.options), {
       isReadonly: O,
       items: L
-    } = E;
+    } = D;
     J(L, () => {
       v.value = L.value;
     }, { deep: !0 });
     const h = [];
     for (const y in pe) {
-      const I = E.on(y, (...M) => {
+      const I = D.on(y, (...M) => {
         d(y, ...M);
       });
       h.push(I);
@@ -920,8 +920,8 @@ const Ne = { class: "vue-drag-uploader__wrapper" }, Ke = /* @__PURE__ */ he({
     return be(() => {
       h.forEach((y) => y());
     }), n({
-      instance: E
-    }), (y, I) => (x(), T("div", {
+      instance: D
+    }), (y, I) => (T(), N("div", {
       ref_key: "el",
       ref: b,
       class: Se(["vue-drag-uploader", { "vue-drag-uploader--readonly": Z(O) }])
@@ -930,7 +930,7 @@ const Ne = { class: "vue-drag-uploader__wrapper" }, Ke = /* @__PURE__ */ he({
         G(y.$slots, "items", {
           items: Z(L),
           options: y.options,
-          instance: de(Z(E)),
+          instance: de(Z(D)),
           onDelete: I[0] || (I[0] = () => console.log(y.$event))
         })
       ])
@@ -960,11 +960,11 @@ const Ne = { class: "vue-drag-uploader__wrapper" }, Ke = /* @__PURE__ */ he({
   },
   emits: ["delete", "item-click"],
   setup(i, { emit: n }) {
-    const t = i, a = n, d = F(() => t.item.uploadState), v = F(() => t.item.progress);
+    const t = i, a = n, d = j(() => t.item.uploadState), v = j(() => t.item.progress);
     function k() {
       t.isReadonly || a("delete", t.item);
     }
-    const b = F(() => t.item.file ? t.item.file.name : t.item.title ? t.item.title : t.item.url.split("/").pop()), E = F(() => O(
+    const b = j(() => t.item.file ? t.item.file.name : t.item.title ? t.item.title : t.item.url.split("/").pop()), D = j(() => O(
       t.item.file ? t.item.file.name : t.item.url
     ));
     function O(h) {
@@ -982,7 +982,7 @@ const Ne = { class: "vue-drag-uploader__wrapper" }, Ke = /* @__PURE__ */ he({
     function L(h) {
       a("item-click", t.item, t.i, h);
     }
-    return (h, y) => (x(), T("div", {
+    return (h, y) => (T(), N("div", {
       class: "vue-drag-uploader-item preview-img",
       style: oe({ "--vmu-img-size": h.size }),
       onClick: L
@@ -990,15 +990,15 @@ const Ne = { class: "vue-drag-uploader__wrapper" }, Ke = /* @__PURE__ */ he({
       G(h.$slots, "it", { item: h.item }, () => {
         var I;
         return [
-          E.value ? (x(), T("div", {
+          D.value ? (T(), N("div", {
             key: 0,
             class: "preview-img__body",
             style: oe({ "background-image": "url(" + (h.item.thumbUrl || h.item.url) + ")", opacity: d.value === Z(R).UPLOADED ? 1 : 0.5 })
           }, null, 4)) : te("", !0),
-          E.value ? te("", !0) : (x(), T("div", Fe, [
+          D.value ? te("", !0) : (T(), N("div", Fe, [
             z("div", null, [
               G(h.$slots, "icon", { item: h.item }, () => [
-                (x(), T("svg", je, y[2] || (y[2] = [
+                (T(), N("svg", je, y[2] || (y[2] = [
                   z("path", { d: "M320 464c8.8 0 16-7.2 16-16l0-288-80 0c-17.7 0-32-14.3-32-32l0-80L64 48c-8.8 0-16 7.2-16 16l0 384c0 8.8 7.2 16 16 16l256 0zM0 64C0 28.7 28.7 0 64 0L229.5 0c17 0 33.3 6.7 45.3 18.7l90.5 90.5c12 12 18.7 28.3 18.7 45.3L384 448c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 64z" }, null, -1)
                 ])))
               ])
@@ -1006,26 +1006,26 @@ const Ne = { class: "vue-drag-uploader__wrapper" }, Ke = /* @__PURE__ */ he({
             z("div", He, fe(b.value), 1)
           ])),
           z("div", Ye, [
-            h.isReadonly ? te("", !0) : (x(), T("span", {
+            h.isReadonly ? te("", !0) : (T(), N("span", {
               key: 0,
               class: "preview-img__remove-icon",
               onClick: y[0] || (y[0] = ve((M) => k(), ["prevent"]))
             }, [
               G(h.$slots, "remove-icon", {}, () => [
-                (x(), T("svg", Be, y[3] || (y[3] = [
+                (T(), N("svg", Be, y[3] || (y[3] = [
                   z("path", { d: "M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z" }, null, -1)
                 ])))
               ])
             ])),
             G(h.$slots, "extra", { item: h.item })
           ]),
-          d.value === Z(R).UPLOADING ? (x(), T("div", Ve, [
+          d.value === Z(R).UPLOADING ? (T(), N("div", Ve, [
             z("div", {
               class: "preview-img__progress-bar",
               style: oe({ width: v.value * 100 + "%" })
             }, null, 4)
           ])) : te("", !0),
-          d.value === Z(R).ERROR ? (x(), T("div", {
+          d.value === Z(R).ERROR ? (T(), N("div", {
             key: 3,
             class: "preview-img__error-message error-message",
             onClick: y[1] || (y[1] = ve(() => {
@@ -1049,7 +1049,7 @@ const Ne = { class: "vue-drag-uploader__wrapper" }, Ke = /* @__PURE__ */ he({
     text: { default: "" }
   },
   setup(i) {
-    return (n, t) => (x(), T("div", {
+    return (n, t) => (T(), N("div", {
       class: "vue-drag-uploader-item add-button",
       key: "empty",
       style: oe({ "--vmu-img-size": n.size })
@@ -1058,7 +1058,7 @@ const Ne = { class: "vue-drag-uploader__wrapper" }, Ke = /* @__PURE__ */ he({
         G(n.$slots, "default", {}, () => [
           z("div", We, [
             G(n.$slots, "icon", De(Ee({ size: n.size })), () => [
-              (x(), T("svg", qe, t[0] || (t[0] = [
+              (T(), N("svg", qe, t[0] || (t[0] = [
                 z("path", { d: "M288 109.3L288 352c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-242.7-73.4 73.4c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l128-128c12.5-12.5 32.8-12.5 45.3 0l128 128c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L288 109.3zM64 352l128 0c0 35.3 28.7 64 64 64s64-28.7 64-64l128 0c35.3 0 64 28.7 64 64l0 32c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64l0-32c0-35.3 28.7-64 64-64zM432 456a24 24 0 1 0 0-48 24 24 0 1 0 0 48z" }, null, -1)
               ])))
             ])
