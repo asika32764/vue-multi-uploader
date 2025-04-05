@@ -281,13 +281,13 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
           }
         } else {
           const errorMessage = `Upload failed with status: ${xhr.status}`;
-          console.error(errorMessage);
+          const e = new Error(errorMessage);
+          console.error(e);
 
           item.uploadState = UploadState.ERROR;
-          item.message = errorMessage;
-          item.messageType = 'error';
+          item.error = e;
 
-          reject(new Error(errorMessage));
+          reject(e);
         }
       };
 

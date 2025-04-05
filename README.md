@@ -305,11 +305,12 @@ export interface UploaderItem {
 
   uploadState: UploadState; // enum
   progress: number;
-  message?: string;
-  messageType?: string;
+  xhr?: XMLHttpRequest;
+  error?: Error;
 
   [props: string]: any;
 }
+
 ```
 
 ## Fetch Uploaded Data And Set to Item
