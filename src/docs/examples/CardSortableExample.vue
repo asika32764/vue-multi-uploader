@@ -105,7 +105,7 @@ function onReorder() {
 
 <template>
   <ShowCard :code>
-    <MultiUploader ref="uploader" upload-url="/api/upload" v-model="existingItems" :options>
+    <MultiUploader ref="uploader" upload-url="/" v-model="existingItems" :options>
       <template #items="{ instance, instance: { canUpload, openFileSelector, deleteItem } }">
         <VueDraggable v-model="instance.items" v-bind="draggableOptions"
           @move="onReorder"

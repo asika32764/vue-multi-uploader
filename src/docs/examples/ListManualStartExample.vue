@@ -14,7 +14,7 @@ const {
   openFileSelector,
   deleteItem,
   uploadStart,
-} = useMultiUploader(items, '/api/upload', {
+} = useMultiUploader(items, '/', {
   dropzone: dropzone,
   maxFiles: 5,
   maxConcurrent: 2,
@@ -72,6 +72,7 @@ const pendingItems = computed(() => {
             <div class="flex-grow-1 text-truncate">
               <div class="text-truncate">
                 {{ item.title }}
+                <span v-if="item.uploadState === UploadState.UPLOADED" class="fa-solid fa-check text-success"></span>
               </div>
               <div class="mt-2">
                 <div class="progress progress-sm" style="height: 0.5rem">
@@ -142,6 +143,7 @@ const pendingItems = computed(() => {
           <div class="flex-grow-1 text-truncate">
             <div class="text-truncate">
               {{ item.title }}
+              <span v-if="item.uploadState === UploadState.UPLOADED" class="fa-solid fa-check text-success"></span>
             </div>
             <div class="mt-2">
               <div class="progress progress-sm" style="height: 0.5rem">

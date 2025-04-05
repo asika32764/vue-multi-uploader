@@ -1,27 +1,20 @@
 import { UploadState } from '@/enum/UploadState';
+import { InvalidFileSizeError, InvalidFileTypeError } from '@/errors.ts';
+import { handleEvents, OptionsEventsMap } from '@/events.ts';
+import { handleDropzoneDragging, openFileSelectorForAdding } from '@/helpers.ts';
 import type { UploaderItem } from '@/types/UploaderItem.ts';
 import useQueue from '@/useQueue';
+import { MaybeElement, unrefElement, wrapRef, wrapUploaderItem } from '@/utils.ts';
 import { uid } from '@lyrasoft/ts-toolkit/src/generic';
-import dush, { Emitter } from 'dush';
-import {
-  type ComponentPublicInstance,
-  computed,
-  isRef,
-  type MaybeRef,
-  type MaybeRefOrGetter,
-  reactive,
-  ref,
-  type Ref,
-  watch
-} from 'vue';
-
-type MaybeElement = HTMLElement | SVGElement | ComponentPublicInstance | undefined | null;
+import { Emitter } from 'dush';
+import { computed, type MaybeRef, type MaybeRefOrGetter, reactive, type Ref, watch } from 'vue';
 
 export type MultiUploaderOptions = {
   id?: MaybeRefOrGetter<string | undefined>;
   accept?: MaybeRefOrGetter<string | undefined>;
   maxFiles?: MaybeRefOrGetter<number | undefined>;
   maxConcurrent?: MaybeRefOrGetter<number | undefined>;
+  maxItemSize?: MaybeRefOrGetter<number | undefined>;
   disabled?: MaybeRefOrGetter<boolean | undefined>;
   readonly?: MaybeRefOrGetter<boolean | undefined>;
   dropzone?: MaybeRefOrGetter<MaybeElement>;
@@ -29,72 +22,17 @@ export type MultiUploaderOptions = {
   autoStart?: MaybeRefOrGetter<boolean>;
 } & Partial<OptionsEventsMap>;
 
-export type UploaderEvents = {
-  'change': (items: UploaderItem[]) => void;
-  'delete-item': (item: UploaderItem) => void;
-  'uploading': () => void;
-  'uploaded': () => void;
-  'create-item': (item: UploaderItem) => void;
-  'item-upload-start': (item: UploaderItem, xhr: XMLHttpRequest) => void;
-  'item-upload-success': (item: UploaderItem, xhr: XMLHttpRequest) => void;
-  'item-upload-fail': (item: UploaderItem, xhr: XMLHttpRequest) => void;
-  'item-upload-end': (item: UploaderItem, xhr: XMLHttpRequest) => void;
-  'item-upload-progress': (item: UploaderItem, event: ProgressEvent) => void;
-  'invalid-file-type': (file: File, accepted: string[]) => void;
-}
-
-export type OptionsEventsMap = {
-  onChange?: UploaderEvents['change'];
-  onDeleteItem?: UploaderEvents['delete-item'];
-  onUploading?: UploaderEvents['uploading'];
-  onUploaded?: UploaderEvents['uploaded'];
-  onItemUploadStart?: UploaderEvents['item-upload-start'];
-  onItemUploadSuccess?: UploaderEvents['item-upload-success'];
-  onItemUploadFail?: UploaderEvents['item-upload-fail'];
-  onItemUploadEnd?: UploaderEvents['item-upload-end'];
-  onItemUploadProgress?: UploaderEvents['item-upload-progress'];
-  onInvalidFileType?: UploaderEvents['invalid-file-type'];
-}
-
-export const uploaderEvents: Record<keyof UploaderEvents, string> = {
-  'change': 'onChange',
-  'delete-item': 'onDeleteItem',
-  'uploading': 'onUploading',
-  'uploaded': 'onUploaded',
-  'create-item': 'onCreateItem',
-  'item-upload-start': 'onItemUploadStart',
-  'item-upload-success': 'onItemUploadSuccess',
-  'item-upload-fail': 'onItemUploadFail',
-  'item-upload-end': 'onItemUploadEnd',
-  'item-upload-progress': 'onItemUploadProgress',
-  'invalid-file-type': 'onInvalidFileType',
-};
-
-function handleEvents(options: MultiUploaderOptions): Emitter {
-  const eventBus = dush();
-
-  for (const eventName in uploaderEvents) {
-    const optionName = uploaderEvents[eventName as keyof UploaderEvents];
-
-    if (optionName && options[optionName as keyof MultiUploaderOptions]) {
-      // @ts-ignore
-      eventBus.on(eventName, options[optionName as keyof MultiUploaderOptions]);
-    }
-  }
-
-  return eventBus;
-}
-
 export function useMultiUploader<T extends MultiUploaderOptions>(
   currentValue: MaybeRef<Partial<UploaderItem>[]>,
   uploadTarget: MaybeRefOrGetter<string>,
-  options: T = {} as T
+  options: T = {} as T,
 ): MultiUploaderComposableInstance {
   // Options
   const id = wrapRef(options.id ?? 'vue-multi-uploader-' + uid()) as Ref<string>;
   const accept = wrapRef(options.accept ?? '') as Ref<string>;
   const maxFiles = wrapRef(options.maxFiles) as Ref<T['maxFiles'] extends number ? number : undefined>;
   const maxConcurrent = wrapRef(options.maxConcurrent ?? 2) as Ref<number>;
+  const maxItemSize = wrapRef(options.maxItemSize) as Ref<T['maxItemSize'] extends number ? number : undefined>;
   const disabled = wrapRef(options.disabled ?? false) as Ref<boolean>;
   const readonly = wrapRef(options.readonly ?? false) as Ref<boolean>;
   const uploadUrl = wrapRef(uploadTarget) as Ref<string>;
@@ -102,12 +40,12 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
     return (wrapRef(options.dropzone).value) as MaybeElement;
   });
   const onDragClass = wrapRef(options.onDragClass ?? 'h-ondrag') as Ref<string>;
-  const autoStart = wrapRef(options.autoStart ?? false) as Ref<boolean>;
+  const autoStart = wrapRef(options.autoStart ?? true) as Ref<boolean>;
 
   // Base
   let items = wrapRef<Partial<UploaderItem>[]>(currentValue) as Ref<UploaderItem[]>;
   items.value = items.value.map(
-    (item) => wrapUploaderItem(item, { uploadState: UploadState.UPLOADED })
+    (item) => wrapUploaderItem(item, { uploadState: UploadState.UPLOADED }),
   );
 
   const uploadQueue = useQueue();
@@ -132,37 +70,7 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
   }
 
   function openFileSelector() {
-    const $input = document.createElement('input');
-    $input.id = 'multi-uploader-selector';
-    $input.type = 'file';
-    $input.accept = accept.value;
-    $input.multiple = true;
-    $input.style.display = 'none';
-
-    $input.addEventListener('change', () => {
-      const files = $input.files!;
-      uploadFiles(files);
-
-      $input.remove();
-    });
-
-    $input.addEventListener('change', () => {
-      $input.remove();
-    });
-
-    $input.addEventListener('blur', () => {
-      $input.remove();
-    });
-
-    document.body.appendChild($input);
-
-    $input.dispatchEvent(
-      new MouseEvent('click', {
-        'view': window,
-        'bubbles': true,
-        'cancelable': true
-      })
-    );
+    openFileSelectorForAdding(accept, addFiles);
   }
 
   // Drag & Drop
@@ -175,83 +83,74 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
   }, { immediate: true });
 
   function bindDraggingEvents(el: HTMLElement) {
-    // @ts-ignore
-    if (el.__dragging_events) {
-      return;
-    }
-
-    el.addEventListener('dragover', (event) => {
-      event.stopPropagation();
-      event.preventDefault();
-
-      el.classList.add(onDragClass.value);
-    });
-
-    el.addEventListener('dragleave', (event) => {
-      event.stopPropagation();
-      event.preventDefault();
-
-      el.classList.remove(onDragClass.value);
-    });
-
-    // File drop
-    el.addEventListener('drop', async (event) => {
-      event.stopPropagation();
-      event.preventDefault();
-
-      el.classList.remove(onDragClass.value);
-
-      const items = event.dataTransfer?.items;
-      const allEntries: File[] = [];
-
-      // Use promise to recursively load files
-      const getFilesRecursively = async (entry: FileSystemEntry): Promise<void> => {
-        const promises: Promise<void>[] = [];
-        // const length = entries.length;
-
-        if (entry.isDirectory) {
-          const dirReader = (entry as FileSystemDirectoryEntry).createReader();
-
-          dirReader.readEntries((entries) => {
-            entries.forEach((ent) => {
-              promises.push(getFilesRecursively(ent));
-            });
-          });
-        } else {
-          promises.push(new Promise((resolve) => {
-            (entry as FileSystemFileEntry).file((file: File) => {
-              allEntries.push(file);
-              resolve();
-            });
-          }));
-        }
-
-        await Promise.all(promises);
-      };
-
-      const promises: Promise<void>[] = [];
-      Array.prototype.forEach.call(items ?? [], (item: DataTransferItem) => {
-
-        const entry = item.webkitGetAsEntry();
-
-        if (entry) {
-          promises.push(getFilesRecursively(entry));
-        }
-      });
-
-      if (promises.length) {
-        Promise.all(promises).then(() => {
-          uploadFiles(allEntries);
-        });
-      }
-    });
-
-    // @ts-ignore
-    el.__dragging_events = true;
+    handleDropzoneDragging(el, onDragClass, addFiles);
   }
 
-  function uploadFiles(files: FileList | File[]) {
-    // Pre check all files to block whole task if anyone is invalid.
+  function addFile(file: File): UploaderItem {
+    return addItem(createItem(file));
+  }
+
+  function createItem(file: File): UploaderItem {
+    const url = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+    const item = reactive<UploaderItem>(wrapUploaderItem({
+      key: uid(),
+      url,
+      file,
+      uploadState: UploadState.PENDING,
+      progress: 0,
+    }));
+
+    item.title = item.title || item.file!.name;
+
+    eventBus.emit('create-item', item);
+
+    return item;
+  }
+
+  function addItem(item: UploaderItem) {
+    const wrappedItem = reactive(wrapUploaderItem({
+      key: uid(),
+      uploadState: UploadState.PENDING,
+      progress: 0,
+    }, item));
+
+    if (!item.file) {
+      return item;
+    }
+
+    checkFile(item.file!);
+
+    if (maxItemSize.value != null) {
+      if (item.file!.size > maxItemSize.value) {
+        const e = new InvalidFileSizeError(
+          'File size is too large',
+          item.file,
+          maxItemSize.value
+        );
+        emits('invalid-file', e);
+        throw e;
+      }
+    }
+
+    const i = items.value.push(wrappedItem);
+
+    const addedItem = items.value[i - 1];
+
+    // Read preview image
+    if (isImageItem(addedItem)) {
+      const reader = new FileReader;
+      reader.onload = (event) => {
+        addedItem.thumbUrl = String(event.target?.result);
+      };
+
+      reader.readAsDataURL(file);
+    }
+
+    return addedItem;
+  }
+
+  function addFiles(files: FileList | File[]) {
+    // Pre-check all files to block whole task if anyone is invalid.
     Array.prototype.forEach.call(files, checkFile);
 
     // Now start loop all files to upload.
@@ -262,36 +161,21 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
         return;
       }
 
-      const url = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
-      const item = reactive<UploaderItem>(wrapUploaderItem({
-        key: uid(),
-        url,
-        file,
-        uploadState: UploadState.PENDING,
-        progress: 0,
-      }));
-
-      item.title = item.title || item.file!.name;
-
-      eventBus.emit('create-item', item);
-
-      const i = items.value.push(item);
-      const v = items.value[i - 1];
+      const v = addFile(file);
 
       if (autoStart.value) {
         uploadFile(v);
       }
-
-      // Read preview image
-      if (isImageItem(item)) {
-        const reader = new FileReader;
-        reader.onload = (event) => {
-          item.thumbUrl = String(event.target?.result);
-        };
-
-        reader.readAsDataURL(file);
-      }
     });
+  }
+
+  function stopItemUpload(item: UploaderItem | XMLHttpRequest) {
+    if (item instanceof XMLHttpRequest) {
+      item.abort();
+      return;
+    }
+
+    item.xhr?.abort();
   }
 
   function checkFile(file: File) {
@@ -318,8 +202,14 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
       });
 
       if (!allow) {
-        emits('invalid-file-type', file, accepted);
-        throw new Error('Not accepted file ext');
+        const e = new InvalidFileTypeError(
+          'Invalid file type',
+          file,
+          accepted
+        );
+
+        emits('invalid-file', e);
+        throw e;
       }
     }
   }
@@ -355,6 +245,7 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
 
   async function uploadFile(item: UploaderItem) {
     item.uploadState = UploadState.UPLOADING;
+    item.error = undefined;
 
     const formData = new FormData();
     formData.append('file', item.file!);
@@ -384,8 +275,7 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
           } catch (parseError) {
             console.error(parseError);
             item.uploadState = UploadState.ERROR;
-            item.message = (parseError as Error).message;
-            item.messageType = 'error';
+            item.error = parseError;
 
             reject(parseError);
           }
@@ -406,10 +296,9 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
         console.error(errorMessage);
 
         item.uploadState = UploadState.ERROR;
-        item.message = errorMessage;
-        item.messageType = 'error';
+        item.error = new Error(errorMessage);
 
-        reject(new Error(errorMessage));
+        reject(item.error);
       };
 
       xhr.onloadend = () => {
@@ -432,7 +321,7 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
     return isImage(
       item.file
         ? item.file.name
-        : item.url
+        : item.url,
     );
   }
 
@@ -505,11 +394,23 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
     }
   });
 
+  // File Sizes
+  const totalSize = computed(() => {
+    return items.value.reduce((acc, item) => {
+      if (item.file) {
+        acc += item.file.size;
+      }
+
+      return acc;
+    }, 0);
+  });
+
   return {
     id,
     accept,
     maxFiles,
     maxConcurrent,
+    maxItemSize,
     disabled,
     readonly,
     uploadUrl,
@@ -519,12 +420,17 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
     isUploading,
     acceptedTypes,
     isReadonly,
+    totalSize,
 
     emits,
     on,
     openFileSelector,
+    addFile,
+    addItem,
+    createItem,
     deleteItem,
     uploadStart,
+    stopItemUpload,
     isImageItem,
     isImage,
   };
@@ -535,53 +441,29 @@ export type MultiUploaderComposableInstance = {
   accept: Ref<string>;
   maxFiles: Ref<number | undefined>;
   maxConcurrent: Ref<number>;
+  maxItemSize: Ref<number | undefined>;
   disabled: Ref<boolean>;
   readonly: Ref<boolean>;
   uploadUrl: Ref<string>;
   items: Ref<UploaderItem[]>;
   eventBus: Emitter;
-  canUpload: Ref<boolean>;
-  isUploading: Ref<boolean>;
-  acceptedTypes: Ref<string[]>;
-  isReadonly: Ref<boolean>;
+
+  // Computed
+  canUpload: ComputedRef<boolean>;
+  isUploading: ComputedRef<boolean>;
+  acceptedTypes: ComputedRef<string[]>;
+  isReadonly: ComputedRef<boolean>;
+  totalSize: ComputedRef<number>;
 
   emits: (event: string, ...args: any[]) => void;
   on: (event: string, callback: (...event: any[]) => void) => () => void;
   openFileSelector: () => void;
+  addFile: (file: File) => UploaderItem;
+  addItem: (item: UploaderItem) => UploaderItem;
+  createItem: (file: File) => UploaderItem;
   deleteItem: (child: UploaderItem) => void;
   uploadStart: () => Promise<PromiseSettledResult<UploaderItem>[]>;
+  stopItemUpload: (item: UploaderItem | XMLHttpRequest) => void;
   isImage: (filePath: string) => boolean;
   isImageItem: (item: UploaderItem) => boolean;
-}
-
-function unrefElement(el: MaybeElement): HTMLElement | SVGElement | null {
-  if (!el) {
-    return null;
-  }
-
-  if ('$el' in el) {
-    return el.$el;
-  }
-
-  return el;
-}
-
-export function wrapUploaderItem(item: Partial<UploaderItem>, extra?: Record<keyof UploaderItem, any>): UploaderItem {
-  item.key ??= uid();
-  item.uploadState ??= UploadState.PENDING;
-  item.progress ??= 0;
-
-  if (extra) {
-    Object.assign(item, extra);
-  }
-
-  return item as UploaderItem;
-}
-
-export function wrapRef<T>(value: MaybeRef<T>): Ref<T> {
-  if (typeof value === 'function') {
-    value = ref((value as Function)());
-  }
-
-  return (isRef(value) ? value : ref(value)) as Ref<T>;
 }

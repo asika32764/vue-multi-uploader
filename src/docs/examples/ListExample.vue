@@ -1,6 +1,7 @@
 <script setup lang="ts">
 
 import ShowCard from '@/docs/ShowCard.vue';
+import { UploadState } from '@/enum/UploadState.ts';
 import { UploaderItem } from '@/types/UploaderItem.ts';
 import { useMultiUploader } from '@/useMultiUploader.ts';
 import { ref, useTemplateRef } from 'vue';
@@ -12,7 +13,7 @@ const items = ref<UploaderItem[]>([]);
 const {
   openFileSelector,
   deleteItem
-} = useMultiUploader(items, '/api/upload', {
+} = useMultiUploader(items, '/', {
   dropzone: dropzone,
   maxFiles: 5,
   onItemUploadSuccess(item, xhr) {
@@ -24,6 +25,7 @@ const {
 const code = `<\script setup lang="ts">
 import {
   type UploaderItem,
+  UploadState,
   useMultiUploader,
 } from 'vue-multi-uploader';
 import { ref, useTemplateRef } from 'vue';
@@ -57,6 +59,7 @@ const {
         <div class="flex-grow-1 text-truncate">
           <div class="text-truncate">
             {{ item.title }}
+            <span v-if="item.uploadState === UploadState.UPLOADED" class="fa-solid fa-check text-success"></span>
           </div>
           <div class="mt-2">
             <div class="progress progress-sm" style="height: 0.5rem">
@@ -117,6 +120,7 @@ const {
           <div class="flex-grow-1 text-truncate">
             <div class="text-truncate">
               {{ item.title }}
+              <span v-if="item.uploadState === UploadState.UPLOADED" class="fa-solid fa-check text-success"></span>
             </div>
             <div class="mt-2">
               <div class="progress progress-sm" style="height: 0.5rem">

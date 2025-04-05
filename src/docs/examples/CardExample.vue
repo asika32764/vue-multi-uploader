@@ -80,7 +80,7 @@ const existingItems = [
 
 <template>
 <ShowCard :code>
-  <MultiUploader ref="uploader" upload-url="/api/upload" v-model="existingItems" :options>
+  <MultiUploader ref="uploader" upload-url="/" v-model="existingItems" :options>
     <template #items="{ items, instance: { canUpload, openFileSelector, deleteItem } }">
       <div class="d-flex flex-wrap w-100 gap-3">
         <ItemCard v-for="(item, index) of items"

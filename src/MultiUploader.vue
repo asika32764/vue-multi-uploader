@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import { uploaderEvents } from '@/events.ts';
 import type { UploaderItem } from '@/types/UploaderItem.ts';
 import {
   type MultiUploaderComposableInstance,
   type MultiUploaderOptions,
-  uploaderEvents,
   useMultiUploader,
 } from '@/useMultiUploader';
 import { onUnmounted, reactive, ref, useTemplateRef, watch } from 'vue';

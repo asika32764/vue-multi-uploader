@@ -16,7 +16,7 @@ export default defineConfig({
     {
       name: 'mock-post-endpoint',
       configureServer(server) {
-        server.middlewares.use('/api/upload', (req, res, next) => {
+        server.middlewares.use('/', (req, res, next) => {
           if (req.method === 'POST') {
             const bb = busboy({ headers: req.headers });
             let fileInfo: FileInfo;
@@ -25,7 +25,7 @@ export default defineConfig({
               fileInfo = info;
 
               stream.on('data', (chunk) => {
-                console.log(`Load ${chunk.length} bytes`);
+                // console.log(`Load ${chunk.length} bytes`);
               });
 
               stream.on('end', () => {

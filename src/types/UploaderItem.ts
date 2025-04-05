@@ -10,6 +10,8 @@ export interface UploaderItem {
 
   uploadState: UploadState;
   progress: number;
+  xhr?: XMLHttpRequest;
+  error?: Error;
   message?: string;
   messageType?: string;
 
