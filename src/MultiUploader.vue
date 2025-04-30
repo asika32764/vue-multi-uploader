@@ -1,6 +1,24 @@
+<script lang="ts">
+import type { UploaderItem } from '@/types/UploaderItem.ts';
+
+export interface MultiUploaderEmits {
+  (e: 'update:modelValue', items: UploaderItem[]): void;
+  (e: 'change', items: UploaderItem[]): void;
+  (e: 'delete-item', item: UploaderItem): void;
+  (e: 'uploading'): void;
+  (e: 'uploaded'): void;
+  (e: 'create-item', item: UploaderItem): void;
+  (e: 'item-upload-start', item: UploaderItem, xhr: XMLHttpRequest): void;
+  (e: 'item-upload-success', item: UploaderItem, xhr: XMLHttpRequest): void;
+  (e: 'item-upload-fail', item: UploaderItem, xhr: XMLHttpRequest): void;
+  (e: 'item-upload-end', item: UploaderItem, xhr: XMLHttpRequest): void;
+  (e: 'item-upload-progress', item: UploaderItem, event: ProgressEvent): void;
+  (e: 'invalid-file-type', file: File, accepted: string[]): void;
+}
+</script>
+
 <script setup lang="ts">
 import { uploaderEvents } from '@/events.ts';
-import type { UploaderItem } from '@/types/UploaderItem.ts';
 import {
   type MultiUploaderComposableInstance,
   type MultiUploaderOptions,
@@ -21,20 +39,7 @@ const props = withDefaults(
   },
 );
 
-const emits = defineEmits<{
-  (e: 'update:modelValue', items: UploaderItem[]): void;
-  (e: 'change', items: UploaderItem[]): void;
-  (e: 'delete-item', item: UploaderItem): void;
-  (e: 'uploading'): void;
-  (e: 'uploaded'): void;
-  (e: 'create-item', item: UploaderItem): void;
-  (e: 'item-upload-start', item: UploaderItem, xhr: XMLHttpRequest): void;
-  (e: 'item-upload-success', item: UploaderItem, xhr: XMLHttpRequest): void;
-  (e: 'item-upload-fail', item: UploaderItem, xhr: XMLHttpRequest): void;
-  (e: 'item-upload-end', item: UploaderItem, xhr: XMLHttpRequest): void;
-  (e: 'item-upload-progress', item: UploaderItem, event: ProgressEvent): void;
-  (e: 'invalid-file-type', file: File, accepted: string[]): void;
-}>();
+const emits = defineEmits<MultiUploaderEmits>();
 
 const value = defineModel<Partial<UploaderItem>[]>({
   default: () => [],
@@ -90,7 +95,6 @@ defineExpose<{
         :items
         :options
         :instance="reactive(instance)"
-        @delete="() => console.log($event)"
       ></slot>
     </div>
   </div>

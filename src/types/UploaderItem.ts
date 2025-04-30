@@ -1,12 +1,12 @@
 import type { UploadState } from '@/enum/UploadState';
 
-export interface UploaderItem {
+export interface UploaderItem<T = any> {
   key: string;
   url: string;
   thumbUrl?: string;
   title?: string;
   file?: File;
-  data?: Record<string, any>;
+  data?: T;
 
   uploadState: UploadState;
   progress: number;
