@@ -7,5 +7,6 @@ export * from './enum/UploadState';
 export * from './useMultiUploader';
 export * from './types/UploaderItem';
 export * from './events';
+export { createItem } from './utils';
 
 export { MultiUploader, ItemCard, ItemCardPlaceholder };

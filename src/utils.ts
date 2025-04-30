@@ -30,6 +30,10 @@ export function wrapUploaderItem(item: Partial<UploaderItem>, extra?: Record<key
   return item as UploaderItem;
 }
 
+export function createItem(item: Partial<UploaderItem>): UploaderItem {
+  return wrapUploaderItem(item);
+}
+
 export function wrapRef<T>(value: MaybeRef<T>): Ref<T> {
   if (typeof value === 'function') {
     value = ref((value as Function)());

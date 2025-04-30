@@ -90,6 +90,8 @@ declare type __VLS_WithTemplateSlots_3<T, S> = T & {
     };
 };
 
+export declare function createItem(item: Partial<UploaderItem>): UploaderItem;
+
 export declare function handleEvents(options: MultiUploaderOptions): Emitter;
 
 export declare const ItemCard: __VLS_WithTemplateSlots_2<typeof __VLS_component, __VLS_TemplateResult["slots"]>;
