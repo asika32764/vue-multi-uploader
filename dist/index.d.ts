@@ -5,6 +5,7 @@ import { ComputedRef } from 'vue';
 import { DefineComponent } from 'vue';
 import { Emitter } from 'dush';
 import { Handler } from 'dush';
+import { MaybePromise } from './types/promise';
 import { MaybeRef } from 'vue';
 import { MaybeRefOrGetter } from 'vue';
 import { PublicProps } from 'vue';
@@ -129,7 +130,107 @@ options: Exclude<MultiUploaderOptions, "uploadUrl">;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {
 el: HTMLDivElement;
 }, HTMLDivElement>, {
+    start?(_: {
+        items: UploaderItem<any>[];
+        options: MultiUploaderOptions;
+        instance: {
+            id: string;
+            accept: string;
+            maxFiles: number | undefined;
+            maxConcurrent: number;
+            maxItemSize: number | undefined;
+            disabled: boolean;
+            readonly: boolean;
+            uploadUrl: string;
+            items: UploaderItem<any>[];
+            eventBus: {
+                _allEvents: Array<{
+                    [eventName: string]: Handler[];
+                }>;
+                use: (plugin: (app: Emitter, options: any) => void, options?: any) => Emitter;
+                on: {
+                    (type: string, handler: Handler): Emitter;
+                    (type: "*", handler: WildcardHandler): Emitter;
+                };
+                once: {
+                    (type: string, handler: Handler): Emitter;
+                    (type: "*", handler: WildcardHandler): Emitter;
+                };
+                off: {
+                    (type: string, handler?: Handler): Emitter;
+                    (type: "*", handler?: WildcardHandler): Emitter;
+                };
+                emit: (type: string, ...event: any[]) => Emitter;
+            };
+            canUpload: boolean;
+            isUploading: boolean;
+            acceptedTypes: string[];
+            isReadonly: boolean;
+            totalSize: number;
+            emits: (event: string, ...args: any[]) => void;
+            on: (event: string, callback: (...event: any[]) => void) => () => void;
+            openFileSelector: () => void;
+            addFile: (file: File) => UploaderItem;
+            addItem: (item: UploaderItem) => UploaderItem;
+            createItem: (file: File) => UploaderItem;
+            deleteItem: (child: UploaderItem) => void;
+            uploadStart: () => Promise<PromiseSettledResult<UploaderItem>[]>;
+            stopItemUpload: (item: UploaderItem | XMLHttpRequest) => void;
+            isImage: (filePath: string) => boolean;
+            isImageItem: (item: UploaderItem) => boolean;
+        };
+    }): any;
     items?(_: {
+        items: UploaderItem<any>[];
+        options: MultiUploaderOptions;
+        instance: {
+            id: string;
+            accept: string;
+            maxFiles: number | undefined;
+            maxConcurrent: number;
+            maxItemSize: number | undefined;
+            disabled: boolean;
+            readonly: boolean;
+            uploadUrl: string;
+            items: UploaderItem<any>[];
+            eventBus: {
+                _allEvents: Array<{
+                    [eventName: string]: Handler[];
+                }>;
+                use: (plugin: (app: Emitter, options: any) => void, options?: any) => Emitter;
+                on: {
+                    (type: string, handler: Handler): Emitter;
+                    (type: "*", handler: WildcardHandler): Emitter;
+                };
+                once: {
+                    (type: string, handler: Handler): Emitter;
+                    (type: "*", handler: WildcardHandler): Emitter;
+                };
+                off: {
+                    (type: string, handler?: Handler): Emitter;
+                    (type: "*", handler?: WildcardHandler): Emitter;
+                };
+                emit: (type: string, ...event: any[]) => Emitter;
+            };
+            canUpload: boolean;
+            isUploading: boolean;
+            acceptedTypes: string[];
+            isReadonly: boolean;
+            totalSize: number;
+            emits: (event: string, ...args: any[]) => void;
+            on: (event: string, callback: (...event: any[]) => void) => () => void;
+            openFileSelector: () => void;
+            addFile: (file: File) => UploaderItem;
+            addItem: (item: UploaderItem) => UploaderItem;
+            createItem: (file: File) => UploaderItem;
+            deleteItem: (child: UploaderItem) => void;
+            uploadStart: () => Promise<PromiseSettledResult<UploaderItem>[]>;
+            stopItemUpload: (item: UploaderItem | XMLHttpRequest) => void;
+            isImage: (filePath: string) => boolean;
+            isImageItem: (item: UploaderItem) => boolean;
+        };
+    }): any;
+    end?(_: {
         items: UploaderItem<any>[];
         options: MultiUploaderOptions;
         instance: {
@@ -217,7 +318,7 @@ export declare interface MultiUploaderEmits {
     (e: 'uploading'): void;
     (e: 'uploaded'): void;
     (e: 'create-item', item: UploaderItem): void;
-    (e: 'item-upload-start', item: UploaderItem, xhr: XMLHttpRequest): void;
+    (e: 'item-upload-start', item: UploaderItem, xhr: XMLHttpRequest, data: FormData): void;
     (e: 'item-upload-success', item: UploaderItem, xhr: XMLHttpRequest): void;
     (e: 'item-upload-fail', item: UploaderItem, xhr: XMLHttpRequest): void;
     (e: 'item-upload-end', item: UploaderItem, xhr: XMLHttpRequest): void;
@@ -236,6 +337,10 @@ export declare type MultiUploaderOptions = {
     dropzone?: MaybeRefOrGetter<MaybeElement>;
     onDragClass?: MaybeRefOrGetter<string>;
     autoStart?: MaybeRefOrGetter<boolean>;
+    inputName?: MaybeRefOrGetter<string>;
+    headers?: MaybeRef<Record<string, any> | (() => Record<string, any>)>;
+    data?: MaybeRef<Record<string, any> | (() => Record<string, any>)>;
+    prepareXhr?: (xhr: XMLHttpRequest) => MaybePromise<XMLHttpRequest | void>;
 } & Partial<OptionsEventsMap>;
 
 export declare type OptionsEventsMap = {
@@ -257,7 +362,7 @@ export declare type UploaderEvents = {
     'uploading': () => void;
     'uploaded': () => void;
     'create-item': (item: UploaderItem) => void;
-    'item-upload-start': (item: UploaderItem, xhr: XMLHttpRequest) => void;
+    'item-upload-start': (item: UploaderItem, xhr: XMLHttpRequest, data: FormData) => void;
     'item-upload-success': (item: UploaderItem, xhr: XMLHttpRequest) => void;
     'item-upload-fail': (item: UploaderItem, xhr: XMLHttpRequest) => void;
     'item-upload-end': (item: UploaderItem, xhr: XMLHttpRequest) => void;

@@ -2,7 +2,7 @@
 
 import ShowCard from '@/docs/ShowCard.vue';
 import { UploadState } from '@/enum/UploadState.ts';
-import { UploaderItem } from '@/types/UploaderItem.ts';
+import type { UploaderItem } from '@/types/UploaderItem.ts';
 import { useMultiUploader } from '@/useMultiUploader.ts';
 import { computed, ref, useTemplateRef } from 'vue';
 

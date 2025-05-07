@@ -2,6 +2,7 @@ import { UploadState } from '@/enum/UploadState';
 import { InvalidFileSizeError, InvalidFileTypeError } from '@/errors.ts';
 import { handleEvents, OptionsEventsMap } from '@/events.ts';
 import { handleDropzoneDragging, openFileSelectorForAdding } from '@/helpers.ts';
+import { MaybePromise } from '@/types/promise';
 import type { UploaderItem } from '@/types/UploaderItem.ts';
 import useQueue from '@/useQueue';
 import { MaybeElement, unrefElement, wrapRef, wrapUploaderItem } from '@/utils.ts';
@@ -20,6 +21,10 @@ export type MultiUploaderOptions = {
   dropzone?: MaybeRefOrGetter<MaybeElement>;
   onDragClass?: MaybeRefOrGetter<string>;
   autoStart?: MaybeRefOrGetter<boolean>;
+  inputName?: MaybeRefOrGetter<string>;
+  headers?: MaybeRef<Record<string, any> | (() => Record<string, any>)>;
+  data?: MaybeRef<Record<string, any> | (() => Record<string, any>)>;
+  prepareXhr?: (xhr: XMLHttpRequest) => MaybePromise<XMLHttpRequest | void>;
 } & Partial<OptionsEventsMap>;
 
 export function useMultiUploader<T extends MultiUploaderOptions>(
@@ -41,6 +46,9 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
   });
   const onDragClass = wrapRef(options.onDragClass ?? 'h-ondrag') as Ref<string>;
   const autoStart = wrapRef(options.autoStart ?? true) as Ref<boolean>;
+  const inputName = wrapRef(options.inputName ?? 'file') as Ref<string>;
+  const headers = wrapRef(options.headers ?? {}) as Ref<Record<string, any>>;
+  const data = wrapRef(options.data ?? {}) as Ref<Record<string, any>>;
 
   // Base
   let items = wrapRef<Partial<UploaderItem>[]>(currentValue) as Ref<UploaderItem[]>;
@@ -164,7 +172,7 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
       const v = addFile(file);
 
       if (autoStart.value) {
-        uploadFile(v);
+        enqueueUploadFile(v);
       }
     });
   }
@@ -236,11 +244,17 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
 
     items.value.forEach((item) => {
       if (item.uploadState === UploadState.PENDING) {
-        promises.push(uploadFile(item));
+        promises.push(enqueueUploadFile(item));
       }
     });
 
     return Promise.allSettled(promises);
+  }
+
+  async function enqueueUploadFile(item: UploaderItem) {
+    return uploadQueue.push(() => {
+      return uploadFile(item);
+    });
   }
 
   async function uploadFile(item: UploaderItem) {
@@ -248,14 +262,26 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
     item.error = undefined;
 
     const formData = new FormData();
-    formData.append('file', item.file!);
+
+    for (const k in data.value) {
+      formData.append(k, data.value[k]);
+    }
+    formData.append(inputName.value, item.file!);
+
+    let xhr = new XMLHttpRequest();
+
+    xhr.open('POST', uploadUrl.value);
+
+    for (const k in headers.value) {
+      xhr.setRequestHeader(k, headers.value[k]);
+    }
+
+    if (options.prepareXhr) {
+      xhr = await options.prepareXhr(xhr) ?? xhr;
+    }
 
     const promise = new Promise<UploaderItem>((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-
-      emits('item-upload-start', item, xhr);
-
-      xhr.open('POST', uploadUrl.value);
+      emits('item-upload-start', item, xhr, formData);
 
       xhr.upload.onprogress = (event: ProgressEvent) => {
         if (event.lengthComputable) {

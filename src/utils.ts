@@ -41,3 +41,11 @@ export function wrapRef<T>(value: MaybeRef<T>): Ref<T> {
 
   return (isRef(value) ? value : ref(value)) as Ref<T>;
 }
+
+export async function extractValue<T>(value: T | (() => T | Promise<T>)): Promise<T> {
+  if (typeof value === 'function') {
+    return (value as Function)();
+  }
+
+  return value;
+}

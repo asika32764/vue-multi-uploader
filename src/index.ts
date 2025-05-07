@@ -5,7 +5,7 @@ import ItemCardPlaceholder from '@/ItemCardPlaceholder.vue';
 
 export * from './enum/UploadState';
 export * from './useMultiUploader';
-export * from './types/UploaderItem';
+export * from './types/UploaderItem.ts';
 export * from './events';
 export { createItem } from './utils';
 

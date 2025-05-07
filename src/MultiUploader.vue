@@ -8,7 +8,7 @@ export interface MultiUploaderEmits {
   (e: 'uploading'): void;
   (e: 'uploaded'): void;
   (e: 'create-item', item: UploaderItem): void;
-  (e: 'item-upload-start', item: UploaderItem, xhr: XMLHttpRequest): void;
+  (e: 'item-upload-start', item: UploaderItem, xhr: XMLHttpRequest, data: FormData): void;
   (e: 'item-upload-success', item: UploaderItem, xhr: XMLHttpRequest): void;
   (e: 'item-upload-fail', item: UploaderItem, xhr: XMLHttpRequest): void;
   (e: 'item-upload-end', item: UploaderItem, xhr: XMLHttpRequest): void;
@@ -90,13 +90,25 @@ defineExpose<{
 <template>
   <div ref="el" class="vue-drag-uploader"
     :class="{ 'vue-drag-uploader--readonly': isReadonly }">
-    <div class="vue-drag-uploader__wrapper">
+    <slot name="start"
+      :items
+      :options
+      :instance="reactive(instance)"
+    ></slot>
+
+    <div class="vue-drag-uploader__wrapper vue-drag-uploader__items">
       <slot name="items"
         :items
         :options
         :instance="reactive(instance)"
       ></slot>
     </div>
+
+    <slot name="end"
+      :items
+      :options
+      :instance="reactive(instance)"
+    ></slot>
   </div>
 </template>
 
