@@ -11,35 +11,38 @@ import { PublicProps } from 'vue';
 import { Ref } from 'vue';
 import { WildcardHandler } from 'dush';
 
-declare const __VLS_component: DefineComponent<__VLS_Props, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {} & {
+declare const __VLS_component: DefineComponent<    {
+item: UploaderItem;
+i: number;
+size?: number | string;
+isReadonly?: boolean;
+}, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {} & {
 delete: any;
 "item-click": any;
-}, string, PublicProps, Readonly<__VLS_Props> & Readonly<{
+}, string, PublicProps, Readonly<{
+item: UploaderItem;
+i: number;
+size?: number | string;
+isReadonly?: boolean;
+}> & Readonly<{
 onDelete?: ((...args: any) => any) | undefined;
 "onItem-click"?: ((...args: any) => any) | undefined;
 }>, {
 size: number | string;
-}, {}, {}, {}, string, ComponentProvideOptions, false, {}, HTMLDivElement>;
+}, {}, {}, {}, string, ComponentProvideOptions, false, {}, any>;
 
-declare const __VLS_component_2: DefineComponent<__VLS_Props_2, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<__VLS_Props_2> & Readonly<{}>, {
+declare const __VLS_component_2: DefineComponent<    {
+size?: any;
+text?: string;
+}, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{
+size?: any;
+text?: string;
+}> & Readonly<{}>, {
 size: any;
 text: string;
-}, {}, {}, {}, string, ComponentProvideOptions, false, {}, HTMLDivElement>;
-
-declare type __VLS_Props = {
-    item: UploaderItem;
-    i: number;
-    size?: number | string;
-    isReadonly?: boolean;
-};
-
-declare type __VLS_Props_2 = {
-    size?: any;
-    text?: string;
-};
+}, {}, {}, {}, string, ComponentProvideOptions, false, {}, any>;
 
 declare function __VLS_template(): {
-    attrs: Partial<{}>;
     slots: {
         it?(_: {
             item: UploaderItem<any>;
@@ -47,17 +50,16 @@ declare function __VLS_template(): {
         icon?(_: {
             item: UploaderItem<any>;
         }): any;
-        'remove-icon'?(_: {}): any;
+        "remove-icon"?(_: {}): any;
         extra?(_: {
             item: UploaderItem<any>;
         }): any;
     };
     refs: {};
-    rootEl: HTMLDivElement;
+    attrs: Partial<{}>;
 };
 
 declare function __VLS_template_2(): {
-    attrs: Partial<{}>;
     slots: {
         default?(_: {}): any;
         icon?(_: {
@@ -65,7 +67,7 @@ declare function __VLS_template_2(): {
         }): any;
     };
     refs: {};
-    rootEl: HTMLDivElement;
+    attrs: Partial<{}>;
 };
 
 declare type __VLS_TemplateResult = ReturnType<typeof __VLS_template>;
@@ -128,7 +130,7 @@ options?: Exclude<MultiUploaderOptions, "uploadUrl">;
 options: Exclude<MultiUploaderOptions, "uploadUrl">;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {
 el: HTMLDivElement;
-}, HTMLDivElement>, {
+}, any>, {
     items?(_: {
         items: UploaderItem<any>[];
         options: MultiUploaderOptions;
