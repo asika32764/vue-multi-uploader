@@ -1,24 +1,6 @@
-<script lang="ts">
-import type { UploaderItem } from '@/types/UploaderItem.ts';
-
-export interface MultiUploaderEmits {
-  (e: 'update:modelValue', items: UploaderItem[]): void;
-  (e: 'change', items: UploaderItem[]): void;
-  (e: 'delete-item', item: UploaderItem): void;
-  (e: 'uploading'): void;
-  (e: 'uploaded'): void;
-  (e: 'create-item', item: UploaderItem): void;
-  (e: 'item-upload-start', item: UploaderItem, xhr: XMLHttpRequest): void;
-  (e: 'item-upload-success', item: UploaderItem, xhr: XMLHttpRequest): void;
-  (e: 'item-upload-fail', item: UploaderItem, xhr: XMLHttpRequest): void;
-  (e: 'item-upload-end', item: UploaderItem, xhr: XMLHttpRequest): void;
-  (e: 'item-upload-progress', item: UploaderItem, event: ProgressEvent): void;
-  (e: 'invalid-file-type', file: File, accepted: string[]): void;
-}
-</script>
-
 <script setup lang="ts">
-import { uploaderEvents } from '@/events.ts';
+import type { UploaderItem } from '@/types/UploaderItem.ts';
+import { type MultiUploaderEmits, uploaderEvents } from '@/events.ts';
 import {
   type MultiUploaderComposableInstance,
   type MultiUploaderOptions,
@@ -40,7 +22,6 @@ const props = withDefaults(
 );
 
 const emits = defineEmits<MultiUploaderEmits>();
-
 const value = defineModel<Partial<UploaderItem>[]>({
   default: () => [],
 });
@@ -51,8 +32,8 @@ watch(value, () => {
   v.value = value.value;
 }, { deep: true });
 
-const el = useTemplateRef('el');
-props.options.dropzone = props.options.dropzone ?? el;
+const container = useTemplateRef('uploader');
+props.options.dropzone = props.options.dropzone ?? container;
 
 const instance = props.instance ?? useMultiUploader(v, props.uploadUrl ?? '', props.options);
 const {
@@ -88,7 +69,7 @@ defineExpose<{
 </script>
 
 <template>
-  <div ref="el" class="vue-drag-uploader"
+  <div ref="uploader" class="vue-drag-uploader"
     :class="{ 'vue-drag-uploader--readonly': isReadonly }">
     <div class="vue-drag-uploader__wrapper">
       <slot name="items"
