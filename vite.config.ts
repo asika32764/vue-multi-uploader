@@ -12,7 +12,10 @@ export default defineConfig({
   },
   plugins: [
     vue(),
-    dts({ rollupTypes: true }),
+    dts({
+      tsconfigPath: './tsconfig.lib.json',
+      rollupTypes: true
+    }),
   ],
   build: {
     outDir: 'dist',

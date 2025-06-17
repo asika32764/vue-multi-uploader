@@ -57,3 +57,18 @@ export function handleEvents(options: MultiUploaderOptions): Emitter {
 
   return eventBus;
 }
+
+export type MultiUploaderEmits = {
+  'update:modelValue': [items: UploaderItem[]];
+  'change': [items: UploaderItem[]];
+  'delete-item': [item: UploaderItem];
+  'uploading': [];
+  'uploaded': [];
+  'create-item': [item: UploaderItem];
+  'item-upload-start': [item: UploaderItem, xhr: XMLHttpRequest];
+  'item-upload-success': [item: UploaderItem, xhr: XMLHttpRequest];
+  'item-upload-fail': [item: UploaderItem, xhr: XMLHttpRequest];
+  'item-upload-end': [item: UploaderItem, xhr: XMLHttpRequest];
+  'item-upload-progress': [item: UploaderItem, event: ProgressEvent];
+  'invalid-file-type': [file: File, accepted: string[]];
+}
