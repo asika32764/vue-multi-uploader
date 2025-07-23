@@ -1,3 +1,5 @@
+import { UploadState } from '@/enum/UploadState.ts';
+import type { UploaderItem } from '@/types/UploaderItem.ts';
 import type { Ref } from 'vue';
 
 export function openFileSelectorForAdding(accept: Ref<string>, uploadFiles: (files: (FileList | File[])) => void) {
@@ -112,4 +114,41 @@ export function handleDropzoneDragging(
 
   // @ts-ignore
   el.__dragging_events = true;
+}
+
+export function isImageItem(item: UploaderItem): boolean {
+  if (item.uploadState === UploadState.UPLOADED) {
+    return isImage(item.url);
+  }
+
+  return isImage(
+    item.file?.name || item.url
+  );
+}
+
+export function isImage(filePath: string) {
+  const match = filePath.match(/^data:image\/([a-zA-Z0-9.+-]+);base64,/);
+
+  let ext: string;
+
+  if (match) {
+    ext = match[1];
+  } else {
+    ext = filePath.split('.').pop()?.split('?').shift() || '';
+  }
+
+  const allow = [
+    'png',
+    'apng',
+    'jpeg',
+    'jpg',
+    'gif',
+    'bmp',
+    'webp',
+    'avif',
+    'heic',
+    'heif',
+  ];
+
+  return allow.indexOf(ext.toLowerCase()) !== -1;
 }

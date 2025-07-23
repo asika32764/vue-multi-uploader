@@ -1,5 +1,6 @@
 <script setup lang="ts">
 
+import { isImageItem } from '@/helpers.ts';
 import { computed } from 'vue';
 import { UploadState } from '@/enum/UploadState';
 import type { UploaderItem } from '@/types/UploaderItem.ts';
@@ -44,28 +45,8 @@ const fileName = computed(() => {
 });
 
 const isImage = computed(() => {
-  return isImageType(
-    props.item.file
-      ? props.item.file.name
-      : props.item.url
-  );
+  return isImageItem(props.item);
 });
-
-
-function isImageType(filePath: string) {
-  const ext = filePath.split('.').pop()?.split('?').shift() || '';
-
-  const allow = [
-    'png',
-    'jpeg',
-    'jpg',
-    'gif',
-    'bmp',
-    'webp',
-  ];
-
-  return allow.indexOf(ext.toLowerCase()) !== -1;
-}
 
 function onClick($event: MouseEvent) {
   emits('item-click', props.item, props.i, $event);

@@ -1,7 +1,7 @@
 import { UploadState } from '@/enum/UploadState';
 import { InvalidFileSizeError, InvalidFileTypeError } from '@/errors.ts';
 import { handleEvents, OptionsEventsMap } from '@/events.ts';
-import { handleDropzoneDragging, openFileSelectorForAdding } from '@/helpers.ts';
+import { handleDropzoneDragging, openFileSelectorForAdding, isImage, isImageItem } from '@/helpers.ts';
 import { MaybePromise } from '@/types/promise';
 import type { UploaderItem } from '@/types/UploaderItem.ts';
 import useQueue from '@/useQueue';
@@ -340,30 +340,6 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
 
       return Promise.reject(error);
     });
-  }
-
-  // Images
-  function isImageItem(item: UploaderItem) {
-    return isImage(
-      item.file
-        ? item.file.name
-        : item.url,
-    );
-  }
-
-  function isImage(filePath: string) {
-    const ext = filePath.split('.').pop()?.split('?').shift() || '';
-
-    const allow = [
-      'png',
-      'jpeg',
-      'jpg',
-      'gif',
-      'bmp',
-      'webp',
-    ];
-
-    return allow.indexOf(ext.toLowerCase()) !== -1;
   }
 
   // Computed
