@@ -46,9 +46,17 @@ export function handleDropzoneDragging(
     return;
   }
 
+  let counter = 0;
+
   el.addEventListener('dragover', (event) => {
+    event.preventDefault();
+  });
+
+  el.addEventListener('dragenter', (event) => {
     event.stopPropagation();
     event.preventDefault();
+
+    counter++;
 
     el.classList.add(onDragClass.value);
   });
@@ -57,7 +65,11 @@ export function handleDropzoneDragging(
     event.stopPropagation();
     event.preventDefault();
 
-    el.classList.remove(onDragClass.value);
+    counter--;
+
+    if (counter === 0) {
+      el.classList.remove(onDragClass.value);
+    }
   });
 
   // File drop
@@ -118,7 +130,15 @@ export function handleDropzoneDragging(
 
 export function isImageItem(item: UploaderItem): boolean {
   if (item.uploadState === UploadState.UPLOADED) {
+    if (item.mime) {
+      return isImageMimeType(item.mime);
+    }
+
     return isImage(item.url);
+  }
+
+  if (item.mime) {
+    return isImageMimeType(item.mime);
   }
 
   return isImage(
@@ -151,4 +171,8 @@ export function isImage(filePath: string) {
   ];
 
   return allow.indexOf(ext.toLowerCase()) !== -1;
+}
+
+export function isImageMimeType(mime: string) {
+  return mime.startsWith('image/');
 }

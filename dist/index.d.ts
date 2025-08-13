@@ -407,6 +407,7 @@ export declare interface UploaderItem<T = any> {
     thumbUrl?: string;
     title?: string;
     file?: File;
+    mime?: string;
     data?: T;
     uploadState: UploadState;
     progress: number;

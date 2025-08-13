@@ -104,6 +104,7 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
       key: uid(),
       url,
       file,
+      mime: file.type,
       uploadState: UploadState.PENDING,
       progress: 0,
     }));
