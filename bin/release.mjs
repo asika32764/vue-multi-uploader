@@ -36,11 +36,14 @@ try {
   console.log(e.message);
 }
 
-const branch = cliInput['b'] || 'main';
+console.log(`>>> Git tag ${ver}`);
+exec(`git tag ${ver}`, { stdio: 'inherit' });
+
+// const branch = cliInput['b'] || 'main';
 
 console.log('>>> Push to git');
 
-exec(`git push origin ${branch}`, { stdio: 'inherit' });
+exec(`git push`, { stdio: 'inherit' });
 
 console.log('>> Publish to npm');
 
