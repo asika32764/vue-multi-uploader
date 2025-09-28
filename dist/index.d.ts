@@ -136,6 +136,9 @@ declare function __VLS_template(): {
                 stopItemUpload: (item: UploaderItem | XMLHttpRequest) => void;
                 isImage: (filePath: string) => boolean;
                 isImageItem: (item: UploaderItem) => boolean;
+                checkFile: (file: File) => void;
+                uploadFile: (item: UploaderItem) => Promise<UploaderItem>;
+                enqueueUploadFile: (item: UploaderItem) => Promise<UploaderItem>;
             };
         }): any;
         items?(_: {
@@ -186,6 +189,9 @@ declare function __VLS_template(): {
                 stopItemUpload: (item: UploaderItem | XMLHttpRequest) => void;
                 isImage: (filePath: string) => boolean;
                 isImageItem: (item: UploaderItem) => boolean;
+                checkFile: (file: File) => void;
+                uploadFile: (item: UploaderItem) => Promise<UploaderItem>;
+                enqueueUploadFile: (item: UploaderItem) => Promise<UploaderItem>;
             };
         }): any;
         end?(_: {
@@ -236,6 +242,9 @@ declare function __VLS_template(): {
                 stopItemUpload: (item: UploaderItem | XMLHttpRequest) => void;
                 isImage: (filePath: string) => boolean;
                 isImageItem: (item: UploaderItem) => boolean;
+                checkFile: (file: File) => void;
+                uploadFile: (item: UploaderItem) => Promise<UploaderItem>;
+                enqueueUploadFile: (item: UploaderItem) => Promise<UploaderItem>;
             };
         }): any;
     };
@@ -338,6 +347,9 @@ export declare type MultiUploaderComposableInstance = {
     stopItemUpload: (item: UploaderItem | XMLHttpRequest) => void;
     isImage: (filePath: string) => boolean;
     isImageItem: (item: UploaderItem) => boolean;
+    checkFile: (file: File) => void;
+    uploadFile: (item: UploaderItem) => Promise<UploaderItem>;
+    enqueueUploadFile: (item: UploaderItem) => Promise<UploaderItem>;
 };
 
 export declare type MultiUploaderEmits = {

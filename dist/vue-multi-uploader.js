@@ -1,4 +1,4 @@
-import { ref as de, isRef as Se, computed as j, watch as X, reactive as se, defineComponent as ve, mergeModels as ge, useModel as be, useTemplateRef as De, onUnmounted as Ee, createElementBlock as F, openBlock as H, normalizeClass as _e, unref as Y, renderSlot as W, createElementVNode as N, normalizeStyle as le, createCommentVNode as ne, toDisplayString as fe, withModifiers as ye, normalizeProps as Oe, guardReactiveProps as Ie } from "vue";
+import { ref as de, isRef as Se, computed as j, watch as K, reactive as se, defineComponent as ve, mergeModels as ge, useModel as be, useTemplateRef as De, onUnmounted as Ee, openBlock as F, createElementBlock as H, normalizeClass as _e, unref as Y, renderSlot as W, createElementVNode as N, normalizeStyle as le, createCommentVNode as ne, toDisplayString as fe, withModifiers as ye, normalizeProps as Oe, guardReactiveProps as Ie } from "vue";
 /*!
  * dush <https://github.com/tunnckoCore/dush>
  *
@@ -365,7 +365,7 @@ var Ce = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : t
   (function(t, a) {
     n.exports = a();
   })(Ce, function() {
-    var t = 1e3, a = 6e4, u = 36e5, g = "millisecond", I = "second", D = "minute", S = "hour", L = "day", v = "week", m = "month", E = "quarter", k = "year", T = "date", K = "Invalid Date", ie = /^(\d{4})[-/]?(\d{1,2})?[-/]?(\d{0,2})[Tt\s]*(\d{1,2})?:?(\d{1,2})?:?(\d{1,2})?[.:]?(\d+)?$/, U = /\[([^\]]+)]|Y{1,4}|M{1,4}|D{1,2}|d{1,4}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|Z{1,2}|SSS/g, oe = { name: "en", weekdays: "Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"), months: "January_February_March_April_May_June_July_August_September_October_November_December".split("_"), ordinal: function(d) {
+    var t = 1e3, a = 6e4, u = 36e5, g = "millisecond", I = "second", D = "minute", S = "hour", L = "day", v = "week", m = "month", E = "quarter", k = "year", T = "date", ee = "Invalid Date", ie = /^(\d{4})[-/]?(\d{1,2})?[-/]?(\d{0,2})[Tt\s]*(\d{1,2})?:?(\d{1,2})?:?(\d{1,2})?[.:]?(\d+)?$/, U = /\[([^\]]+)]|Y{1,4}|M{1,4}|D{1,2}|d{1,4}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|Z{1,2}|SSS/g, oe = { name: "en", weekdays: "Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"), months: "January_February_March_April_May_June_July_August_September_October_November_December".split("_"), ordinal: function(d) {
       var o = ["th", "st", "nd", "rd"], s = d % 100;
       return "[" + d + (o[(s - 20) % 10] || o[s] || o[0]) + "]";
     } }, B = function(d, o, s) {
@@ -435,7 +435,7 @@ var Ce = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : t
       }, o.$utils = function() {
         return y;
       }, o.isValid = function() {
-        return this.$d.toString() !== K;
+        return this.$d.toString() !== ee;
       }, o.isSame = function(s, l) {
         var i = _(s);
         return this.startOf(l) <= i && i <= this.endOf(l);
@@ -506,7 +506,7 @@ var Ce = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : t
         return this.add(-1 * s, l);
       }, o.format = function(s) {
         var l = this, i = this.$locale();
-        if (!this.isValid()) return i.invalidDate || K;
+        if (!this.isValid()) return i.invalidDate || ee;
         var f = s || "YYYY-MM-DDTHH:mm:ssZ", p = y.z(this), w = this.$H, b = this.$m, O = this.$M, e = i.weekdays, c = i.months, h = i.meridiem, A = function($, x, te, ue) {
           return $ && ($[x] || $(l, f)) || te[x].slice(0, ue);
         }, M = function($) {
@@ -624,9 +624,9 @@ var Ce = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : t
       }, o.toString = function() {
         return this.$d.toUTCString();
       }, d;
-    }(), ee = J.prototype;
-    return _.prototype = ee, [["$ms", g], ["$s", I], ["$m", D], ["$H", S], ["$W", L], ["$M", m], ["$y", k], ["$D", T]].forEach(function(d) {
-      ee[d[1]] = function(o) {
+    }(), X = J.prototype;
+    return _.prototype = X, [["$ms", g], ["$s", I], ["$m", D], ["$H", S], ["$W", L], ["$M", m], ["$y", k], ["$D", T]].forEach(function(d) {
+      X[d[1]] = function(o) {
         return this.$g(o, d[0], d[1]);
       };
     }), _.extend = function(d, o) {
@@ -723,13 +723,13 @@ function z(n) {
   return typeof n == "function" && (n = de(n())), Se(n) ? n : de(n);
 }
 function He(n, r, t = {}) {
-  const a = z(t.id ?? "vue-multi-uploader-" + re()), u = z(t.accept ?? ""), g = z(t.maxFiles), I = z(t.maxConcurrent ?? 2), D = z(t.maxItemSize), S = z(t.disabled ?? !1), L = z(t.readonly ?? !1), v = z(r), m = j(() => z(t.dropzone).value), E = z(t.onDragClass ?? "h-ondrag"), k = z(t.autoStart ?? !0), T = z(t.inputName ?? "file"), K = z(t.headers ?? {}), ie = z(t.data ?? {});
+  const a = z(t.id ?? "vue-multi-uploader-" + re()), u = z(t.accept ?? ""), g = z(t.maxFiles), I = z(t.maxConcurrent ?? 2), D = z(t.maxItemSize), S = z(t.disabled ?? !1), L = z(t.readonly ?? !1), v = z(r), m = j(() => z(t.dropzone).value), E = z(t.onDragClass ?? "h-ondrag"), k = z(t.autoStart ?? !0), T = z(t.inputName ?? "file"), ee = z(t.headers ?? {}), ie = z(t.data ?? {});
   let U = z(n);
   U.value = U.value.map(
     (e) => ce(e, { uploadState: R.UPLOADED })
   );
   const oe = xe(), B = Le(t);
-  X(I, (e) => {
+  K(I, (e) => {
     oe.maxRunning = e;
   }, { immediate: !0 });
   function C(e, ...c) {
@@ -743,7 +743,7 @@ function He(n, r, t = {}) {
   function V() {
     Ue(u, y);
   }
-  X(m, () => {
+  K(m, () => {
     const e = Fe(m.value);
     e && e instanceof HTMLElement && ae(e);
   }, { immediate: !0 });
@@ -772,7 +772,7 @@ function He(n, r, t = {}) {
     }, e));
     if (!e.file)
       return e;
-    if (ee(e.file), D.value != null && e.file.size > D.value) {
+    if (X(e.file), D.value != null && e.file.size > D.value) {
       const M = new Re(
         "File size is too large",
         e.file,
@@ -791,7 +791,7 @@ function He(n, r, t = {}) {
     return A;
   }
   function y(e) {
-    Array.prototype.forEach.call(e, ee), Array.prototype.forEach.call(e, (c) => {
+    Array.prototype.forEach.call(e, X), Array.prototype.forEach.call(e, (c) => {
       if (!f.value)
         return;
       const h = Z(c);
@@ -806,7 +806,7 @@ function He(n, r, t = {}) {
     }
     (c = e.xhr) == null || c.abort();
   }
-  function ee(e) {
+  function X(e) {
     const c = w.value, h = e.name.split(".").pop();
     if (c.length) {
       let A = !1;
@@ -846,8 +846,8 @@ function He(n, r, t = {}) {
     c.append(T.value, e.file);
     let h = new XMLHttpRequest();
     h.open("POST", v.value);
-    for (const M in K.value)
-      h.setRequestHeader(M, K.value[M]);
+    for (const M in ee.value)
+      h.setRequestHeader(M, ee.value[M]);
     return t.prepareXhr && (h = await t.prepareXhr(h) ?? h), new Promise((M, P) => {
       C("item-upload-start", e, h, c), h.upload.onprogress = ($) => {
         $.lengthComputable && (e.progress = $.loaded / $.total, C("item-upload-progress", e, $));
@@ -871,11 +871,11 @@ function He(n, r, t = {}) {
     }).catch((M) => (C("item-upload-fail", e, M), Promise.reject(M)));
   }
   const f = j(() => (g.value == null || U.value.length < Number(g.value)) && !b.value), p = j(() => U.value.filter((c) => c.uploadState === R.UPLOADING).length > 0), w = j(() => (Array.isArray(u.value) ? u.value : u.value.split(",")).map((e) => e.trim()).filter((e) => e.length > 0).map((e) => e.indexOf("/") === -1 && e[0] === "." ? e.substr(1) : e)), b = j(() => S.value || L.value);
-  X(U, (e) => {
+  K(U, (e) => {
     e.map((c) => {
       c.key = c.key || re();
     }), C("change", U);
-  }, { deep: !0 }), X(p, (e) => {
+  }, { deep: !0 }), K(p, (e) => {
     C(e ? "uploading" : "uploaded");
   });
   const O = j(() => U.value.reduce((e, c) => (c.file && (e += c.file.size), e), 0));
@@ -905,7 +905,10 @@ function He(n, r, t = {}) {
     uploadStart: s,
     stopItemUpload: J,
     isImageItem: he,
-    isImage: me
+    isImage: me,
+    checkFile: X,
+    uploadFile: i,
+    enqueueUploadFile: l
   };
 }
 const Ye = { class: "vue-drag-uploader__wrapper vue-drag-uploader__items" }, nt = /* @__PURE__ */ ve({
@@ -925,7 +928,7 @@ const Ye = { class: "vue-drag-uploader__wrapper vue-drag-uploader__items" }, nt 
   emits: /* @__PURE__ */ ge(["update:modelValue", "change", "delete-item", "uploading", "uploaded", "create-item", "item-upload-start", "item-upload-success", "item-upload-fail", "item-upload-end", "item-upload-progress", "invalid-file-type"], ["update:modelValue"]),
   setup(n, { expose: r, emit: t }) {
     const a = n, u = t, g = be(n, "modelValue"), I = de(g.value);
-    X(g, () => {
+    K(g, () => {
       I.value = g.value;
     }, { deep: !0 });
     const D = De("uploader");
@@ -934,7 +937,7 @@ const Ye = { class: "vue-drag-uploader__wrapper vue-drag-uploader__items" }, nt 
       isReadonly: L,
       items: v
     } = S;
-    X(v, () => {
+    K(v, () => {
       g.value = v.value;
     }, { deep: !0 });
     const m = [];
@@ -948,7 +951,7 @@ const Ye = { class: "vue-drag-uploader__wrapper vue-drag-uploader__items" }, nt 
       m.forEach((E) => E());
     }), r({
       instance: S
-    }), (E, k) => (H(), F("div", {
+    }), (E, k) => (F(), H("div", {
       ref: "uploader",
       class: _e(["vue-drag-uploader", { "vue-drag-uploader--readonly": Y(L) }])
     }, [
@@ -1003,7 +1006,7 @@ const Ye = { class: "vue-drag-uploader__wrapper vue-drag-uploader__items" }, nt 
     function L(v) {
       a("item-click", t.item, t.i, v);
     }
-    return (v, m) => (H(), F("div", {
+    return (v, m) => (F(), H("div", {
       class: "vue-drag-uploader-item preview-img",
       style: le({ "--vmu-img-size": v.size }),
       onClick: L
@@ -1011,15 +1014,15 @@ const Ye = { class: "vue-drag-uploader__wrapper vue-drag-uploader__items" }, nt 
       W(v.$slots, "it", { item: v.item }, () => {
         var E;
         return [
-          S.value ? (H(), F("div", {
+          S.value ? (F(), H("div", {
             key: 0,
             class: "preview-img__body",
             style: le({ "background-image": "url(" + (v.item.thumbUrl || v.item.url) + ")", opacity: u.value === Y(R).UPLOADED ? 1 : 0.5 })
           }, null, 4)) : ne("", !0),
-          S.value ? ne("", !0) : (H(), F("div", je, [
+          S.value ? ne("", !0) : (F(), H("div", je, [
             N("div", null, [
               W(v.$slots, "icon", { item: v.item }, () => [
-                (H(), F("svg", Be, m[2] || (m[2] = [
+                (F(), H("svg", Be, m[2] || (m[2] = [
                   N("path", { d: "M320 464c8.8 0 16-7.2 16-16l0-288-80 0c-17.7 0-32-14.3-32-32l0-80L64 48c-8.8 0-16 7.2-16 16l0 384c0 8.8 7.2 16 16 16l256 0zM0 64C0 28.7 28.7 0 64 0L229.5 0c17 0 33.3 6.7 45.3 18.7l90.5 90.5c12 12 18.7 28.3 18.7 45.3L384 448c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 64z" }, null, -1)
                 ])))
               ])
@@ -1027,26 +1030,26 @@ const Ye = { class: "vue-drag-uploader__wrapper vue-drag-uploader__items" }, nt 
             N("div", Ve, fe(D.value), 1)
           ])),
           N("div", Ge, [
-            v.isReadonly ? ne("", !0) : (H(), F("span", {
+            v.isReadonly ? ne("", !0) : (F(), H("span", {
               key: 0,
               class: "preview-img__remove-icon",
               onClick: m[0] || (m[0] = ye((k) => I(), ["prevent", "stop"]))
             }, [
               W(v.$slots, "remove-icon", {}, () => [
-                (H(), F("svg", We, m[3] || (m[3] = [
+                (F(), H("svg", We, m[3] || (m[3] = [
                   N("path", { d: "M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z" }, null, -1)
                 ])))
               ])
             ])),
             W(v.$slots, "extra", { item: v.item })
           ]),
-          u.value === Y(R).UPLOADING ? (H(), F("div", Qe, [
+          u.value === Y(R).UPLOADING ? (F(), H("div", Qe, [
             N("div", {
               class: "preview-img__progress-bar",
               style: le({ width: g.value * 100 + "%" })
             }, null, 4)
           ])) : ne("", !0),
-          u.value === Y(R).ERROR ? (H(), F("div", {
+          u.value === Y(R).ERROR ? (F(), H("div", {
             key: 3,
             class: "preview-img__error-message error-message",
             onClick: m[1] || (m[1] = ye(() => {
@@ -1070,7 +1073,7 @@ const Ye = { class: "vue-drag-uploader__wrapper vue-drag-uploader__items" }, nt 
     text: { default: "" }
   },
   setup(n) {
-    return (r, t) => (H(), F("div", {
+    return (r, t) => (F(), H("div", {
       class: "vue-drag-uploader-item add-button",
       key: "empty",
       style: le({ "--vmu-img-size": r.size })
@@ -1079,7 +1082,7 @@ const Ye = { class: "vue-drag-uploader__wrapper vue-drag-uploader__items" }, nt 
         W(r.$slots, "default", {}, () => [
           N("div", Je, [
             W(r.$slots, "icon", Oe(Ie({ size: r.size })), () => [
-              (H(), F("svg", Xe, t[0] || (t[0] = [
+              (F(), H("svg", Xe, t[0] || (t[0] = [
                 N("path", { d: "M288 109.3L288 352c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-242.7-73.4 73.4c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l128-128c12.5-12.5 32.8-12.5 45.3 0l128 128c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L288 109.3zM64 352l128 0c0 35.3 28.7 64 64 64s64-28.7 64-64l128 0c35.3 0 64 28.7 64 64l0 32c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64l0-32c0-35.3 28.7-64 64-64zM432 456a24 24 0 1 0 0-48 24 24 0 1 0 0 48z" }, null, -1)
               ])))
             ])
