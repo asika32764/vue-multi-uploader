@@ -436,6 +436,9 @@ export function useMultiUploader<T extends MultiUploaderOptions>(
     stopItemUpload,
     isImageItem,
     isImage,
+    checkFile,
+    uploadFile,
+    enqueueUploadFile,
   };
 }
 
@@ -469,4 +472,7 @@ export type MultiUploaderComposableInstance = {
   stopItemUpload: (item: UploaderItem | XMLHttpRequest) => void;
   isImage: (filePath: string) => boolean;
   isImageItem: (item: UploaderItem) => boolean;
+  checkFile: (file: File) => void;
+  uploadFile: (item: UploaderItem) => Promise<UploaderItem>;
+  enqueueUploadFile: (item: UploaderItem) => Promise<UploaderItem>;
 }

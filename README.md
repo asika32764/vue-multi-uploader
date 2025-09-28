@@ -245,19 +245,22 @@ const {
 
 ### Methods
 
-| Name               | Type                                                                 | Description                                                           |
-|--------------------|----------------------------------------------------------------------|-----------------------------------------------------------------------|
-| `addFile`          | `(file: File) => UploaderItem`                                       | Add a file to the uploader                                            |
-| `addItem`          | `(item: UploaderItem) => UploaderItem`                               | Add an item to the uploader                                           |
-| `createItem`       | `(file: File) => UploaderItem`                                       | Create a new item based on the file                                   |
-| `deleteItem`       | `(child: UploaderItem) => void`                                      | Delete a specific file item from the uploader                         |
-| `emits`            | `(event: string, ...args: any[]) => void`                            | Manually trigger specific events                                      |
-| `isImage`          | `(filePath: string) => boolean`                                      | Determine if a file is an image based on its path                     |
-| `isImageItem`      | `(item: UploaderItem) => boolean`                                    | Determine if an item is an image based on `UploaderItem`              |
-| `on`               | `(event: string, callback: (...event: any[]) => void) => () => void` | Register event listeners and return a function to remove the listener |
-| `openFileSelector` | `() => void`                                                         | Open the file selection window                                        |
-| `uploadStart`      | `() => Promise<PromiseSettledResult<UploaderItem>[]>`                | Start the upload process and return the result for each item          |
-| `stopItemUpload`   | `(item: UploaderItem or XMLHttpRequest) => void`                     | Stop the upload process for a specific item                           |
+| Name                | Type                                                                 | Description                                                              |
+|---------------------|----------------------------------------------------------------------|--------------------------------------------------------------------------|
+| `addFile`           | `(file: File) => UploaderItem`                                       | Add a file to the uploader                                               |
+| `addItem`           | `(item: UploaderItem) => UploaderItem`                               | Add an item to the uploader                                              |
+| `createItem`        | `(file: File) => UploaderItem`                                       | Create a new item based on the file                                      |
+| `deleteItem`        | `(child: UploaderItem) => void`                                      | Delete a specific file item from the uploader                            |
+| `emits`             | `(event: string, ...args: any[]) => void`                            | Manually trigger specific events                                         |
+| `isImage`           | `(filePath: string) => boolean`                                      | Determine if a file is an image based on its path                        |
+| `isImageItem`       | `(item: UploaderItem) => boolean`                                    | Determine if an item is an image based on `UploaderItem`                 |
+| `on`                | `(event: string, callback: (...event: any[]) => void) => () => void` | Register event listeners and return a function to remove the listener    |
+| `openFileSelector`  | `() => void`                                                         | Open the file selection window                                           |
+| `uploadStart`       | `() => Promise<PromiseSettledResult<UploaderItem>[]>`                | Start the upload process and return the result for each item             |
+| `stopItemUpload`    | `(item: UploaderItem or XMLHttpRequest) => void`                     | Stop the upload process for a specific item                              |
+| `enqueueUploadFile` | `(item: UploaderItem) => Promise<UploaderItem>`                      | Enqueue a file for upload, returns the created item or null if not added |
+| `uploadFile`        | `(item: UploaderItem) => Promise<UploaderItem>`                      | Upload a single file, returns the uploaded item                          |
+| `checkFile`         | `(file: File) => void`                                               | Check if a file is valid, throw an Error if invalid                      |
 
 Note you can modify some of the values in the return values, such as `disabled`, `readonly`, `maxFiles` etc.
 The change will be reflected in the uploader instance.
