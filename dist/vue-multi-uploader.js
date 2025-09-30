@@ -1,4 +1,4 @@
-import { ref as de, isRef as Se, computed as j, watch as K, reactive as se, defineComponent as ve, mergeModels as ge, useModel as be, useTemplateRef as De, onUnmounted as Ee, openBlock as F, createElementBlock as H, normalizeClass as _e, unref as Y, renderSlot as W, createElementVNode as N, normalizeStyle as le, createCommentVNode as ne, toDisplayString as fe, withModifiers as ye, normalizeProps as Oe, guardReactiveProps as Ie } from "vue";
+import { ref as de, isRef as Se, computed as j, watch as K, reactive as se, defineComponent as ve, mergeModels as ge, useModel as be, useTemplateRef as De, onUnmounted as Ee, createElementBlock as F, openBlock as H, normalizeClass as _e, unref as Y, renderSlot as W, createElementVNode as N, normalizeStyle as le, createCommentVNode as ne, toDisplayString as fe, withModifiers as ye, normalizeProps as Oe, guardReactiveProps as Ie } from "vue";
 /*!
  * dush <https://github.com/tunnckoCore/dush>
  *
@@ -951,7 +951,7 @@ const Ye = { class: "vue-drag-uploader__wrapper vue-drag-uploader__items" }, nt 
       m.forEach((E) => E());
     }), r({
       instance: S
-    }), (E, k) => (F(), H("div", {
+    }), (E, k) => (H(), F("div", {
       ref: "uploader",
       class: _e(["vue-drag-uploader", { "vue-drag-uploader--readonly": Y(L) }])
     }, [
@@ -1006,7 +1006,7 @@ const Ye = { class: "vue-drag-uploader__wrapper vue-drag-uploader__items" }, nt 
     function L(v) {
       a("item-click", t.item, t.i, v);
     }
-    return (v, m) => (F(), H("div", {
+    return (v, m) => (H(), F("div", {
       class: "vue-drag-uploader-item preview-img",
       style: le({ "--vmu-img-size": v.size }),
       onClick: L
@@ -1014,15 +1014,15 @@ const Ye = { class: "vue-drag-uploader__wrapper vue-drag-uploader__items" }, nt 
       W(v.$slots, "it", { item: v.item }, () => {
         var E;
         return [
-          S.value ? (F(), H("div", {
+          S.value ? (H(), F("div", {
             key: 0,
             class: "preview-img__body",
             style: le({ "background-image": "url(" + (v.item.thumbUrl || v.item.url) + ")", opacity: u.value === Y(R).UPLOADED ? 1 : 0.5 })
           }, null, 4)) : ne("", !0),
-          S.value ? ne("", !0) : (F(), H("div", je, [
+          S.value ? ne("", !0) : (H(), F("div", je, [
             N("div", null, [
               W(v.$slots, "icon", { item: v.item }, () => [
-                (F(), H("svg", Be, m[2] || (m[2] = [
+                (H(), F("svg", Be, m[2] || (m[2] = [
                   N("path", { d: "M320 464c8.8 0 16-7.2 16-16l0-288-80 0c-17.7 0-32-14.3-32-32l0-80L64 48c-8.8 0-16 7.2-16 16l0 384c0 8.8 7.2 16 16 16l256 0zM0 64C0 28.7 28.7 0 64 0L229.5 0c17 0 33.3 6.7 45.3 18.7l90.5 90.5c12 12 18.7 28.3 18.7 45.3L384 448c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 64z" }, null, -1)
                 ])))
               ])
@@ -1030,26 +1030,26 @@ const Ye = { class: "vue-drag-uploader__wrapper vue-drag-uploader__items" }, nt 
             N("div", Ve, fe(D.value), 1)
           ])),
           N("div", Ge, [
-            v.isReadonly ? ne("", !0) : (F(), H("span", {
+            v.isReadonly ? ne("", !0) : (H(), F("span", {
               key: 0,
               class: "preview-img__remove-icon",
               onClick: m[0] || (m[0] = ye((k) => I(), ["prevent", "stop"]))
             }, [
               W(v.$slots, "remove-icon", {}, () => [
-                (F(), H("svg", We, m[3] || (m[3] = [
+                (H(), F("svg", We, m[3] || (m[3] = [
                   N("path", { d: "M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z" }, null, -1)
                 ])))
               ])
             ])),
             W(v.$slots, "extra", { item: v.item })
           ]),
-          u.value === Y(R).UPLOADING ? (F(), H("div", Qe, [
+          u.value === Y(R).UPLOADING ? (H(), F("div", Qe, [
             N("div", {
               class: "preview-img__progress-bar",
               style: le({ width: g.value * 100 + "%" })
             }, null, 4)
           ])) : ne("", !0),
-          u.value === Y(R).ERROR ? (F(), H("div", {
+          u.value === Y(R).ERROR ? (H(), F("div", {
             key: 3,
             class: "preview-img__error-message error-message",
             onClick: m[1] || (m[1] = ye(() => {
@@ -1073,7 +1073,7 @@ const Ye = { class: "vue-drag-uploader__wrapper vue-drag-uploader__items" }, nt 
     text: { default: "" }
   },
   setup(n) {
-    return (r, t) => (F(), H("div", {
+    return (r, t) => (H(), F("div", {
       class: "vue-drag-uploader-item add-button",
       key: "empty",
       style: le({ "--vmu-img-size": r.size })
@@ -1082,7 +1082,7 @@ const Ye = { class: "vue-drag-uploader__wrapper vue-drag-uploader__items" }, nt 
         W(r.$slots, "default", {}, () => [
           N("div", Je, [
             W(r.$slots, "icon", Oe(Ie({ size: r.size })), () => [
-              (F(), H("svg", Xe, t[0] || (t[0] = [
+              (H(), F("svg", Xe, t[0] || (t[0] = [
                 N("path", { d: "M288 109.3L288 352c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-242.7-73.4 73.4c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l128-128c12.5-12.5 32.8-12.5 45.3 0l128 128c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L288 109.3zM64 352l128 0c0 35.3 28.7 64 64 64s64-28.7 64-64l128 0c35.3 0 64 28.7 64 64l0 32c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64l0-32c0-35.3 28.7-64 64-64zM432 456a24 24 0 1 0 0-48 24 24 0 1 0 0 48z" }, null, -1)
               ])))
             ])
