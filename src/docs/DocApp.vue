@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import CardExample from '@/docs/examples/CardExample.vue';
-import CardIconsExample from '@/docs/examples/CardIconsExample.vue';
-import CardSortableExample from '@/docs/examples/CardSortableExample.vue';
-import ListExample from '@/docs/examples/ListExample.vue';
-import ListManualStartExample from '@/docs/examples/ListManualStartExample.vue';
+import CardExample from '~/docs/examples/CardExample.vue';
+import CardIconsExample from '~/docs/examples/CardIconsExample.vue';
+import CardSortableExample from '~/docs/examples/CardSortableExample.vue';
+import ListExample from '~/docs/examples/ListExample.vue';
+import ListManualStartExample from '~/docs/examples/ListManualStartExample.vue';
 import { faGithub, faNpm } from '@fortawesome/free-brands-svg-icons';
 import { faFile } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';

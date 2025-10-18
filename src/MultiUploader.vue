@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { UploaderItem } from '@/types/UploaderItem.ts';
-import { type MultiUploaderEmits, uploaderEvents } from '@/events.ts';
+import type { UploaderItem } from '~/types/UploaderItem.ts';
+import { type MultiUploaderEmits, uploaderEvents } from '~/events.ts';
 import {
   type MultiUploaderComposableInstance,
   type MultiUploaderOptions,
   useMultiUploader,
-} from '@/useMultiUploader';
+} from '~/useMultiUploader';
 import { onUnmounted, reactive, ref, useTemplateRef, watch } from 'vue';
 
 const props = withDefaults(
@@ -32,7 +32,7 @@ watch(value, () => {
   v.value = value.value;
 }, { deep: true });
 
-const container = useTemplateRef('uploader');
+const container = useTemplateRef<HTMLDivElement>('uploader');
 props.options.dropzone = props.options.dropzone ?? container;
 
 const instance = props.instance ?? useMultiUploader(v, props.uploadUrl ?? '', props.options);

@@ -1,13 +1,13 @@
 <script setup lang="ts">
 
-import ShowCard from '@/docs/ShowCard.vue';
-import ItemCard from '@/ItemCard.vue';
-import ItemCardPlaceholder from '@/ItemCardPlaceholder.vue';
-import MultiUploader from '@/MultiUploader.vue';
-import { MultiUploaderOptions } from '@/useMultiUploader.ts';
+import ShowCard from '~/docs/ShowCard.vue';
+import ItemCard from '~/ItemCard.vue';
+import ItemCardPlaceholder from '~/ItemCardPlaceholder.vue';
+import MultiUploader from '~/MultiUploader.vue';
+import { MultiUploaderOptions } from '~/useMultiUploader.ts';
 import { ref } from 'vue';
 import { UseDraggableOptions, VueDraggable } from 'vue-draggable-plus';
-import '@/vue-multi-uploader.scss';
+import '~/vue-multi-uploader.scss';
 
 const options: MultiUploaderOptions = {
   maxFiles: 5,
@@ -46,7 +46,7 @@ import {
 import 'vue-multi-uploader/dist/vue-multi-uploader.scss';
 import { ref } from 'vue';
 import { type UseDraggableOptions, VueDraggable } from 'vue-draggable-plus';
-import '@/vue-multi-uploader.scss';
+import '~/vue-multi-uploader.scss';
 
 const options: MultiUploaderOptions = {
   maxFiles: 5,

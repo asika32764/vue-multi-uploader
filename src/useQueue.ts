@@ -1,4 +1,4 @@
-import { queue } from '@lyrasoft/ts-toolkit/src/generic';
+import { queue } from '@lyrasoft/ts-toolkit/generic';
 
 export default function useQueue() {
   return queue();

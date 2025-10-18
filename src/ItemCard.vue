@@ -1,9 +1,9 @@
 <script setup lang="ts">
 
-import { isImageItem } from '@/helpers.ts';
+import { isImageItem } from '~/helpers.ts';
 import { computed } from 'vue';
-import { UploadState } from '@/enum/UploadState';
-import type { UploaderItem } from '@/types/UploaderItem.ts';
+import { UploadState } from '~/enum/UploadState';
+import type { UploaderItem } from '~/types/UploaderItem.ts';
 
 const props = withDefaults(
   defineProps<{

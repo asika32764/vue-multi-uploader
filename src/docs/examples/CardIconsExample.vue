@@ -1,12 +1,12 @@
 <script setup lang="ts">
 
-import ShowCard from '@/docs/ShowCard.vue';
-import ItemCard from '@/ItemCard.vue';
-import ItemCardPlaceholder from '@/ItemCardPlaceholder.vue';
-import MultiUploader from '@/MultiUploader.vue';
-import { UploaderItem } from '@/types/UploaderItem.ts';
-import { MultiUploaderOptions } from '@/useMultiUploader.ts';
-import '@/vue-multi-uploader.scss';
+import ShowCard from '~/docs/ShowCard.vue';
+import ItemCard from '~/ItemCard.vue';
+import ItemCardPlaceholder from '~/ItemCardPlaceholder.vue';
+import MultiUploader from '~/MultiUploader.vue';
+import { UploaderItem } from '~/types/UploaderItem.ts';
+import { MultiUploaderOptions } from '~/useMultiUploader.ts';
+import '~/vue-multi-uploader.scss';
 import { ref } from 'vue';
 
 const options: MultiUploaderOptions = {

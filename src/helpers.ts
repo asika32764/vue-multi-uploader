@@ -1,5 +1,5 @@
-import { UploadState } from '@/enum/UploadState.ts';
-import type { UploaderItem } from '@/types/UploaderItem.ts';
+import { UploadState } from '~/enum/UploadState.ts';
+import type { UploaderItem } from '~/types/UploaderItem.ts';
 import type { Ref } from 'vue';
 
 export function openFileSelectorForAdding(accept: Ref<string>, uploadFiles: (files: (FileList | File[])) => void) {

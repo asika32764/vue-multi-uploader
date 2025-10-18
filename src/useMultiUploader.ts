@@ -1,12 +1,12 @@
-import { UploadState } from '@/enum/UploadState';
-import { InvalidFileSizeError, InvalidFileTypeError } from '@/errors.ts';
-import { handleEvents, OptionsEventsMap } from '@/events.ts';
-import { handleDropzoneDragging, openFileSelectorForAdding, isImage, isImageItem } from '@/helpers.ts';
-import { MaybePromise } from '@/types/promise';
-import type { UploaderItem } from '@/types/UploaderItem.ts';
-import useQueue from '@/useQueue';
-import { MaybeElement, unrefElement, wrapRef, wrapUploaderItem } from '@/utils.ts';
-import { uid } from '@lyrasoft/ts-toolkit/src/generic';
+import { UploadState } from '~/enum/UploadState';
+import { InvalidFileSizeError, InvalidFileTypeError } from '~/errors.ts';
+import { handleEvents, OptionsEventsMap } from '~/events.ts';
+import { handleDropzoneDragging, openFileSelectorForAdding, isImage, isImageItem } from '~/helpers.ts';
+import { MaybePromise } from '~/types/promise';
+import type { UploaderItem } from '~/types/UploaderItem.ts';
+import useQueue from '~/useQueue';
+import { MaybeElement, unrefElement, wrapRef, wrapUploaderItem } from '~/utils.ts';
+import { uid } from '@lyrasoft/ts-toolkit/generic';
 import { Emitter } from 'dush';
 import { computed, type MaybeRef, type MaybeRefOrGetter, reactive, type Ref, type ComputedRef, watch } from 'vue';
 

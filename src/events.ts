@@ -1,5 +1,5 @@
-import type { UploaderItem } from '@/types/UploaderItem.ts';
-import { MultiUploaderOptions } from '@/useMultiUploader.ts';
+import type { UploaderItem } from '~/types/UploaderItem.ts';
+import { MultiUploaderOptions } from '~/useMultiUploader.ts';
 import dush, { Emitter } from 'dush';
 
 export type UploaderEvents = {

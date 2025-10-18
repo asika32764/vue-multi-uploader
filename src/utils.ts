@@ -1,6 +1,6 @@
-import { UploadState } from '@/enum/UploadState.ts';
-import type { UploaderItem } from '@/types/UploaderItem.ts';
-import { uid } from '@lyrasoft/ts-toolkit/src/generic.ts';
+import { UploadState } from '~/enum/UploadState.ts';
+import type { UploaderItem } from '~/types/UploaderItem.ts';
+import { uid } from '@lyrasoft/ts-toolkit/generic';
 import type { MaybeRef, Ref } from 'vue';
 import { ComponentPublicInstance, isRef, ref } from 'vue';
 

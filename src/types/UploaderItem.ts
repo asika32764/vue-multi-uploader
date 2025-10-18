@@ -1,4 +1,4 @@
-import type { UploadState } from '@/enum/UploadState';
+import type { UploadState } from '~/enum/UploadState';
 
 export interface UploaderItem<T = any> {
   key: string;
