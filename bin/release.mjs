@@ -24,12 +24,12 @@ console.log(`>>> yarn build:prod`);
 exec(`yarn build:prod`, { stdio: 'inherit' });
 
 console.log(`>>> npm version ${args.join(' ')} --no-git-tag-version`);
-const buffer = exec(`npm version ${args.join(' ')} --no-git-tag-version`);
+exec(`npm version ${args.join(' ')} --no-git-tag-version`, { stdio: 'inherit' });
 
-const ver = buffer.toString().split("\n")[1];
+const ver = exec(`npm pkg get version | tr -d '"'`).toString().trim();
 
 console.log('>>> Git commit all');
-exec(`git add .`, { stdio: 'inherit' });
+
 try {
   exec(`git commit -am "Prepare release ${ver}."`, { stdio: 'inherit' });
 } catch (e) {
