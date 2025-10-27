@@ -4,13 +4,15 @@ import { ComponentPublicInstance } from 'vue';
 import { ComputedRef } from 'vue';
 import { DefineComponent } from 'vue';
 import { Emitter } from 'dush';
+import { Handler } from 'dush';
 import { MaybePromise } from './types/promise';
 import { MaybeRef } from 'vue';
 import { MaybeRefOrGetter } from 'vue';
 import { PublicProps } from 'vue';
 import { Ref } from 'vue';
+import { WildcardHandler } from 'dush';
 
-declare const __VLS_base: DefineComponent<__VLS_PublicProps, {
+declare const __VLS_component: DefineComponent<__VLS_PublicProps, {
 instance: MultiUploaderComposableInstance;
 }, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
 uploading: () => any;
@@ -40,9 +42,11 @@ onChange?: ((items: UploaderItem<any>[]) => any) | undefined;
 "onInvalid-file-type"?: ((file: File, accepted: string[]) => any) | undefined;
 }>, {
 options: Exclude<MultiUploaderOptions, "uploadUrl">;
-}, {}, {}, {}, string, ComponentProvideOptions, false, {}, any>;
+}, {}, {}, {}, string, ComponentProvideOptions, false, {
+uploader: HTMLDivElement;
+}, HTMLDivElement>;
 
-declare const __VLS_base_2: DefineComponent<__VLS_Props_2, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {} & {
+declare const __VLS_component_2: DefineComponent<__VLS_Props_2, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {} & {
 delete: (item: UploaderItem<any>) => any;
 "item-click": (item: UploaderItem<any>, index: number, $event: MouseEvent) => any;
 }, string, PublicProps, Readonly<__VLS_Props_2> & Readonly<{
@@ -50,22 +54,12 @@ onDelete?: ((item: UploaderItem<any>) => any) | undefined;
 "onItem-click"?: ((item: UploaderItem<any>, index: number, $event: MouseEvent) => any) | undefined;
 }>, {
 size: number | string;
-}, {}, {}, {}, string, ComponentProvideOptions, false, {}, any>;
+}, {}, {}, {}, string, ComponentProvideOptions, false, {}, HTMLDivElement>;
 
-declare const __VLS_base_3: DefineComponent<__VLS_Props_3, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<__VLS_Props_3> & Readonly<{}>, {
+declare const __VLS_component_3: DefineComponent<__VLS_Props_3, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<__VLS_Props_3> & Readonly<{}>, {
 size: any;
 text: string;
-}, {}, {}, {}, string, ComponentProvideOptions, false, {}, any>;
-
-declare const __VLS_export: __VLS_WithSlots<typeof __VLS_base, __VLS_Slots>;
-
-declare const __VLS_export_2: __VLS_WithSlots_2<typeof __VLS_base_2, __VLS_Slots_2>;
-
-declare const __VLS_export_3: __VLS_WithSlots_3<typeof __VLS_base_3, __VLS_Slots_3>;
-
-declare type __VLS_ModelProps = {
-    modelValue?: Partial<UploaderItem>[];
-};
+}, {}, {}, {}, string, ComponentProvideOptions, false, {}, HTMLDivElement>;
 
 declare type __VLS_Props = {
     id?: string;
@@ -87,45 +81,228 @@ declare type __VLS_Props_3 = {
     text?: string;
 };
 
-declare type __VLS_PublicProps = __VLS_Props & __VLS_ModelProps;
+declare type __VLS_PublicProps = {
+    modelValue?: Partial<UploaderItem>[];
+} & __VLS_Props;
 
-declare type __VLS_Slots = {} & {
-    start?: (props: typeof __VLS_1) => any;
-} & {
-    items?: (props: typeof __VLS_3) => any;
-} & {
-    end?: (props: typeof __VLS_5) => any;
+declare function __VLS_template(): {
+    attrs: Partial<{}>;
+    slots: {
+        start?(_: {
+            items: UploaderItem<any>[];
+            options: MultiUploaderOptions;
+            instance: {
+                id: string;
+                accept: string;
+                maxFiles: number | undefined;
+                maxConcurrent: number;
+                maxItemSize: number | undefined;
+                disabled: boolean;
+                readonly: boolean;
+                uploadUrl: string;
+                items: UploaderItem<any>[];
+                eventBus: {
+                    _allEvents: Array<{
+                        [eventName: string]: Handler[];
+                    }>;
+                    use: (plugin: (app: Emitter, options: any) => void, options?: any) => Emitter;
+                    on: {
+                        (type: string, handler: Handler): Emitter;
+                        (type: "*", handler: WildcardHandler): Emitter;
+                    };
+                    once: {
+                        (type: string, handler: Handler): Emitter;
+                        (type: "*", handler: WildcardHandler): Emitter;
+                    };
+                    off: {
+                        (type: string, handler?: Handler): Emitter;
+                        (type: "*", handler?: WildcardHandler): Emitter;
+                    };
+                    emit: (type: string, ...event: any[]) => Emitter;
+                };
+                canUpload: boolean;
+                isUploading: boolean;
+                acceptedTypes: string[];
+                isReadonly: boolean;
+                totalSize: number;
+                emits: (event: string, ...args: any[]) => void;
+                on: (event: string, callback: (...event: any[]) => void) => () => void;
+                openFileSelector: () => void;
+                addFile: (file: File) => UploaderItem;
+                addItem: (item: UploaderItem) => UploaderItem;
+                createItem: (file: File) => UploaderItem;
+                deleteItem: (child: UploaderItem) => void;
+                uploadStart: () => Promise<PromiseSettledResult<UploaderItem>[]>;
+                stopItemUpload: (item: UploaderItem | XMLHttpRequest) => void;
+                isImage: (filePath: string) => boolean;
+                isImageItem: (item: UploaderItem) => boolean;
+                checkFile: (file: File) => void;
+                uploadFile: (item: UploaderItem) => Promise<UploaderItem>;
+                enqueueUploadFile: (item: UploaderItem) => Promise<UploaderItem>;
+            };
+        }): any;
+        items?(_: {
+            items: UploaderItem<any>[];
+            options: MultiUploaderOptions;
+            instance: {
+                id: string;
+                accept: string;
+                maxFiles: number | undefined;
+                maxConcurrent: number;
+                maxItemSize: number | undefined;
+                disabled: boolean;
+                readonly: boolean;
+                uploadUrl: string;
+                items: UploaderItem<any>[];
+                eventBus: {
+                    _allEvents: Array<{
+                        [eventName: string]: Handler[];
+                    }>;
+                    use: (plugin: (app: Emitter, options: any) => void, options?: any) => Emitter;
+                    on: {
+                        (type: string, handler: Handler): Emitter;
+                        (type: "*", handler: WildcardHandler): Emitter;
+                    };
+                    once: {
+                        (type: string, handler: Handler): Emitter;
+                        (type: "*", handler: WildcardHandler): Emitter;
+                    };
+                    off: {
+                        (type: string, handler?: Handler): Emitter;
+                        (type: "*", handler?: WildcardHandler): Emitter;
+                    };
+                    emit: (type: string, ...event: any[]) => Emitter;
+                };
+                canUpload: boolean;
+                isUploading: boolean;
+                acceptedTypes: string[];
+                isReadonly: boolean;
+                totalSize: number;
+                emits: (event: string, ...args: any[]) => void;
+                on: (event: string, callback: (...event: any[]) => void) => () => void;
+                openFileSelector: () => void;
+                addFile: (file: File) => UploaderItem;
+                addItem: (item: UploaderItem) => UploaderItem;
+                createItem: (file: File) => UploaderItem;
+                deleteItem: (child: UploaderItem) => void;
+                uploadStart: () => Promise<PromiseSettledResult<UploaderItem>[]>;
+                stopItemUpload: (item: UploaderItem | XMLHttpRequest) => void;
+                isImage: (filePath: string) => boolean;
+                isImageItem: (item: UploaderItem) => boolean;
+                checkFile: (file: File) => void;
+                uploadFile: (item: UploaderItem) => Promise<UploaderItem>;
+                enqueueUploadFile: (item: UploaderItem) => Promise<UploaderItem>;
+            };
+        }): any;
+        end?(_: {
+            items: UploaderItem<any>[];
+            options: MultiUploaderOptions;
+            instance: {
+                id: string;
+                accept: string;
+                maxFiles: number | undefined;
+                maxConcurrent: number;
+                maxItemSize: number | undefined;
+                disabled: boolean;
+                readonly: boolean;
+                uploadUrl: string;
+                items: UploaderItem<any>[];
+                eventBus: {
+                    _allEvents: Array<{
+                        [eventName: string]: Handler[];
+                    }>;
+                    use: (plugin: (app: Emitter, options: any) => void, options?: any) => Emitter;
+                    on: {
+                        (type: string, handler: Handler): Emitter;
+                        (type: "*", handler: WildcardHandler): Emitter;
+                    };
+                    once: {
+                        (type: string, handler: Handler): Emitter;
+                        (type: "*", handler: WildcardHandler): Emitter;
+                    };
+                    off: {
+                        (type: string, handler?: Handler): Emitter;
+                        (type: "*", handler?: WildcardHandler): Emitter;
+                    };
+                    emit: (type: string, ...event: any[]) => Emitter;
+                };
+                canUpload: boolean;
+                isUploading: boolean;
+                acceptedTypes: string[];
+                isReadonly: boolean;
+                totalSize: number;
+                emits: (event: string, ...args: any[]) => void;
+                on: (event: string, callback: (...event: any[]) => void) => () => void;
+                openFileSelector: () => void;
+                addFile: (file: File) => UploaderItem;
+                addItem: (item: UploaderItem) => UploaderItem;
+                createItem: (file: File) => UploaderItem;
+                deleteItem: (child: UploaderItem) => void;
+                uploadStart: () => Promise<PromiseSettledResult<UploaderItem>[]>;
+                stopItemUpload: (item: UploaderItem | XMLHttpRequest) => void;
+                isImage: (filePath: string) => boolean;
+                isImageItem: (item: UploaderItem) => boolean;
+                checkFile: (file: File) => void;
+                uploadFile: (item: UploaderItem) => Promise<UploaderItem>;
+                enqueueUploadFile: (item: UploaderItem) => Promise<UploaderItem>;
+            };
+        }): any;
+    };
+    refs: {
+        uploader: HTMLDivElement;
+    };
+    rootEl: HTMLDivElement;
 };
 
-declare type __VLS_Slots_2 = {} & {
-    it?: (props: typeof __VLS_1) => any;
-} & {
-    icon?: (props: typeof __VLS_3) => any;
-} & {
-    'remove-icon'?: (props: typeof __VLS_5) => any;
-} & {
-    extra?: (props: typeof __VLS_7) => any;
+declare function __VLS_template_2(): {
+    attrs: Partial<{}>;
+    slots: {
+        it?(_: {
+            item: UploaderItem<any>;
+        }): any;
+        icon?(_: {
+            item: UploaderItem<any>;
+        }): any;
+        'remove-icon'?(_: {}): any;
+        extra?(_: {
+            item: UploaderItem<any>;
+        }): any;
+    };
+    refs: {};
+    rootEl: HTMLDivElement;
 };
 
-declare type __VLS_Slots_3 = {} & {
-    default?: (props: typeof __VLS_1) => any;
-} & {
-    icon?: (props: typeof __VLS_3) => any;
+declare function __VLS_template_3(): {
+    attrs: Partial<{}>;
+    slots: {
+        default?(_: {}): any;
+        icon?(_: {
+            size: any;
+        }): any;
+    };
+    refs: {};
+    rootEl: HTMLDivElement;
 };
 
-declare type __VLS_WithSlots<T, S> = T & {
+declare type __VLS_TemplateResult = ReturnType<typeof __VLS_template>;
+
+declare type __VLS_TemplateResult_2 = ReturnType<typeof __VLS_template_2>;
+
+declare type __VLS_TemplateResult_3 = ReturnType<typeof __VLS_template_3>;
+
+declare type __VLS_WithTemplateSlots<T, S> = T & {
     new (): {
         $slots: S;
     };
 };
 
-declare type __VLS_WithSlots_2<T, S> = T & {
+declare type __VLS_WithTemplateSlots_2<T, S> = T & {
     new (): {
         $slots: S;
     };
 };
 
-declare type __VLS_WithSlots_3<T, S> = T & {
+declare type __VLS_WithTemplateSlots_3<T, S> = T & {
     new (): {
         $slots: S;
     };
@@ -135,13 +312,13 @@ export declare function createItem(item: Partial<UploaderItem>): UploaderItem;
 
 export declare function handleEvents(options: MultiUploaderOptions): Emitter;
 
-export declare const ItemCard: typeof __VLS_export_2;
+export declare const ItemCard: __VLS_WithTemplateSlots_2<typeof __VLS_component_2, __VLS_TemplateResult_2["slots"]>;
 
-export declare const ItemCardPlaceholder: typeof __VLS_export_3;
+export declare const ItemCardPlaceholder: __VLS_WithTemplateSlots_3<typeof __VLS_component_3, __VLS_TemplateResult_3["slots"]>;
 
 declare type MaybeElement = HTMLElement | SVGElement | ComponentPublicInstance | undefined | null;
 
-export declare const MultiUploader: typeof __VLS_export;
+export declare const MultiUploader: __VLS_WithTemplateSlots<typeof __VLS_component, __VLS_TemplateResult["slots"]>;
 
 export declare type MultiUploaderComposableInstance = {
     id: Ref<string>;
